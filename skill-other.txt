@@ -1,1 +1,9 @@
-"" 
+eclipse 插件checkstyle link安装方式
+1、下载checkstyle插件包；
+2、创建存放eclispe插件目录如 D:\My_Dev\my_eclipse_plugins\checkstyle；
+3、将checkstyle包中解压出的features及plugins文件夹直接入2步目录下
+4、在eclipse安装目录eclipse\dropins目录下创建后缀为.link的文件 如checkstyle.link
+5、link文件中放入具体插件path如 path=D:/My_Dev/my_eclipse_plugins/checkstyle （目录是反斜杆）
+6、重启eclipse完成安装。
+===============================================================================================
+

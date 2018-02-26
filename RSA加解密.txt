@@ -1,12 +1,22 @@
 RSA算法 JS加密 JAVA解密
 
+首先引入jsencrypt.js，然后获取RSA的公钥和私钥。
+　　var encrypt=new JSEncrypt();
+　　encrypt.setPublicKey(RSA的公钥);
+　　encrypt.encrypt(加密的内容);
+这样加密就成功了。然后解密也很简单。
+　　encrypt.setPrivateKey(RSA的私钥);
+　　encrypt.decrypt(解密的内容);
+
+
+
 java代码
 
 需要依赖 commons-codec 包
 <dependency>
 	<groupId>commons-codec</groupId>
 	<artifactId>commons-codec</artifactId>
-	<version>1.6</version>
+	<version>1.10</version>
 </dependency>
 
 

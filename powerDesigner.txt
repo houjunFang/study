@@ -1,6 +1,9 @@
 pd自动将name填充为code，可以通过如下配置修改：
 选择tools->general Options,选择弹出窗口中的Dialog选项,将Name to Code mirroring 上的钩去掉。
 
+powerdesigner 显示comment
+http://blog.csdn.net/qq496013218/article/details/70267611
+
 =====================================================================================
 PowerDesigner 数据库设计导出到Excel
 代码一：所有的表在同一个 Sheet 页中

@@ -1,0 +1,156 @@
+#git
+#git config --global user.name "fanghj"
+#git config --global user.email "fanghoujun@126.com"
+
+下载代码
+$ git clone git://github.com/schacon/grit.git [自定义名称可省]
+
+#git config --global --list 查看全局配置信息
+
+初始化一个git仓库
+#git init
+#git add <filename> 可多次执行多次添加文件至
+#git add file1 file2
+
+#git commit -m "提交备注" 提交至本地库
+
+#git status  查看工作区状态
+#git diff filename 文件比较
+
+查看提交历史
+#git log
+#git log pretty=oneline 
+
+回退至上一个版本 windows环境下 git reset --hard HEAD"^"
+#git reset --hard HEAD^
+
+git log --pretty=oneline
+git reset --hard id
+
+查看执行过的命令历史
+#git reflog
+
+#git commit -m "" 用于提交暂存区文件
+#git commit -am "" 用于提交跟踪过的所有文件
+
+
+#git diff 查看工作区 同 暂存区文件区别
+#git diff --cached 查看暂存区同本地库的区别
+#git diff HEAD 工作区同本地库的区别（HEAD指本地库最新一次提交）
+
+要跟历史版本中的代码作比较：
+git diff HEAD^ 比较 workspace 与最新commit的前一次commit的差异（注意与git diff HEAD的差别） 
+git diff HEAD~2 比较 workspace 与上2次提交的差异，相当于 git diff HEAD~2 HEAD~0，注意两个HEAD的位置，diff显示的结果表示 后一个(HEAD~0) 相对于 前一个的修改(HEAD~2) 
+git diff HEAD~2 HEAD^ 比较上一次commit（即当前commit的前一次）与上上次commit之间的差异，HEAD^=HEAD^1=HEAD~1
+
+
+git reset  --hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容
+
+#git checkout -b branchName 相当于
+git branch branchName
+git checkout branchName
+
+------------------------------
+通常我们提交git的时候都是
+
+git add .
+git commit -m "some str"
+git push
+这三大步，而实际上，你只需要两条命令就够了，除非有新的文件要被添加进去。
+
+git commit -am "some str"
+git push
+
+
+1) 创建目录
+$ mkdir test
+$ cd test
+2) 初始化
+$ git init
+3) 创建hello.md文件
+$ echo "这是一次测试test ssh key" > hello.md
+4) 提交到本地
+若出现如上warning提示则重新提交一次即可。
+$ git add .   #提交当前目录下所以文件
+$ git commit -m "add hello.md"   #提交记录说明 
+5) 提交到github
+$ git remote add origin ‘粘贴复制test ssh key的ssh路径’  #
+$ git push -u origin master
+
+=====================================
+git 私秘钥管理
+一、借助 TortoiseGit\bin目录下的pageant.exe 生成管理
+通过 windows中自启动文件夹中 加入 pageant.exe快捷方式，并使用其快捷方式的目标 如 “C:\Program Files\TortoiseGit\bin\pageant.exe” “D:\key\1111.ppk” 传入私钥
+
+二 命令方式
+windows环境下
+1、创建目录.ssh
+cmd命令行方式创建文件夹mkdir .ssh 
+私钥一定要存放当前用户根目录.ssh文件夹下
+ 一定要在当前用户根目录如下：C:\Users\fang_houjun\.ssh
+
+在.ssh文件夹下创建config文件并增加如下配置内容
+#github.com learngit.git
+Host github.com
+HostName github.com
+PreferredAuthentications publickey    
+User fanghoujun
+IdentityFile /C/Users/fang_houjun/.ssh/id_rsa
+
+#gitee.com hjapp_1.0.git
+Host gitee.com
+HostName gitee.com
+PreferredAuthentications publickey    
+User fanghoujun
+IdentityFile /C/Users/fang_houjun/.ssh/id_gitee
+则成功完成了访问不同远程库，使用不同私钥
+
+2、生成公私钥
+运行git-bash.exe 并执行
+ssh-keygen -t rsa -C "邮箱名" -f /xxx/xx/id_rsa(文件存放目录)
+生成文件至当前目录：ssh-keygen -t rsa -C "邮箱名" 
+
+3、测试
+ssh -T git@github.com 测试ssh连接github.com是否成功
+
+
+创建远程分支
+#git checkout -b v1
+#git push -u origin v1 上传V1分支至远程库
+
+列出分支情况
+#git branch [-r|-a|-v] 获取分支情况 【远程，所有，提交版本信息】
+
+删除本地分支
+git branch -d 分支名称
+git branch -D 删除本地分支（不merge分支直接丢掉）
+删除本地远程分支
+git branch -r -d origin/分支名称
+
+远程删除git服务器上的分支
+git push origin -d 分支名称
+
+创建并切换分支
+git checkout -b branchName
+
+将分支合并入当前分支
+git merge 分支名称  
+
+git branch -d 分支名称
+git branch -r -d origin/分支名称
+
+====================================
+git push origin 分支名称 -d 远程删除git服务上的分支 
+git branch -r -d origin/分支名称 删除本地远程分支
+git push origin 分支名称 -u 创建分支至服务器
+
+---------------------------------------
+git 合并两个分支
+1、git clone git远程地址
+2、git checkout -b dev origin/dev 本地建立一个与远程版本相同的分支
+3、git checkout master 切回master
+4、git merge dev 把本地dev库合并入master
+5、git push origin master 把本地master同步至远程
+6、不需要远程dev分支库时,执行如下删除
+git push origin 分支名 -d 
+git branch -r -d 分支名称（删除本地远程分支）

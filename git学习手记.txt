@@ -90,7 +90,7 @@ cmd命令行方式创建文件夹mkdir .ssh
  一定要在当前用户根目录如下：C:\Users\fang_houjun\.ssh
 
 在.ssh文件夹下创建config文件并增加如下配置内容
-#github.com learngit.git
+#github.com study.git
 Host github.com
 HostName github.com
 PreferredAuthentications publickey    

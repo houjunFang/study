@@ -1,0 +1,6 @@
+dubbo配置文件报错解决方案
+解压dubbo.jar包中dubbo.xsd至相应目录备用
+windows->preferrence->xml->xmlcatalog ==》add->catalog entry  ->file system 选择解压的文件目录
+修改key值和配置文件的http://code.alibabatech.com/schema/dubbo/dubbo.xsd 相同
+保存。。在xml文件右键validate  ok解决了。。
+

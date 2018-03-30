@@ -1,0 +1,23 @@
+1.修改zookeeper三台机器安装目录conf/zoo.cfg如下
+tickTime=2000
+dataDir=/usr/myapp/zookeeper-3.4.5/data
+dataLogDir=/usr/myapp/zookeeper-3.4.5/logs
+clientPort=2181
+initLimit=5
+syncLimit=2
+server.1=192.168.220.128:2888:3888
+server.2=192.168.220.129:2888:3888
+server.3=192.168.220.130:2888:3888
+
+2.data目录下新增myid文件
+分别在三台机器data目录下
+echo '1' > data/myid
+echo '2' > data/myid
+echo '3' > data/myid
+
+3.启动和停止
+分别进入三台机器zookeeper安装bin目录，启动、停止、重启分和查看当前节点状态（包括集群中是何角色）别执行：
+./zkServer.sh start
+./zkServer.sh stop
+./zkServer.sh restart
+./zkServer.sh status

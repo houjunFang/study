@@ -1,0 +1,298 @@
+在linux操作系统中，我们会经常要用到wget下载文件
+安装install
+#yum -y install wget
+
+
+spark 安装模式：
+standalone
+1、standalone模式
+2、spark on mesos
+3、spark on YARN
+
+standalone模式为Master-Worker模式，在本地模拟集群模式
+1.安装JDK
+2.安装scala
+3.安装spark
+4.将上述安装目录增加至环境变量中如下：
+#vi /etc/profile
+export SCALA_HOME=/app/scala-2.11.7
+export SPARK_HOME=/app/spark-2.3.0-bin-hadoop2.7
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.161-3.b14.el6_9.x86_64
+export PATH=$PATH:${SCALA_HOME}/bin:$SPARK_HOME/bin:$JAVA_HOME/bin
+
+#source /etc/profile 使用环境变量配置生效
+5.验证上述安装
+#java -version
+#scala -version
+6.修改spark_home/conf下相关文件
+#cp  spark-env.sh.template spark-env.sh
+#vi spark-env.sh
+export SCALA_HOME=/app/scala-2.11.7
+export SPARK_HOME=/app/spark-2.3.0-bin-hadoop2.7
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.161-3.b14.el6_9.x86_64
+export SPARK_MASTER_IP=192.168.56.101
+export SPARK_EXECUTOR_MEMORY=1G
+
+#cp slaves.template slaves
+验证单机模式
+#./bin/run-example  SparkPi 10
+
+
+export SCALA_HOME=/app/scala-2.11.7
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk.x86_64
+export HADOOP_HOME=/app/hadoop-2.8.3
+export HADOOP_CONF_DIR=/app/hadoop-2.8.3/etc/hadoop
+export SPARK_MASTER_IP=hserver1
+export SPARK_WORKER_MEMORY=1G
+export SPARK_WORKER_CORES=1
+export SPARK_WORKER_INSTANCES=1
+
+
+1.安装JAVA
+2.下载scala
+#tar zxvf scala-2.11.6.tgz -C /urs/local 解决至指定目录
+命令设置Scala的PATH
+#cd /etc/profile
+#export SCALA_HOME=/app/scala-2.11.7
+#export PATH=$PATH:$SCALA_HOME/bin
+#source /etc/profile
+#echo $PATH
+
+3.安装spark
+#tar xvf spark-2.3.0-bin-hadoop2.7.tgz
+增加spark安装目录至环境变量
+#export SPARK_HOME=/app/spark-2.3.0-bin-hadoop2.7
+#export PATH=$PATH:$SCALA_HOME/bin:$SPARK_HOME/bin
+
+4.安装成功与否验证
+$spark-shell
+报找不到服务时需要修改HOSTS如下
+#vi /etc/hosts
+10.20.32.200 hserver1
+#service network restart
+
+===================================================
+spark集群
+
+scp -r /etc/profile root@hserver2:/etc/profile
+scp -r /etc/profile root@hserver3:/etc/profile
+分别至对应服务器执行
+source /etc/profile 使用环境变量更改在各机器生效
+
+scp -r /app/scala-2.11.7 root@hserver2:/app/scala-2.11.7
+scp -r /app/scala-2.11.7 root@hserver3:/app/scala-2.11.7
+
+scp -r /app/spark-2.3.0-bin-hadoop2.7 root@hserver2:/app/spark-2.3.0-bin-hadoop2.7
+scp -r /app/spark-2.3.0-bin-hadoop2.7 root@hserver3:/app/spark-2.3.0-bin-hadoop2.7
+
+spark源代码开发语言是Scala，Scala是一个基于JVM的开发语言
+Scala 是一门多范式（multi-paradigm）的编程语言
+Scala 源代码被编译成Java字节码，所以它可以运行于JVM之上，并可以调用现有的Java类库
+
+
+(2)狭义的Hadoop
+个人认为，狭义的Hadoop指Apache下Hadoop子项目，该项目由以下模块组成：
+Hadoop Common: 一系列组件和接口，用于分布式文件系统和通用I/O
+Hadoop Distributed File System (HDFS?): 分布式文件系统
+Hadoop YARN: 一个任务调调和资源管理框架
+Hadoop MapReduce: 分布式数据处理编程模型，用于大规模数据集并行运算
+
+狭义的Hadoop主要解决三个问题，提供HDFS解决分布式存储问题，提供YARN解决任务调度和资源管理问题，提供一种编程模型，让开发者可以进来编写代码做离线大数据处理。
+
+spark-submit
+SparkSession - Spark SQL 的 入口
+
+org.apache.spark.sql.sparksession所在jar包
+spark-assembly-[SPARK_VER]-hadoop[HADOOP_VER].jar 根据你的spark版本和hadoop版本，SPARK_VER和HADOOP_VER可能不同。
+
+
+=============================================
+scala + eclipse+ maven 环境搭建
+1.安装scala_eclipse_plugin 插件
+2.编写scala 代码程序
+3.run as--scala Application 
+
+需要maven管理scala项目 需要增加scala maven archetype
+新增maven scala创建模板：
+创建MAVEN项目-->>scala
+点击Configure，点击Add Remote Catalog
+Catalog file:http://repo1.maven.org/maven2/archetype-catalog.xml
+Description:Remote Catalog
+或通过如下：
+这里新建一个maven项目，在选择archetype的时候，选择添加>add archetype
+archetype group id : net.alchim31.maven
+archetype artifact id :scala-archetype-simple
+archetype version : 1.6
+此时新建scala maven项目时将可以通过点选scala-archetype-simple模板创建sacal maven工程了
+
+创建的项目POM报错，需要再安装 maven-for-scala插件
+
+maven-scala-plugin编译打包scala工程：
+mvn clean scala:compile compile package
+
+===========================================================
+eclipse下scala+java混用maven环境搭建
+1.安装scala_eclipse_plugin 插件
+2.正常创建MAVEN工程，右击工程configuer->add scala nature转变工程为scala工程
+3.pom中增加spark-core_2.11（后面跟scala版本）依赖（其中scala相关依赖包已含上其中，所以需要build path去掉2步中的依赖的包）
+4.右击工程->属性-》scala complier-> scala installation 修改对应的scala版本
+
+====================================================================
+spark 本地运行
+1.本地需要安装jdk
+2.安装hadoop并使用64位二进制复盖bin目录（并不实际使用）
+3.本地安装scala
+4.本地安装（解压）spark,并不实际使用
+5.需要设置以上相应的环境变量
+
+======================================================================
+apache spark 是一个快速的, 用于海量数据处理的通用引擎.
+Spark是用Scala程序设计语言编写而成，运行于Java虚拟机（JVM）环境之上
+spark组件
+1.Spark Streaming支持从多种数据源提取数据，如：Kafka、Flume、Twitter、ZeroMQ、Kinesis以及TCP套接字
+2.spark sql & DataFrames
+3.MLlib
+4.GraphX
+
+RDD(弹性分布式数据集)
+1、什么是RDD?
+RDD是Spark中的抽象数据结构类型，任何数据在Spark中都被表示为RDD。从编程的角度来看，
+RDD可以简单看成是一个数组。和普通数组的区别是，RDD中的数据是分区存储的，这样不同分区的数据就可以分布在不同的机器上，
+同时可以被并行处理。因此，Spark应用程序所做的无非是把需要处理的数据转换为RDD，然后对RDD进行一系列的变换和操作从而得到结果
+2、如何创建RDD
+RDD可以从普通数组创建出来，也可以从文件系统或者HDFS中的文件创建出来
+
+
+====================================================
+spark-shell
+在Spark Shell中，有一个专有的SparkContext已经为您创建好了，变量名叫做sc。
+自己创建的SparkContext将无法工作。可以用--master参数来设置SparkContext要连接的集群，用--jars来设置需要添加到CLASSPATH的jar包，
+如果有多个jar包，可以使用逗号分隔符连接它们。例如，在一个拥有4核的环境上运行spark-shell
+
+RDD actions/transformations
+创建RDD
+scala>val txt = sc.textFile("file///home/readme.txt")
+
+data = [1, 2, 3, 4, 5]  
+distData = sc.parallelize(data)
+sc.parallelize(data, slices)//一般来说，不指定，Spark会尝试根据集群的状况，来自动设定slices的数目,也可在创建rdd时指定
+
+val a = sc.parallelize(1 to 9) //1至9
+val b = a.map(x=>x*2) //产生新的RDD中每个数*2
+scala>b.collect()
+scala>a.collect()
+
+
+action:
+scala> txt.count()  //返回RDD总行数
+scala> txt.first()  //返回RDD第一行
+
+transformation
+txt.filter(line=>line.contains("spark")).count()
+
+
+flatMap、map和reduceByKey,collect(),cache()  
+
+Spark简介
+1、什么是Spark
+发源于AMPLab实验室的分布式内存计算平台，它克服了MapReduce在迭代式计算和交互式计算方面的不足。
+相比于MapReduce，Spark能充分利用内存资源提高计算效率。
+
+2、Spark计算框架
+Driver程序启动很多workers,然后workers在（分布式）文件系统中读取数据后转化为RDD（弹性分布式数据集），最后对RDD在内存中进行缓存和计算
+
+3、为什么Spark计算速度快
+（1）内存计算
+（2）优化执行计划
+
+4、Spark Api语言支持
+（1）Scala
+（2）Java
+（3）Python
+
+5、怎么运行Spark
+Local本地模式、Spark独立集群、Mesos、Yarn-Standalone、Yarn-Client
+
+1、RDD（弹性分布式数据集）是什么
+只读的、分块的数据记录集合(RDD是一种分布式的内存抽象)
+可以通过读取来不同存储类型的数据进行创建、或者通过RDD操作生成（map、filter操作等）
+使用者只能控制RDD的缓存或者分区方式
+RDD的数据可以有多种类型存储方式(可（序列化）存在内存或硬盘中) 
+
+1.RDD的创建
+直接从集合转化 sc.parallelize(List(1,2,3,4,5,6,7,8,9,10))
+从HDFS文件转化 sc.textFile("hdfs://")
+从本地文件转化 sc.textFile("file:/")
+
+2.RDD支持两种操作类型
+transformation
+action
+
+transformaction变换：变换的返回值是一个新的RDD集合，而不是单个值。调用一个变换方法，不会有任何求值计算，它只获取一个RDD作为参数，然后返回一个新的RDD。
+变换函数包括：map，filter，flatMap，groupByKey，reduceByKey，aggregateByKey，pipe和coalesce。
+action行动：行动操作计算并返回一个新的值。当在一个RDD对象上调用行动函数时，会在这一时刻计算全部的数据处理查询并返回结果值。
+行动操作包括：reduce，collect，count，first，take，countByKey以及foreach。
+
+结构上Hive On Spark和SparkSQL都是一个翻译层，把一个SQL翻译成分布式可执行的Spark程序。而且大家的引擎都是spark
+
+
+
+
+可以通过以下三种方式加载spring容器，实现bean的扫描与管理：
+1、 ClassPathXmlApplicationContext：从类路径中加载
+ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-context.xml");
+context.start();
+2、 FileSystemXmlApplicationContext: 从文件系统加载
+
+FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext("E:\\spring-context.xml");
+context.start();
+3、 XmlWebApplicationContext：从web系统中加载
+
+
+ApplicationContext ac = new ClassPathXmlApplicationContext(new String[]{"applicationContext.xml","dao.xml"});
+或者用通配符:
+ApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/*.xml");
+
+ClassPathXmlApplicationContext[只能读放在web-info/classes目录下的配置文件]
+classpath:前缀是不需要的,默认就是指项目的classpath路径下面;
+如果要使用绝对路径,需要加上file:前缀表示这是绝对路径;
+
+FileSystemXmlApplicationContext
+1.没有盘符的是项目工作路径,即项目的根目录;
+2.有盘符表示的是文件绝对路径.
+3.如果要使用classpath路径,需要前缀classpath:
+ApplicationContext factory = new FileSystemXmlApplicationContext("classpath:appcontext.xml");
+ApplicationContext factory = new FileSystemXmlApplicationContext("file:F:/workspace/example/src/appcontext.xml");//可以不加file前辍
+
+
+
+即把spring容器加载到servlet容器（web容器）中，所以需要在web.xml文件中配置servlet或者listener的方式，实现spring容器的加载
+
+web.xml配置listener方式实现加载：
+<listener>  
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+</listener>  
+<context-param>  
+    <param-name>contextConfigLocation</param-name>  
+    <param-value>/WEB-INF/spring-context.xml</param-value>  
+</context-param>
+
+web.xml配置servlet方式实现加载：
+
+    <servlet>
+        <servlet-name>springServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath*:/spring-mvc*.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+注意： 在spring MVC中，一般需要同时使用上面两种方式，servlet方式负责配置controller等view层，listener方式负责配置service、dao等model层。
+
+URL fileURL=this.getClass().getResource("/config/application.xml");//jar中的类获得jar包中资源文件的路径   
+InputStream is=this.getClass().getResourceAsStream("/config/application.xml");//jar中的类读入jar包中的资源文件 
+
+
+

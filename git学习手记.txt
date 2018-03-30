@@ -1,3 +1,22 @@
+配置Git
+　1. 打开你要放置项目的本地路径，右键选择$ Git Bash Here。
+　2. 初始化用户名：$ git config --global user.name "用户名"   用户名修改为自己的用户名。
+　3. 初始化邮箱：$ git config --global user.email "邮箱地址"。
+　　注：如果用户名或邮箱输入错误需要重置，使用以下命令修改：
+　　　　$ git config --global --replace-all user.name "用户名"  
+　　　　$ git config --global --replace-all user.email "邮箱地址"
+2. 生成公钥，命令行中输入$ssh-keygen -t rsa -C "邮箱" 会在C:\Users\Administrator\.ssh 目录下
+将id_rsa.pub内容复制粘贴至->公钥框里
+以码云为例：在项目页打开管理 → 公钥管理 → 添加公钥
+
+4. Clone项目：
+　找到项目的SSH地址，命令行输入 $ git clone "SSH地址"，完毕之后项目将会被Clone至选择的目录下。
+5. Clone代码：
+　如果需要Clone某个分支，命令行输入$ git clone -b "分支名" "仓库地址名" 即可。
+=============================================================================================
+
+
+
 #git  
 #git config --global user.name "fanghj"
 #git config --global user.email "fanghoujun@126.com"

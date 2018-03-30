@@ -1,0 +1,206 @@
+a)创建tmp文件，mkdir -p /data/tmp
+b)创建name文件，mkdir -p /data/name
+c)创建data文件，mkdir -p /data/data
+
+/usr/lib/jvm/java-1.8.0-openjdk.x86_64
+
+hdfs-env.sh 修改JDK目录
+
+core-site.xml
+<property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://10.20.32.200:9000</value>
+    <description>192.168.1.100为服务器IP地址，其实也可以使用主机名</description>
+</property>
+<property>
+    <name>io.file.buffer.size</name>
+    <value>131072</value>
+    <description>该属性值单位为KB，131072KB即为默认的64M</description>
+</property>
+<property>
+　　<name>hadoop.tmp.dir</name>
+　　<value>/data/tmp</value>
+</property>
+
+
+hdfs-site.xml
+ <property>
+    <name>dfs.replication</name>
+    <value>2</value>
+    <description>分片数量，伪分布式将其配置成1即可</description>
+</property>
+<property>
+    <name>dfs.namenode.name.dir</name>
+    <value>file:/data/name</value>
+    <description>命名空间和事务在本地文件系统永久存储的路径</description>
+</property>
+<property>
+    <name>dfs.blocksize</name>
+    <value>268435456</value>
+    <description>大文件系统HDFS块大小为256M，默认值为64M</description>
+</property>
+<property>
+    <name>dfs.namenode.handler.count</name>
+    <value>100</value>
+    <description>更多的NameNode服务器线程处理来自DataNodes的RPCS</description>
+</property>
+<property>
+    <name>dfs.datanode.data.dir</name>
+    <value>file:/data/data</value>
+    <description>DataNode在本地文件系统中存放块的路径</description>
+</property>
+<property>
+　　<name>dfs.namenode.secondary.http-address</name>
+　　<value>10.20.32.200:9001</value>
+</property>
+<property>
+　　　　<name>dfs.permissions.enabled</name>
+　　　　<value>false</value>
+　　　　<description>
+　　　　　　If "true", enable permission checking in HDFS.
+　　　　　　If "false", permission checking is turned off,
+　　　　</description>
+</property>
+
+
+mapred-site.xml
+<property>
+    <name>mapreduce.framework.name</name>
+    <value>yarn</value>
+</property>
+<property>
+    <name>mapreduce.jobtracker.staging.root.dir</name>
+    <value>/data/tmp</value>
+</property>
+
+
+
+
+4.yarn-site.xml
+<configuration>
+		<property>
+　　　　<name>yarn.resourcemanager.scheduler.address</name>
+　　　　<value>10.20.32.200:8030</value>
+				<description>默认${yarn.resourcemanager.hostname}:8030,可不配置</description>
+　　</property>
+　　<property>
+　　　　<name>yarn.resourcemanager.hostname</name>
+　　　　<value>10.20.32.200</value>
+　　</property>
+　　<property>
+　　　　<name>yarn.nodemanager.aux-services</name>
+　　　　<value>mapreduce_shuffle</value>
+　　</property>
+　　<property>
+　　　　<name>yarn.log-aggregation-enable</name>
+　　　　<value>true</value>
+　　</property>
+　　<property>
+　　　　<name>yarn.log-aggregation.retain-seconds</name>
+　　　　<value>604800</value>
+　　</property>
+</configuration>
+
+5.slaves
+slave1
+slave2
+
+格式化HDFS
+hadoop namenode -format
+
+
+scp -r app hserver3:/
+scp /etc/hosts hserver3:/etc/hosts
+
+#scp -r /app/hadoop-2.8.3/etc/hadoop/* hserver2:/app/hadoop-2.8.3/etc/hadoop/
+
+问题：仅DATANODE启不启来，注意检查/etc/hosts文件内容，文件里面的::localhost 等信息不能删除或注掉，需要保留
+如下：
+127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
+::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+10.20.32.200 hserver1
+10.20.32.202 hserver2
+10.20.32.203 hserver3
+
+ERROR org.apache.hadoop.hdfs.server.namenode.SecondaryNameNode: Exception in doCheckpoint
+
+通过用浏览器和http访问jobtracker所在节点的8088端口监控jobtracker
+通过用浏览器和http访问namenode所在节点的50070端口监控集群
+NameNode - https://localhost:50070/
+JobTracker - https://localhost:50030/
+
+hadoop jar hadoop-mapreduce-examples-2.8.3.jar wordcount /test/wordCount.txt /countOut
+
+hadoop fs -put testWordCount /wordCountInput
+#hadoop jar hadoop-mapreduce-examples-2.8.3.jar wordcount /wordCountInput /wordCountOutput
+
+Hadoop集群测试
+#echo "this is a test by fanghj to MAP REDUCE " >> testWordCount
+#hadoop fs -mkdir /wordCountInput //创建hadoop文件夹wordCountInput
+#hadoop fs -put testWordCount /wordCountInput //将文件testWordCount上传至wordCountInput文件夹
+#hadoop jar /app/hadoop-2.8.3/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.3.jar wordcount /wordCountInput /wordCountOutput
+
+#hadoop jar wc.jar org.apache.hadoop.examples.WordCount /wordCountInput /wordCountOutput
+
+#hadoop jar wc.jar org.apache.hadoop.examples.WordCount -D mapreduce.input.fileinputformat.split.maxsize=1 /wordCountInput /wordCountOutput
+最大划分字节数为1
+-D mapreduce.input.fileinputformat.split.maxsize=1
+
+查看运行结果
+#hadoop fs -ls /wordCountOutput
+在output/part-r-00000可以看到程序执行结果：
+#hadoop fs -cat /wordCountOutpart-r-00000
+
+============================================================
+hadoop eclipse插件设置
+1、设置本地对应hadoop目录
+hadoop installation directory:E:\soft_\hadoop-2.8\hadoop-2.8.0
+2、location设置
+MapReduce(V2)Master的Host填写yarn-site.xml中配置的yarn.resourcemanager.hostname配置的resourceManager的ip地址
+port填写yarn-site.xml中配置的yarn.resourcemanager.scheduler.address的值，也就是yarn的scheduler的端口号，如果没有配置的话，可以参考hadoop文档，2.6.0版本的默认值为8030
+
+右面DFS Master的Host写NameNode的ip，port写NameNode的入口地址，也就是core-site.xml中fs.default.name这个参数设置的ip和端口
+
+
+mapreduce.framework.name == yarn (local) 控制任务是在本地运行还是在集群运行
+
+报错解决方法：
+/bin/bash: line 0: fg: no job control 
+mapred-site.xml增加如下设置：
+<property>
+	<name>mapreduce.app-submission.cross-platform</name>
+	<value>true</value>
+</property>
+
+硬编码方式：
+Configuration conf = new Configuration();
+conf.set("mapreduce.app-submission.cross-platform", "true");
+
+yarn-site.xml中配置的yarn.resourcemanager.scheduler.address 的IP+端口，2.8.3版本的默认值为8030
+
+
+hadoop权限
+创建了一个xxx用户并在系统根目录下创建/app目录
+一般做法是root用户在根目录下创建/app目录，并修改该目录拥有者为xxx(chown –R xxx:xxx /app）
+
+
+
+============================================
+Hadoop内置Partitioner,Hadoop中自带了一个默认的分区类HashPartitioner
+1.根据业务需要，产生多个输出文件
+2.多个reduce任务在并发运行，提高整体job的运行效率
+
+Mapper最终处理的键值对<key, value>，是需要送到Reducer去合并的，合并的时候，有相同key的键/值对会送到同一个Reducer节点中进行归并。
+哪个key到哪个Reducer的分配过程，是由Partitioner规定的
+
+=================================================================================
+Spark Streaming是一个准实时流处理框架，而Hadoop MR是一个离线、批处理框架；很显然，在数据的价值性角度，Spark Streaming完胜于Hadoop MR
+Spark引进了弹性分布式数据集RDD (Resilient Distributed Dataset) 
+
+hadoop 解决大数据的（大到一台计算机无法进行存储，一台计算机无法在要求时间内进行处理）的可靠存储和处理。
+hadoop 包括yarn mapreduce hdfs三大核心组件
+
+=======================================================================
+Storm
+
+storm是一个用于实时流式计算的分布式计算引擎，弥补了Hadoop在实时计算方面的不足（Hadoop在本质上是一个批处理系统）

@@ -1,0 +1,94 @@
+oracle启动：
+1.1、启动lsnrctl监听。
+切换至oracle用户
+#su - oracle
+查看当前侦听是否已启动：
+#lsnrctl status
+未启动启动侦听
+#lsnrctl start
+#lsnrctl stop 停侦听
+
+1.2、启动数据库实例。
+以system用户身份登陆oracle
+sqlplus /nolog
+
+sql>conn as sysdba
+sql>startup
+
+
+
+
+创建oracle用户并赋权限
+create user jianzhou identified by jz123456;
+
+grant connect, resource to jianzhou;
+
+创建表空间
+create tablespace AITELLER datafile 'AITELLER.dbf' size 200M;  
+
+修改用户默认表空间
+alter user jianzhou default tablespace AITELLER;  
+
+-----------------------------------
+启动图型界面模式：
+#dbca 启动数据库实例创建助手
+#netca 启动服务及侦听配置助手
+
+监听启动停止：
+#lsnrctl start --启动
+#lsnrctl stop  --停止
+#lsnrctl status --查看状态 
+
+#tnsping bkserver 测试侦听器
+
+
+[root@node04 /]# groupadd -g 601 oinstall
+[root@node04 /]# groupadd -g 602 dba
+[root@node04 /]# groupadd -g 603 oper
+
+passwd oracle / oracleadmin
+
+
+
+su - oracle
+vim .bash_profile
+
+export TMP=/tmp
+export ORACLE_HOSTNAME=node04
+export ORACLE_UNQNAME=ORA11G
+export ORACLE_BASE=/ora01/app/oracle
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
+export ORACLE_SID=ORA11G
+#xterm窗口模式安装
+export ORACLE_TERM=xterm 
+#防止安装过程出现乱码
+export LANG=C 
+export NLS_LANG=AMERICAN_AMERICA.ZHS16GBK 
+PATH=/usr/sbin:$PATH:$ORACLE_HOME/bin
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib:/lib:/usr/lib;
+export CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib;
+umask 022
+
+source .bash_profile
+
+
+#dbca
+
+oracleadmin
+
+启停oracle
+#su - oracle
+#sqlplus  / as sysdba; 是以DBA身份连接到oracle
+sql>startup  启动
+sql>shutdown immediate； 关闭
+
+查看当前的所有数据库: 
+sql>select * from v$database;
+
+1、本地安装oracle 管理客户端
+2、配置侦听测试
+
+本地远程登录ORACLE:
+CMD>sqlplus sys/sys@xjbank(数据库实例名) as sysdba
+
+

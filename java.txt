@@ -1,0 +1,18 @@
+java上"\" 斜杆是转义使用，需要表达斜杠本身“\\”
+正则表达式中\\ 表示\,所义java中要表示为\\\\
+
+java中 replaceAll 同 split()处理特殊字符
+
+以下方法LINUX windows下通用
+temp[] = "d:\\xx\\x.txt".replaceAll("\\\\","/").split("/");
+if(temp.length>1){
+ String fileName = temp[temp.length - 1]; 
+}
+
+relaceAll()及split()接收正则表达式
+regex为\\\\，因为在java中\\表示一个\，而regex中\\也表示\，所以当\\\\解析成regex的时候为\\。 
+
+====================================================================================================
+java 构造方法
+构造方法对类进行初始化
+

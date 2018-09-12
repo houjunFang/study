@@ -17,6 +17,9 @@ java 构造方法
 构造方法对类进行初始化
 
 ----------------------------------------------------------------------------------------------------
+java对象锁（方法锁） 类锁（静态方法锁）
+
+
 1.指定当前对象加锁，方法上加synchronized
 public synchronized void function(){}
 2.指定当前类的class对象加锁
@@ -36,4 +39,64 @@ notify()/notifyAll()系列方法的作用是：唤醒那些正在等待该对象锁的线程，使其继续运
 sleep()不释放锁
 
 java多线程下，条件判断应使用while而不可使用if
+
+
+一个线程可以允许多次对同一对象上锁.对于每一个对象来说,java虚拟机维护一个计数器,记录对象被加了多少次锁,没被锁的对象的计数器是0,
+线程每加锁一次,计数器就加1,每释放一次,计数器就减1.当计数器跳到0的时候,锁就被完全释放了.    
+java虚拟机中的一个线程在它到达监视区域开始处的时候请求一个锁.JAVA程序中每一个监视区域都和一个对象引用相关联.
+   
+监视器：monitor   
+锁：lock(JVM里只有一种独占方式的lock)   
+进入监视器：entermonitor   
+离开/释放监视器：leavemonitor   
+(entermonitor和leavemonitor是JVM的指令)   
+拥有者：owner   
+  
+在JVM里，monitor就是实现lock的方式。   
+entermonitor就是获得某个对象的lock(owner是当前线程)   
+leavemonitor就是释放某个对象的lock  
+
+
+
+java中每个对象都有唯一的一个monitor，想拥有一个对象的monitor的话有以下三种方式：
+1.执行该对象的同步方法 public synchronize a () {}
+2.执行该对象的同步块synchronize(obj) {}
+3.执行某个类的静态同步方法public static synchronize b(){}
+tips：拥有monitor的是线程
+1.同时只能有一个线程可以获取某个对象的monitor
+2.一个线程通过调用某个对象的wait()方法释放该对象的monitor并进入休眠状态，
+直到其他线程获取了被该线程释放的monitor并调用该对象的notify()或者notifyAll()后再次竞争获取该对象的monitor
+3.只有拥有该对象monitor的线程才可以调用该对象的notify()和notifyAll()方法
+如果没有该对象monitor的线程调用了该对象的notify()或者notifyAll()方法将会抛出java.lang.IllegalMonitorStateException
+wait()方法也和notify()一样有相同的限制
+
+ 一：Monitor
+Monitor是一个同步工具，相当于操作系统中的互斥量（mutex），即值为1的信号量。
+它内置与每一个Object对象中，相当于一个许可证。拿到许可证即可以进行操作，没有拿到则需要阻塞等待。
+
+二：syncrhoized实现原理
+syncrhoized又叫做内置锁，为什么呢？因为使用syncrhoized加锁的同步代码块在字节码引擎中执行时，其实是通过锁对象的monitor的取用与释放来实现的。由上面我们直到Monitor是内置于任何一个对象中的，syncrhoized利用monitor来实现加锁解锁，故syncrhoized又叫做内置锁。
+现在我们知道为什么用syncrhoized(lock)来加锁时，锁对象可以是任意对象了：
+1：syncrhoized(lock)加锁时，用到的其实只是lock对象内置的monitor而已；
+2：一个对象的monitor是唯一的，相当于一个唯一的许可证。拿到许可证的线程才可以执行，执行完后释放对象的monitor才可以被其他线程获取。
+我们来讲解一下syncrhoized加锁的同步块的执行过程：
+现在假设有代码块：  syncrhoized（Object lock）{ 同步代码...;}
+它在字节码文件中被编译为：
+monitorenter;//获取monitor许可证，
+进入同步块 同步代码...
+monitorexit;//离开同步块后，释放monitor许可证
+
+synchronized
+对于普通方法同步，锁是当前实例对象
+对于静态方法同步，锁是当前类的 Class 对象
+对于方法块同步，锁是 Synchronized 括号里的对象
+
+
+进程：每个进程都有独立的代码和数据空间（进程上下文），进程间的切换会有较大的开销，一个进程包含1--n个线程。
+线程：同一类线程共享代码和数据空间，每个线程有独立的运行栈和程序计数器(PC)，线程切换开销小。
+线程和进程一样分为五个阶段：创建、就绪、运行、阻塞、终止。
+多进程是指操作系统能同时运行多个任务（程序）。
+多线程是指在同一程序中有多个顺序流在执行。
+
+在java中，每次程序运行至少启动2个线程。一个是main线程，一个是垃圾收集线程。因为每当使用java命令执行一个类的时候，实际上都会启动一个ＪＶＭ，每一个ｊＶＭ实际在就是在操作系统中启动了一个进程。
 --------------------------------------------------------------------------------------------------------------------------

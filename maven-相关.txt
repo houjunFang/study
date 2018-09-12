@@ -3,3 +3,4 @@
 	<localRepository>D:/.m2/repository</localRepository>  
 3.还可以在运行时指定本地仓库位置：
 	mvn clean install -Dmaven.repo.local=/home/juven/myrepo/
+	

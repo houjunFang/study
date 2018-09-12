@@ -173,3 +173,8 @@ git 合并两个分支
 6、不需要远程dev分支库时,执行如下删除
 git push origin 分支名 -d 
 git branch -r -d 分支名称（删除本地远程分支）
+
+------------------------------------------------------
+查看GIT历史
+git log --pretty=oneline --graph
+

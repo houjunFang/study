@@ -178,3 +178,6 @@ git branch -r -d 分支名称（删除本地远程分支）
 查看GIT历史
 git log --pretty=oneline --graph
 
+======================================================
+取消当前所有文件修改（相对于暂存区）
+git checkout -- . 或 git checkout .

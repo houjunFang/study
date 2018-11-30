@@ -203,3 +203,19 @@ git remote -v
 3.将本地库push至远程(git push 代称 分支)
 git push origin master
 git push coding master
+
+==========================================
+克隆指定分支代码：
+git clone -b xxxx URL
+
+
+git branch -d 分支名称  //删除本地分支
+git push origin --delete 分支名称  //删除远程分支
+或者
+git push origin -d 分支名 //删除远程分支
+
+删除分支后，更新查看
+git remote prune origin
+
+查看所有分支情况：
+git remote show origin

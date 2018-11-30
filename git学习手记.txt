@@ -181,3 +181,25 @@ git log --pretty=oneline --graph
 ======================================================
 取消当前所有文件修改（相对于暂存区）
 git checkout -- . 或 git checkout .
+
+--------------------------------------
+
+
+git remote add 代称 仓库地址
+git push 代称 分支
+git remote -v 可以查看本地仓库现在连接了那个远程仓库。
+
+git remote add origin +复制的内容”，就是给本地仓库增加一个远程仓库，刚刚复制的内容就是远程仓库的地址。可以理解为origin是后边一长串仓库地址的代号
+
+例如：
+如何将本地仓库连接到多个远程仓库
+1.进入本地仓库目录
+git remote add origin https://github.com/hjapp/t.git
+git remote add coding https://git.coding.net/hjapp/test.git
+
+2.查看本地库现在已创建的远程仓库
+git remote -v
+
+3.将本地库push至远程(git push 代称 分支)
+git push origin master
+git push coding master

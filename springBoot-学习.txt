@@ -1,0 +1,222 @@
+1.要成为一个springboot项目必须继承spring-boot-starter-parent同时指定版本
+2.覆盖指定相关参数如下：
+  <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <java.version>1.8</java.version>
+      <start-class>com.hjapp.springbootdemo.SpringbootdemoApplication</start-class>
+  </properties>
+3.组件依赖不用配置版本，因为parent中已经有指定如下：
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+4.maven插件也在spring-boot-starter-parent中有指定所以可直接如下使用
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+启动类可通过属性start-class来配置指定
+
+
+controller配置正常报404错解决方案：
+1.spring boot 默认扫描您的类是 在启动类的当前包 和 下级包
+2.还有一种解决方案是 ，配置spring 扫描路径 在启动类的上面添加   @ComponentScan(basePackages = {"com.dai.*"}),这配您的controller所在的包  
+
+=======================================================================================================================================
+SpringBoot 集成swagger2
+1.pom.xml中增加如下swagger依赖
+ <!--swagger2 支持-->
+  <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>2.2.2</version>
+  </dependency>
+  <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>2.2.2</version>
+  </dependency>
+2.xxxApplication同级位置创建如下swagger2.java
+@Configuration
+@EnableSwagger2 //启用swagger2
+public class Swagger2 {
+
+    @Bean
+    public Docket createRestApi(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.hjapp.controller")) // 扫描该包下的所有需要在Swagger中展示的API，@ApiIgnore注解标注的除外  
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Spring Boot集成Swagger2构建RESTful APIs DEMO")
+                .description("springBoot集成swagger2 DEMO")
+                .termsOfServiceUrl("http://www.hjapp.com/")
+                .contact("fanghoujun")
+                .version("1.0")
+                .build();
+    }
+}
+3.针对com.hjapp.controller包下的controller相应方法作相应注解配置如下：
+@RestController
+public class TestController {
+
+    @ApiOperation(value="支付工具名称名称查询",httpMethod = "POST",notes = "用户测试验证 <br> 接口生成时间：2018年07月12日 13:31:54",consumes = "application/json", produces = "application/json")
+    @RequestMapping(value ="/getUser",method= RequestMethod.POST)
+    @ApiImplicitParam(name = "User", value = "user服务参数", required = true, dataType = "User")
+    public String getUser(@RequestBody User user){//@RequestBody 绑定JSON字符串至对象user
+        return "hello test";
+    }
+}
+---------------------------------------------------------------
+入参中使用的bean
+@ApiModel(description="输入bean")
+public class User {
+
+    @ApiModelProperty(name="userName", value="姓名",dataType="String",example="aaa")
+    private String name;
+    @ApiModelProperty(name="age", value="年龄",dataType="String",example="18")
+    private String age;
+
+    @ApiModelProperty(name="id", value="id",dataType="String",example="2018009")
+    private String id;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+}
+4.启动项目后通过http://ip:端口/swagger-ui.htm访问查看生成的api效果
+http://127.0.0.1:8080/v2/api-docs
+
+5.关键注解说明：
+
+属性说明
+@ApiModelProperty(value="字段说明中文描述",name="属性名称",dataType="类型",required="true/false是否必填",example="样例")
+
+====================================================================================================================
+@SpringBootApplication注解，它包括三个注解：
+@Configuration：表示将该类作用springboot配置文件类。
+@EnableAutoConfiguration:表示程序启动时，自动加载springboot默认的配置。
+@ComponentScan:表示程序启动是，自动扫描当前包及子包下所有类。
+
+
+@Controller 普通controller，返回视图
+@RestController 直接返回字符串 相当于@ResponseBody + @Controller
+
+返回空
+response.getWriter().print(null);
+
+
+@CrossOrigin
+
+@ResponseBody
+@RestController
+
+
+
+
+
+
+
+
+
+js中JSON.stringify()用在ajax中将json对象转化成JSON字符串形式传输
+JSON.parse()【从一个字符串中解析出json对象】
+JSON.stringify()【从一个对象中解析出字符串】
+JSON.stringify()函数是用来序列化对象的，无论输入什么，输出的都是字符串类型，可以按自己的需求来定制如何序列化，输出结果是怎样的格式
+//测试发送json数据
+$("#id").click(function () {
+    $.ajax({
+        type: "post",
+        url: "test",
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify(getTestJson()),
+        dataType: "json",
+        success: function (data) {
+            alert(data);
+        },
+        error:function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(XMLHttpRequest.status);
+            alert(XMLHttpRequest.readyState);
+            alert(textStatus);
+        }
+    });
+ 
+    function getTestJson() {
+        var Json = {
+            "a":"aaaaaaa",
+            "b":0,
+            "c":2,
+        };
+        return Json;
+    }
+ 
+});
+
+
+ @RequestBody(required = false)非必传处理
+ 
+ @RequestMapping(value = "/test",method = RequestMethod.POST)
+    @ResponseBody
+    public String test(@RequestBody(required = false) String requestJson){
+            if(requestJson==null||requestJson==""){
+                return ApiResponse.buildFailResponse(ResultConstant.OPERATOR_FAIL,"请求接口需要传递正确的JSON数据");
+            }
+
+---------------------------------------------------------------------------------------------------------
+@ImportResource 加载配置文件
+@ImportResource({"classpath*:META-INF/core-app/*.xml", "classpath*:META-INF/productCenter/productCenter-service.xml"})
+
+@SpringBootApplication 指定扫描包：scanBasePackages
+@SpringBootApplication(
+    scanBasePackages = {"com.bosent.productCenter"}
+)
+
+
+单元测试
+@RunWith //默认使用SpringRunner.class
+
+指定runner 
+@RunWith(SpringRunner.class)
+
+@SpringBootTest(classes={Application.class})// 指定启动类
+
+
+
+@SpringBootApplication
+@SpringBootApplication
+
+@ImportResources
+@SpringBootTest
+@RunWith
+
+
+
+
+

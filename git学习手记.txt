@@ -237,6 +237,8 @@ git push origin :refs/tags/标签名
 列出标签：git tag
 --------------------- 
 git放弃本地修改
-git checkout .  放弃本地所有修改(未git add操作)
-git checkout -- filename 放弃单个指定文件修改
+1)git checkout .  放弃本地所有修改(未git add操作)
+2)git checkout -- filename 放弃单个指定文件修改
+
+
 

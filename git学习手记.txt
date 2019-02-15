@@ -240,5 +240,18 @@ git放弃本地修改
 1)git checkout .  放弃本地所有修改(未git add操作)
 2)git checkout -- filename 放弃单个指定文件修改
 
+3)git reset HEAD . 放弃所有修改（已经git add操作，恢复至未git add前操作）
+4)git reset HEAD filename 放弃指定文件修改
 
+5)git reset --hard HEAD^ (恢复至git commit 前一个版本)
+6)git reset --hard filename (恢复指定文件至上一次commit版本)
 
+===========================================================
+git tag 打标签
+1)git tag tagname
+2)git tag -a tagname -m "tag desc"
+3)git tag -d tagname  //删除本地标签
+3)git tag   //查看当前所有标签
+4)git push origin tagname  //推送本地标签至远端
+5)git push origin --tags   //推送本地所有标签至远端
+6)git push origin --delete tagname //删除远端标签

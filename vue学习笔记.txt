@@ -1,0 +1,33 @@
+nodejs下载地址:https://nodejs.org/en/
+
+插件set-iterm2-badge
+
+检查node及npm是否安装完成
+node -v
+npm -v 
+
+安装vue
+npm install vue
+或
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+cnpm install vue
+
+
+检查安装VUE成功与否
+vue -V
+
+
+安装vue-cli
+cnpm install --global vue-cli
+
+vue init webpack my-project
+cd my-project
+npm install
+npm run dev
+
+
+https://blog.csdn.net/weixin_41910848/article/details/81697577
+
+
+	
+

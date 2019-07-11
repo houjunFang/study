@@ -293,3 +293,11 @@ git tag 使用方法：
 7.git push origin tagname
 8.git push origin --tags  //推送本地所有标签
 9.git push origin 源tagname:目的tagname  //如 git push origin :tagname 则是删除远程标签tagname
+
+
+git push origin tagname -d //删除远程tag
+git tag tagname -d //删除本地分支
+
+git branch branchName -d //删除本地分支
+git push origin branchName -d //删除远程分支
+

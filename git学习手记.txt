@@ -256,6 +256,12 @@ git tag 打标签
 5)git push origin --tags   //推送本地所有标签至远端
 6)git push origin --delete tagname //删除远端标签
 
+7)git checkout [tagname]  //切换至tagname对应分支
+对之前某次提交补打标签tag
+8)git tag -a tagname commitId
+
+
+
 -----------------
 git 基于某个分支创建分支
 1、拷贝源代码
@@ -273,5 +279,17 @@ git branch 分支名 tagName
 git 基于指定提交commit创建分支
 git checkout -b 分支名 commitId //基于commitId创建分支名分支，并切换至该分支
 如：
-git log --pretty=online
+git log --pretty=oneline [--graph]
 git checkout -b branchName 12313
+
+=========================================================
+git tag 使用方法：
+1.git tag v1.0  //给当前分支打一个v1.0的标签TAG
+2.git tag  //查看所有已存在的标签
+3.git tag tagname commitId   //对指定的commitId进行打标
+4.git show tagname //查看tag信息
+5.git tag -a v1.0 -m "测试标签" [commitId] //打标 -a指定tagname,-m指定TAG描述信息 指定commitId则对指定提交进行打标
+6.git tag -d v1.0 //删除本地标签
+7.git push origin tagname
+8.git push origin --tags  //推送本地所有标签
+9.git push origin 源tagname:目的tagname  //如 git push origin :tagname 则是删除远程标签tagname

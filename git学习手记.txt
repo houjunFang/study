@@ -206,7 +206,7 @@ git push coding master
 
 ==========================================
 克隆指定分支代码：
-git clone -b xxxx URL
+git clone -b 分支名 http://xxx.git
 
 
 git branch -d 分支名称  //删除本地分支
@@ -255,3 +255,23 @@ git tag 打标签
 4)git push origin tagname  //推送本地标签至远端
 5)git push origin --tags   //推送本地所有标签至远端
 6)git push origin --delete tagname //删除远端标签
+
+-----------------
+git 基于某个分支创建分支
+1、拷贝源代码
+git clone git@git地址
+cd 项目目录
+2、根据已有分支创建新的分支
+git checkout -b yourbranchname origin/oldbranchname
+3、推送到git
+git push origin yourbranchname -u
+=================================================
+git 基于TAG标签创建分支
+git branch 分支名 tagName
+例如:git branch newbranch vtest.1.0.FINAL 会以tag vtest.1.0.FINAL创建新的分支newbranch;
+---------------------------------------------------------------
+git 基于指定提交commit创建分支
+git checkout -b 分支名 commitId //基于commitId创建分支名分支，并切换至该分支
+如：
+git log --pretty=online
+git checkout -b branchName 12313

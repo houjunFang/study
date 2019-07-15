@@ -27,6 +27,1032 @@ npm run dev
 
 
 https://blog.csdn.net/weixin_41910848/article/details/81697577
+----------------------------------------------------------------------------------
+(首先安装使用淘宝npm镜像：
+npm i -g cnpm --registry=https://registry.npm.taobao.org)
+
+安装
+npm install --save //运行安装至本地
+npm install --save-dev //安装至开发
+express静态资源web服务器
+
+卸载
+npm uninstall --save / --save-dev  webpack  
+
+
+
+
+全局安装脚手架环境
+npm install -g vue-cli
+创建一个基于webpack模板项目my-project
+vue init webpack my-project
+进入项目
+cd my-project
+安装依赖
+npm install
+启动项目
+npm run dev（npm start）
+
+打包项目
+npm run build
+
+============================
+vue 调试：
+一、使用debugger和sourcemap调试Vue组件
+1.针对vue-cli webpack官方脚手架，打开build/webpack.dev.conf.js文件，找到下面这句：
+devtool: '#cheap-module-eval-source-map',
+将其修改为：
+devtool: '#eval-source-map ',
+2.在VUE组件需要调试的代码前增加debugger
+3.npm run dev 刷新chrome F12就可以DEBUG了
+
+二、chrome安装vue-devtools插件
+扩展Chrome插件
+Chrome浏览器 >  更多程序 > 拓展程序 
+点击加载已解压程序按钮, 选择 vue-devtools > shells > chrome 放入
+
+
+导入element-ui
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)//全局使用ElementUI
+
+
+
+
+
+如果你写 JS 代码不喜欢带分号，而又搞不清什么时候必须加分号，可以这么做：在以 “(”、"[" 、"/"、"+"、"-" 开头的语句前面都加上一个分号。
+
+
+main.js是我们的入口文件，主要作用是初始化vue实例并使用需要的插件
+
+
+
+
+
+安装element-ui
+npm install element-ui -S（S代表save 安装到本地开发者环境中）
+
+Vue.prototype.$http = axios
+
+
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)//全局使用ElementUI
+
+在ES6前， 前端就使用RequireJS或者seaJS实现模块化，
+ requireJS是基于AMD规范的模块化库，  而像seaJS是基于CMD规范的模块化库， 
+  两者都是为了为了推广前端模块化的工具， 更多有关AMD和CMD的区别
+  
+
+var 方法作用域
+let 块作作用域
+const 同let,不同点const变量赋值后不可再改变（声明常量）
+
+qs:
+https://www.cnblogs.com/zyl96/p/10253767.html
+
+1.箭头函数没有自己的this, 它的this是继承而来; 默认指向在定义它时所处的对象(宿主对象)
+普通函数中的this:
+
+1. this总是代表它的直接调用者(js的this是执行上下文), 例如 obj.func ,那么func中的this就是obj
+
+2.在默认情况(非严格模式下,未使用 'use strict'),没找到直接调用者,则this指的是 window (约定俗成)
+
+3.在严格模式下,没有直接调用者的函数中的this是 undefined
+
+4.使用call,apply,bind(ES5新增)绑定的,this指的是 绑定的对象
+
+
+webpack-dev-server
+
+
+ESLint 关闭 setting中关闭
+Vuex是用来管理组件之间通信的一个插件
+Vuex 是一个专为 Vue.js应用程序开发的状态管理模式
+
+Vue.use
+Vue.prototype
+
+vue axios作为ajax插件
+Mockjs
+jQuery中的Promise
+Mock平台
+https://www.cnblogs.com/dayiran1222/p/9072122.html
+store.js - 轻松实现本地存储（LocalStorage） 
+sessionStorage
+
+axios
+
+Ajax 即“Asynchronous Javascript And XML”（异步 JavaScript 和 XML），是指一种创建交互式网页应用的网页开发技术。
+Ajax = 异步 JavaScript 和 XML（标准通用标记语言的子集）。
+Ajax 是一种用于创建快速动态网页的技术。
+Ajax 是一种在无需重新加载整个网页的情况下，能够更新部分网页的技术。
+通过在后台与服务器进行少量数据交换，Ajax 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。 
+
+
+
+https://blog.csdn.net/harsima/article/details/77949623
+
+如果在开发过程中，ajax请求地址非本服务相同主机和相同端口，则会因浏览器自身的安全机制，导致出现跨域问题。解决该问题最好的方法是让后台同学配置CORS，或者在webpack中设置proxyTable，或者自己搭建nginx服务进行反向代理。
+
+这里主要说一下关于webpack中proxyTable的设置（其实是vue-cli生成的项目自带的配置项）。请注意，webpack的proxyTable只在开发环境中有效！以下说明均引用自vue-cli对webpack模板的说明，这里为原文链接：vuejs-templates
+
+在config/index.js中编辑dev.proxyTable项，以设置代理规则。在开发环境中，实际上使用的是http-proxy-middleware插件实现的代理功能，所以它的详细用法你应该参考其官方文档，这里有个简单的例子：
+
+// config/index.js
+module.exports = {
+  // ...
+  dev: {
+    proxyTable: {
+      // 所有以/api 为前缀的请求将被代理到http://jsonplaceholder.typicode.com
+      // 即 /api/getNav -> http://jsonplaceholder.typicode.com/getNav
+      '/api': {
+        target: 'http://jsonplaceholder.typicode.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  }
+}
+
+
+
+
+通过npm install <模块名> --save-dev下载的模块，会安装到devDependencies下，代表开发环境下需要依赖的，
+通过npm install <模块名> --save下载的模块，会安装到dependencies下，代表生产环境下需要依赖的。
+
+
+vue-cli脚手架关闭eslint的步骤：
+1.打开 build文件夹下面的webpack.base.conf.js;
+2.找到下面这段代码，并将它注释掉：
+const createLintingRule = () => ({
+  // test: /\.(js|vue)$/,
+  // loader: 'eslint-loader',
+  // enforce: 'pre',
+  // include: [resolve('src'), resolve('test')],
+  // options: {
+  //   formatter: require('eslint-friendly-formatter'),
+  //   emitWarning: !config.dev.showEslintErrorsInOverlay
+  // }
+})
+
+
+x => x * x 相当于 function(x){return x*x}
+
+// 两个参数返回后面的值
+(x, y) =>x*y + y*y
+//没有参数
+() => 999
+// 可变参数
+(x, y, ...rest) =>{
+    var i,sum = x+y;
+    for (i=0;i<rest.length;i++){
+        sum += rest[i];
+    }
+    return sum;
+}
+// 这样写会出错
+x => {foo:x} // 这和函数体{}有冲突
+// 写成这种
+x => {{foo:x}} 返回对象正确写法
+
+
+$(function() {}) 是$(document).ready(function()的简写。
+
+
+ /**
+     * 
+     * getRemoteIP:获取远程请求客户端的外网IP <br/>
+     * 
+     * @param request
+     *            请求实体对象
+     * @return ip 外网ip<br/>
+     */
+    public static String getRemoteIP(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
+    }
+
+
+
+components：{App}中App变量在哪里定义的，不是只有一个App.vue的文件名吗？没找到App变量啊！！在vue的todo-list例子中：components的b写法是这样的：components:{ '标签名'：变量名}，
+如components:{'todo-list':TodoList},此处components：{App}，的写法，既没有标签，也没有变量，如何理解？
+还有template的写法：template: '<App/>'，template中应该定义的是标签，我想问一下，<App>标签又在哪里呢？好像没有这个标签啊！
+
+你说的components：{App}应该是在main.js入口文件中吧，这样的话App应该是App.vue组件中通过export default导出APP变量出来的，然后在main.js中通过import 导入App变量
+components：{App} 写法是ES6的写法，在对象中，如果键值对一样的话，只写一个就可以
+template: '<App/>' 这里面也涉及到一个简写的处理，如果你不在组件上面添加属性或者指令的话，你就可以写成但标签的形式 <App/>其实就是 ‘ <App><App/>’
+<App>标签又在哪里呢 <App>这样写就是代表APP这个组件 template: '<App/>'就是代表使用APP组件的模板
+
+https://segmentfault.com/a/1190000015371266
+
+组件引用：
+<template>  
+    <div>  
+        <!-- 3.在template中就可以直接使用了 -->  
+        <testComponent></testComponent>  
+    </div>  
+</template>  
+  
+<script>  
+    //1.先使用import导入你要在该组件中使用的子组件  
+    import testComponent from './testComponent.vue'  
+    export default {  
+        //2.然后,在components中写入子组件  
+        components: {testComponent},  
+        methods: {},  
+    }  
+</script>  
+  
+<style></style>
+
+
+组件引用方式二：
+<template>  
+    <div>  
+        <!-- 2.在template中使用 -->  
+        <testComponent></testComponent>  
+    </div>  
+</template>  
+  
+<script>  
+    export default {  
+        //1.直接在components中写入子组件  
+        components: {  
+            testComponent:require('./testComponent.vue').default  
+        },  
+        methods: {},  
+    }  
+</script>  
+  
+<style></style>
+
+
+
+vue.js2.0中文,项目所使用的js框架
+vue-router,vue.js配套路由
+vuex      状态管理
+Element UI框架
+
+
+router-view vue-router
+
+const router=new VueRouter({
+routes: routers
+})
+
+键的名字必须为 routes
+
+JS 原型https://www.liaoxuefeng.com/wiki/1022910821149312/1023021997355072
+
+　1， route，它是一条路由，由这个英文单词也可以看出来，它是单数， Home按钮  => home内容， 这是一条route,  about按钮 => about 内容， 这是另一条路由。
+
+　　　　2， routes 是一组路由，把上面的每一条路由组合起来，形成一个数组。[{home 按钮 =>home内容 }， { about按钮 => about 内容}]
+
+　　　　3， router 是一个机制，相当于一个管理者，它来管理路由。因为routes 只是定义了一组路由，它放在哪里是静止的，当真正来了请求，怎么办？ 就是当用户点击home 按钮的时候，怎么办？这时router 就起作用了，它到routes 中去查找，去找到对应的 home 内容，所以页面中就显示了 home 内容。
+
+
+Vue 将模板编译成虚拟 DOM 渲染函数。结合响应系统，Vue 能够智能地计算出最少需要重新渲染多少组件，并把 DOM 操作次数减到最少
+new Vue({
+  el:'#app',
+  router:router,
+  render:h=>h(App)
+})
+
+
+------------------------------------------------------
+vue安装npm（安装稳定版本）
+npm install vue
+
+============================================
+npm init //使用 npm init 指令创建项目描述文件 package.json。
+
+webpack.config.js为webpack的配置文件
+
+-----------------------------------------
+nodejs导入导出模块module.exports(exports),require
+1.单个模块导出
+导出：module.exports=函数名或变量名
+module.exports=function(){}
+导入：require("xxx.js") 或省略后缀 require('xxx')
+
+2.导出多个模块
+var showFn = ()=>{};
+var subFn = function(){};
+	module.exports.showfn = showFn;
+	module.exports.subFn = subFn;
+或者
+  module.exports={showFn,subFn};
+或者
+  module.exports={
+     a:showFn,
+     b:subFn
+  }
+
+module.exports才是真正的接口，exports只不过是它的一个辅助工具。　最终返回给调用的是module.exports而不是exports。
+所有的exports收集到的属性和方法，都赋值给了Module.exports。当然，这有个前提，就是module.exports本身不具备任何属性和方法。
+如果，module.exports已经具备一些属性和方法，那么exports收集来的信息将被忽略。
+
+Node.js本身提供了很多核心模块 http://nodejs.org/api/ ，这些核心模块被编译成二进制文件，可以require('模块名')去获取；核心模块具有最高的加载优先级（有模块与核心模块同名时会体现）,如：
+var fs=require('fs');
+var http=require('http')）
+总结：
+0.一个 Node.js 文件就是一个模块，这个文件可能是JavaScript 代码、JSON 或者编译过的C/C++ 扩展
+1.nodejs通过exports(module.exports导出模块),通过require('模块名')引入模块
+2.exports仅仅是module.exports的一个地址引用。nodejs只会导出module.exports的指向，如果exports指向变了，那就仅仅是exports不在指向module.exports，于是不会再被导出
+（Module.exports才是真正的接口，exports只不过是它的一个辅助工具。　最终返回给调用的是Module.exports而不是exports。所有的exports收集到的属性和方法，都赋值给了Module.exports
+当然，这有个前提，就是Module.exports本身不具备任何属性和方法。如果，Module.exports已经具备一些属性和方法，那么exports收集来的信息将被忽略）
+
+module.exports = 'ROCK IT!';
+exports.name = function() {
+	console.log('My name is Lemmy Kilmister');
+};
+
+//再次引用执行rocker.js :
+　　var rocker = require('./rocker.js');
+　　rocker.name(); // TypeError: Object ROCK IT! has no method 'name'
+
+3.如果你的模块是一个特定的类型,就用Module.exports;如果你模块是一个典型的“实例化对象”就用exports。给Module.exports添加属性类似于给exports添加属性
+
+
+手动搭建vue-load + webpack项目
+1.新建项目文件夹 vue-prj
+2.npm init  //初始化项目，生成项目配置文件package.json
+新建src夹并在其下创建App.vue文件
+3.npm install webpack --save-dev
+新建webpack打包配置文件webpack.config.js
+SRC目录下创建工程入口文件index.js
+SRC目前下创建dist目录存放打包编译后的JS文件
+3.npm install vue vue-loader css-loader style-loader --save-dev
+4.npm install webpack-dev-server --save-dev
+
+
+
+===================================================================================================
+先安装好淘宝的cnpm，淘宝镜像方便些$ npm install -g cnpm --registry=https://registry.npm.taobao.org
+npm install --save-dev webpack@<版本号>格式
+
+node.js中__dirname变量获取当前模块文件所在目录的完整绝对路径 
+
+loader：是webpack用来预处理模块的，在一个模块被引入之前，会预先使用loader处理模块的内容
+
+babel-loader
+babel是ES6+语法的编译器，用于将旧版本浏览器无法识别的语法和特性转换成为ES5语法，使代码能够适用更多环境。
+在Babel执行编译的过程中，会从项目的根目录下的 .babelrc文件中读取配置。.babelrc是一个json格式的文件。
+
+
+webpack loader三种写法
+方式一：
+module:{
+        rules:[
+            {
+                test:/\.css$/,
+                use:['style-loader','css-loader']
+            }
+        ]
+    },
+
+方式二：
+ module:{
+        rules:[
+            {
+                test:/\.css$/,
+                loader:['style-loader','css-loader']
+            }
+        ]
+    },
+
+方式三：
+module:{
+        rules:[
+            {
+                test:/\.css$/,
+                use: [
+                    {
+                        loader: "style-loader"
+                    }, {
+                        loader: "css-loader"
+                    }
+                ]
+            }
+        ]
+    },
+
+
+方式四：
+module:{
+	rules:[
+	{
+    test: /\.css$/,
+    loader: 'style-loader!css-loader?modules'
+   }
+	]
+}
+说明：style-loader和css-loader是工具名称。
+!感叹号是分割符，表示两个工具都参与处理。
+?问号，其实跟url的问号一样，就是后面要跟参数的意思。
+而modules这个参数呢，就是将css打包成模块)
+
+需要安装
+npm install  babel-preset-env babel-loader babel-core --save-dev
+
+babel-loader配置：
+{
+    test:/\.js$/,
+    use:[{
+        loader:'babel-loader'
+    }],
+    exclude:[
+        path.resolve(__dirname,'node_modules')
+    ]
+}
+根目录下增加.labelrc文件并增加如下配置：
+{
+	"presets":["env"]
+}
+
+或者
+{
+    test:/\.js$/,
+    use:[{
+        loader:'babel-loader'
+        options:{
+        	presets:['env']
+        }
+    }],
+    exclude:[
+        path.resolve(__dirname,'node_modules')
+    ]
+}
+-----------------------------------------------------------
+webpack.config.js配置
+webpack --mode development
+webpack --model production
+
+
+    
+==========================================
+1.新建一个目录，进入目录，初始化npm init
+2.npm install webpack webpack-cli --save-dev (安装完成后 webpack -v 检查安装版本及是否安装成功)
+2.1新建webpack.config.js配置文件指导打包过程
+3.直接运行如下
+  	webpack --mode development
+或者webpack --mode production 则采用默认方式打包 入口文件是'./src/index.js'，输出路径是'./dist/main.js'，其中src目录即index.js文件需要手动创建，而dist目录及main.js会自动生成。
+4.简化打包命令可以package.json配置script中增加如下：简化后，执行npm run dev 就相当于执行webpack --mode development
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack --mode development"
+  },
+5.不使用默认打包（指定入口及出口）可在webpack.config.js中如下：
+const path = require('path');
+
+module.exports = {
+	entry: './src/js/main.js',                                // 入口文件
+	output: {                                                 // 出口文件
+		path: path.resolve(__dirname, 'dist/js'),         // 出口文件位置，一定要是绝对路径
+		filename: 'bundle.js'                             // 出口文件名
+	}
+}
+上面：将会打包。。。main.js文件到。。。bundle.js文件
+
+多文件输入：
+
+const path = require('path');
+
+module.exports = {
+	entry: {
+		main: './src/js/main.js',   // 入口文件
+		a: './src/js/a.js'
+	},
+	output: {            // 出口文件          
+		path: path.resolve(__dirname, 'dist/js'),         // 出口文件位置
+		filename: '[name].js'      // 出口文件名，name就是entry的键名
+	}
+=========================================================================
+webpack --mode development --module-bind 'css=style-loader!css-loader'         			// 给css绑定。。。。
+webpack --mode development --module-bind 'css=style-loader!css-loader' --watch      // watch参数监听，每次保存文件会自动执行 修改文件会自动刷新
+webpack --mode development --module-bind 'css=style-loader!css-loader' --progress --display-modules --display-reasons
+
+--progerss：会出现打包过程，有百分比进度条
+--display-modules：会把所有打包的模块列出来
+--display-reasons：会把打包的原因列出来
+
+------------------------------------------
+html-webpack-plugin 默认会在dist下生成一个index.html文件并引入相应JS
+
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+module.exports = {
+     entry: {
+         bundle : './src/js/main.js'
+     },
+     output: {
+         filename: "[name]-[hash].js",
+         path: __dirname + '/dist'
+     },
+     module: {
+         loaders: [
+             { test: /\.css$/, loader: 'style-loader!css-loader' },  //.css 文件使用 style-loader 和 css-loader 来处理.
+             { test: /\.(png|jpg|jpeg|gif)$/, loader: 'url-loader?limit=8192'} //图片文件使用 url-loader 来处理，小于8kb的直接转为base64
+         ]
+     },
+     plugins:[
+         new HtmlWebpackPlugin({
+             title: 'hello webpack',
+             template:'src/component/index.html',　　//为新生成的index.html指定模版
+             minify:{ //压缩HTML文件
+                 removeComments:true,    //移除HTML中的注释
+                 collapseWhitespace:true    //删除空白符与换行符
+             }
+         })
+     ]
+};
+
+title: 用来生成页面的 title 元素
+filename: 输出的 HTML 文件名，默认是 index.html, 也可以直接配置带有子目录。
+template: 模板文件路径，支持加载器，比如 html!./index.html
+inject: true | 'head' | 'body' | false  ,注入所有的资源到特定的 template 或者 templateContent 中，如果设置为 true 或者 body，
+所有的 javascript 资源将被放置到 body 元素的底部，'head' 将放置到 head 元素中。
+favicon: 添加特定的 favicon 路径到输出的 HTML 文件中。
+minify:{ //压缩HTML文件
+  removeComments:true,    //移除HTML中的注释
+  collapseWhitespace:true    //删除空白符与换行符
+}
+hash: true | false, 如果为 true, 将添加一个唯一的 webpack 编译 hash 到所有包含的脚本和 CSS 文件，对于解除 cache 很有用。
+cache: true | false，如果为 true, 这是默认值，仅仅在文件修改之后才会发布文件。
+showErrors: true | false, 如果为 true, 这是默认值，错误信息会写入到 HTML 页面中
+chunks: 允许只添加某些块 (比如，仅仅 unit test 块)
+chunksSortMode: 允许控制块在添加到页面之前的排序方式，支持的值：'none' | 'default' | {function}-default:'auto'
+excludeChunks: 允许跳过某些块，(比如，跳过单元测试的块)
+
+-------------------------------------------------------------------------------------------
+module.exports={
+	entry:{
+		bundle:'./src/main.js'
+		//bundle:__dirname + './src/main.js'
+		//bundle:path.join(__dirname,'/src/main.js')
+	},
+	或者
+	 entry:'./src/main.js'
+	
+	output:{
+		filename:"[name]-[hash].js", //[name]指entry中的key
+		path:__dirname + '/dist' 
+		//paht:path.jion(__dirname,'/dist')
+	}
+	或者
+	 output:{
+        filename:'./dist/app.js' //文件夹不存在会自动创建  path不单独指出，包含在filename中了
+    }
+}
+
+-----------------------------------------------------------------------------------------------
+webpack-dev-server安装
+1.npm install webpack-dev-server --save-dev
+2.module.exports={
+
+	devServer:{
+	 inline:true,
+	 port:8001
+	}
+
+}
+//配置webpack开发服务功能
+    devServer: {
+        //设置基本目录结构
+        contentBase: path.resolve(__dirname, 'dist'),
+        //服务器的IP地址，可以使用IP也可以使用localhost
+        host: 'localhost',
+        //服务端压缩是否开启
+        compress: true,
+        //配置服务端口号
+        port: 9090
+    }
+3.package.json script中增加：
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --devtool eval-source-map --progress --colors --hot --inline --content-base ./dist",
+    "build": "webpack --progress --colors"
+  },
+    
+详解package.json中命令：
+webpack-dev-server   //启动webpack-dev-server
+--progress --colors    //打包进行显示颜色
+--hot  //开启模块热修复功能
+--content-base ./dist   //设置webpack-dev-server运行的根目录是 ./dist   也可以通过devServer中配置
+--inline  //使用inline的方式进行页面自动刷新
+--quiet  //控制台中不输出打包信息
+--compress  //开启gzip压缩
+
+
+1.npm 开启了npm run dev以后怎么退出或关闭？
+ctrl+c
+2.--save-dev
+自动把模块和版本号添加到模块配置文件package.json中的依赖里devdependencies部分
+3. --save-dev 与 --save 的区别
+--save     安装包信息将加入到dependencies（生产阶段的依赖）
+--save-dev 安装包信息将加入到devDependencies（开发阶段的依赖），所以开发阶段一般使用它
+==========================================================================================
+nodejs中require('xxx')
+当xxx为文件夹时，先查找文件夹下是否有package.json文件且其中main属性指定了入口js
+找不到再看其文件夹下是否有index.js 都不存在就报错
+------------------------------------------------------------------------------------------
+变量导出：
+let msg ='hello,fanghj!'
+module.exports=msg;
+
+在ES6出现之前，js是没有统一的模块体系。
+服务器端使用CommonJS规范,而浏览器端又有AMD和CMD两种规范
+
+
+{{模型名称}} 插值，绑定模型数据（单向绑定） 
+v-bind:标签属性，可以缩写为:标签属性 绑定模型数据到HTML标签的属性 
+v-if 条件判断 
+v-for="item in list" foreach循环 
+v-on:click，可以缩写为@click 绑定用户事件 
+v-model 绑定表单数据 
+指令.修饰符 .number（将输入的数据转换为数字）、.trim（去除输入的数据后面的空格）
+
+
+vue的实例属性和方法
+除了数据属性，Vue 实例还暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来。例如：
+
+var data = { a: 1 }
+var vm = new Vue({
+  el: '#example',
+  data: data
+})
+
+vm.$data === data // => true
+vm.$el === document.getElementById('example') // => true
+
+// $watch 是一个实例方法
+vm.$watch('a', function (newValue, oldValue) {
+  // 这个回调将在 `vm.a` 改变后调用
+})
+
+
+【vue】中的$符号
+在使用vue的时候我们会有用户自定义的属性与方法，同时还存在vue定义好属性和方法（实例属性/实例方法）
+在使用实例属性/方法的时候需要水用$符号，以便与用户自定义的定义的属性区分开来
+//$watch是一个实例方法
+vm.$watch('counter',function (nval,oval) {
+//将在counter发送改变后调用
+alert('计数器值的变化：'+oval+'变为'+nval+'!');
+})
+
+
+$.refs
+$.refs 是document.querySelector(‘a’) -实现选择器的功能
+
+与 标签中的 ref 配合使用
+
+<div id="app">
+   <input type="text" ref="input1"/>
+   <button @click="add">添加</button>
+</div>
+
+<script>
+new Vue({
+  el: "#app",
+  methods:{
+   add:function(){
+       //this.$refs.input1  减少获取dom节点的消耗
+       this.$refs.input1.value ="22";
+       }
+  }
+})
+</script>
+
+ES6 对象内函数的几种写法：
+var person1 = {
+    name: "p1",
+    sayThis() {
+        console.log(this);
+    }
+};
+
+var person2 = {
+    name: "p2",
+    sayThis:()=> {
+        console.log(this);
+    }
+};
+
+var person3 = {
+    name: "p3",
+    sayThis: function() {
+        console.log(this);
+    }
+};
+
+person1.sayThis()
+person2.sayThis()
+
+this指向当前调用此方法的对象
+person2的写法，使用了箭头函数，箭头函数的this指向当前的执行环境，这里当然是window对象，箭头函数并没有自己的this值，它的this继承自外围作用域。
+----------------------------------------------------------------------------------
+ES6
+1.在es6中，当对象的一个属性名称与本地变量名相同时，可以简单书写名称而省略冒号和值
+let person={
+  school,
+  persionInfo
+}
+
+2.对象字面量内的方括号表明该属性需要计算，其结果是一个字符串。意味着可以包含表达式：
+var suffix="name";
+let person={
+ ["first" + suffix]:"fanghj",
+ ["last"+suffix]:"haha"
+}
+================================================================================================================================================
+
+vue实例创建之
+官方：一个 Vue 应用由一个通过 new Vue 创建的根 Vue 实例，以及可选的嵌套的、可复用的组件树组成。
+
+// 定义一个名为 button-counter 的新组件
+Vue.component('button-counter', {
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+  template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+})
+
+===============================================================================================
+ES6相关写法：
+// 箭头函数 
+let f = a => a + 1; 
+// 等价于
+var f = function(a) {
+  return a + 1;
+}
+ 
+// 模版字符串
+let a = 'react'
+let s = `hello ${a}`;  // hello react
+ 
+ 
+// 解构赋值
+let [ lang, ...other ] = ['js', 'java', 'react'];  // js , ['java', 'react']
+ 
+// 扩展运算符 合并数组
+let arr1 = ['a', 'a1'];
+let arr2 = ['b'];
+let newArr = [...arr1, ...arr2]  // ['a', 'a1', 'b']
+ 
+// 对象解构
+let { person: {name, age}, foo } = { person : {name: 'tom', age: 4}, foo: 'foo' }
+console.log(name, foo, age)  // tom , foo , 4
+ 
+// 默认值
+let t = (a = 1) => a + 2
+t(2)  // 4
+t() // 3
+ 
+let o = '';
+let temp = o || 1  // 1
+ 
+// map用法
+arr1.map(item => (
+  item 
+))
+ 
+// filter
+arr1.filter(item => (item != 'a'))  // a1
+ 
+// swap 变量值交换
+let foo = 1
+let bar = 2
+ 
+;[foo, bar] = [bar, foo]  // foo = 2 , bar = 1
+
+----------------------------------------------------------------------------------------
+vue data属性使用函数的意义
+new vue({
+ data:function(){
+ 		return{
+ 		
+ 		}
+ }
+})
+或
+new vue({
+  data(){
+  	return{
+  	}
+  }
+})
+当然简单使用也可是一个对象
+new vue({
+  data:{
+     msg:'xxxx',
+     "xxxx":"xxx"
+  }
+})
+备注：而使用一个返回对象的函数，每次使用组件都会创建一个新的对象，这样就不会出现共享数据的问题来了。
+====================================================================================================
+Vue中图片的引入：
+<template>
+	<div id="t">
+			<v-fang imagsrc="../static/logo.png"/>  //自定义组件直接使用static下的图片
+    	<br>
+    	<v-fang :imagsrc="img1"/>	//自定义组件引入导入图片
+    	<br>
+   		<img :src="img1"/>  //非组件使用引入导入图片方式
+	</div>
+</template>
+
+import Fang from './components/Fang.vue'
+import picName from './assets/logo.png'
+export default{
+  data(){
+  	return{
+  	  imgUrl:picName
+  	}
+  },
+  components:{
+  	'v-fang':Fang
+  }
+}
+---------------------------------------
+自定义组件：Fang.vue
+<template>
+    <div id="template1">
+        <div>--{{title}}--</div>
+        <br>
+        <img :src="imagsrc"/>
+    </div>
+</template>
+
+<script>
+
+export default {
+    name:"Fang",
+    props:{imagsrc:String},
+    data(){
+        return{
+            title:"子组件TITLE"
+        }
+    }
+}
+</script>
+
+=================================================================
+轮播插件：swiper
+
+npm install element-ui --save
+main.js
+import Vue from 'vue'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-default/index.css'
+import App from './App.vue'
+
+Vue.use(ElementUI)
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+
+A.vue
+<template>
+  <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3>{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
+</template>
+
+<style>
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+  
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+  
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
+</style>
+==========================================================
+数据挂载在实例化Vue的时候，两种方式挂载数据
+方法一：最常用的方法var app=new vue({el:"#app",data(){}`````})
+注：文档中最常用的做法就是直接在实例化的时候利用el:"#app"来挂载元素
+方法二：$mount?
+var app=new vue({data(){}})
+app.$mount("#app")
+注：利用$mount挂载的方法有一个很大的好处，就是将实例化的内容和他对HTML的关联分开，可以更直观的展现。
+
+=================================================================================
+何为scoped？
+在vue文件中的style标签上，有一个特殊的属性：scoped。当一个style标签拥有scoped属性时，它的CSS样式就只能作用于当前的组件，也就是说，该样式只能适用于当前组件元素。
+通过该属性，可以使得组件之间的样式不互相污染。如果一个项目中的所有style标签全部加上了scoped，相当于实现了样式的模块化。
+
+
+VueJS】实例中data属性的三种写法及区别
+2018年02月06日 17:16:34 Servenity 阅读数 4417
+1、__
+
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data:{
+            isLogin: false
+        }
+    })
+</script>
+2、__
+
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data: function(){
+            return {
+                isLogin: false
+            }
+        }
+    })
+</script>
+3、__
+
+<script type="text/javascript">
+    var app=new Vue({
+        el:'#app',
+        data() {
+            return {
+                isLogin: false
+            }
+        }
+    })
+</script>
+第3种是第2种的ES6写法
+
+区别
+1）在简单的Vue实例中，没什么区别，因为你app对象不会被复用。
+
+var app = new Vue({...})
+2）但是在组件中，因为可能在多处调用同一组件，所以为了不让多处的组件共享同一data对象，只能返回函数。
+
+export default{
+    data(){
+        return {
+            ...
+        }
+    }
+
+
+Vue.set( vm, data, {...bill})
+var vm = new Vue(el:'#billinfo', data: bill});
+
+var vm = new Vue({el:xx, data: {bill: bill}});
+这样在bill更新时便可以像这样操作更新
+vm.bill = {id:'xxx', store: 'yyy'};
+
+vm.$data 引用data
+
+
+
+Vue.js事件绑定的一般格式
+v-on:click='functionName'
+@click='functionName'
+
+
+============================================================================
+vue组件的组成如下三部分组成
+<template/>
+
+<script>
+ export default{
+ 
+ }
+</script>
+
+<style scoped>
+</style>
+
+父组件如何引用使用子组件？
+1.父组件template中直接使用子组件标签；
+2.父组件脚本中import子组件，components中使用组件
+3.子组件props中接收外围传入的属性
 
 
 	

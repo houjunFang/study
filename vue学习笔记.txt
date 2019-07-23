@@ -1,4 +1,5 @@
 nodejs下载地址:https://nodejs.org/en/
+hbuildx 将vue转成app
 
 插件set-iterm2-badge
 
@@ -1055,5 +1056,200 @@ vue组件的组成如下三部分组成
 3.子组件props中接收外围传入的属性
 
 
+vue中
+1、父组件可以使用 props 把数据传给子组件。
+2、子组件可以使用 $emit 触发父组件的自定义事件。
+vm.$emit( event, arg ) //触发当前实例上的事件
+vm.$on( event, fn );//监听event事件后运行 fn； 
 	
+
+在Vue所有的生命周期钩子方法（如created，mounted， updated以及destroyed）里使用this，this指向调用它的Vue实例，即（new Vue）。 
+箭头函数没有自己的this, 它的this是继承而来; 默认指向在定义它时所处的对象(宿主对象),而不是执行时的对象, 定义它的时候,可能环境是window; 箭头函数可以方便地让我们在 setTimeout ,setInterval中方便的使用this。
+二种解决方案如下：
+1. 定义局部的 this，让他指向上下文。
+created () {
+    let _this = this  //指定 _this 指向上下文
+    setTimeout(function () {
+      _this.styleType = 2
+    }, 2000)
+  }
+ 
+
+2. 如果我们会频繁更改这个 ‘styleType’ ，那么就将它定义在 methods 上下文当中，在 setTimeout 中调用。
+created () {
+    setTimeout(this.setStyleType, 2000)
+  },
+  methods: {
+    setStyleType () {  //状态可多次调用，如果还有更多状态，可以考虑传参
+      this.styleType = 2
+    }
+  }
+  
+3.还可以修改成如下：
+created(){
+   setTimeout(()=>{this.styleType=2;},2000);
+}
+  
+注意：vue中在methods中定义方法，使用箭头函数时需要注意,箭头函数的this指向的windows而非vue实例
+methods中的函数定义的函数的方法中可以使用this,其指向的上一级
+
+详解例子：
+var app = new Vue({
+        el:"#app",
+        data:{
+            sList: [1,2,3],
+            sResultList: []
+        },
+        methods:{
+            group:function(){
+                //ES5的普通函数写法，这里的this指向app,指向vue实例
+                this.......
+            },
+            group1:()=>{
+            	//ES6的箭头函数写法，箭头函数没有自己的this,它的this事继承来的，指向在定义它时所处的宿主对象，在这里this指向window。
+                this.......
+            },
+            group2:function(){
+            	//这里的this同group中的this一样，指向vue实例
+				this.sList.forEach(function(obj){         //匿名函数中的this
+						//在匿名函数中，这里的this不指向vue实例，这里的this指向window，在严格模式下，this指向undefined ，要使用this，可以直接用app（即vue实例）。
+                        app.sResultList.push(obj)
+						//  this.sResultList.push(obj)
+                })
+			},
+			group3:function(){
+				//这里的this同group中的this一样，指向vue实例
+				this.sList.forEach((obj)=>{       //既是匿名函数又是箭头函数中的this
+					//匿名函数没有自己的this，它的this继承来的，也可以说这里的this指向跟上一级的this指向相同，即vue实例
+                    this.sResultList.push(obj)
+                })
+			}
+        },
+    })
+    $(function(){
+        app.group()
+    })
+--------------------- 
+$ref
+1.父组件调用子组件上的方法
+1.子组件：
+<template>
+  <button>点击我</button>
+</template>
+<script>
+  export default {
+    methods: {
+      emitEvent(msg){
+        console.log('接收的数据--------->'+msg)//接收的数据--------->我是父组件中的数据
+      }
+    }
+  }
+</script>
+
+2.父组件：
+<template>
+  <div id="app">
+    <child-a ref="child"></child-a>
+    <!--用ref给子组件起个名字-->
+    <button @click="getMyEvent">点击父组件</button>
+  </div>
+</template>
+<script>
+  import ChildA from './components/child.vue'
+  export default {
+    components: {
+      ChildA
+    },
+    data() {
+      return {
+        msg: "我是父组件中的数据"
+      }
+    },
+    methods: {
+      getMyEvent(){
+          this.$refs.child.emitEvent(this.msg);
+          //调用子组件的方法，child是上边ref起的名字，emitEvent是子组件的方法。
+      }
+    }
+  }
+</script>
+
+$emit子组件调用父组件上的方法
+1.子组件：
+<template>
+  <button @click="emitEvent">点击我</button>
+</template>
+<script>
+  export default {
+    data() {
+      return {
+        msg: "我是子组件中的数据"
+      }
+    },
+    methods: {
+      emitEvent(){
+        this.$emit('my-event', this.msg)
+        //通过按钮的点击事件触发方法，然后用$emit触发一个my-event的自定义方法，传递this.msg数据。
+      }
+    }
+  }
+</script>
+--------------------- 
+2.父组件：
+<template>
+  <div id="app">
+    <child-a @my-event="getMyEvent"></child-a>
+    <!--父组件中通过监测my-event事件执行一个方法，然后取到子组件中传递过来的值-->
+  </div>
+</template>
+<script>
+  import ChildA from './components/child.vue'
+  export default {
+    components: {
+      ChildA
+    },
+    methods: {
+      getMyEvent(msg){
+          console.log('接收的数据--------->'+msg)//接收的数据--------->我是子组件中的数据
+      }
+    }
+  }
+</script>
+
+===================================================
+vue 组件的注册及使用
+1.全局注册
+Vue.component('componentName',{});
+2.局部注册：
+var child={
+	template:'<div>我是一个子组件</div>'
+}
+
+new Vue({
+  el:"#xx",
+  components:{
+  	'my-conponent':child
+  }
+})
+
+ue组件的模板在某些情况下会受到HTML的限制，比如<table>内规定只允许是<tr>、<td>、<th>等这些表格元素，所以在<table>内直接使用组件时无效的。这种情况下，可以使用特殊的is属性来挂载组件。
+
+<div id="app">
+    <table>
+        <tbody is="my-component"></tbody>
+    </table>
+</div>
+
+Vue.component('my-component', {
+    template: `<div>这里是组件内容</div>`
+});
+常见的限制元素还有<ul>、<ol>、<select>。
+除了template选项外，组件中还可以像Vue实例那样使用其他的选项，比如data、computed、methods等。
+但是在使用data时，data必须是函数，然后将数据return出去。
+JavaScript对象是引用关系，如果return的对象引用了外部的一个对象，那这个对象就是共享的，任何一方修改都会同步。
+
+
+:model是v-bind:model的缩写
+
+
 

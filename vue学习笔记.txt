@@ -1,6 +1,9 @@
 nodejs下载地址:https://nodejs.org/en/
 hbuildx 将vue转成app
 
+https://github.com/caochangkui
+
+
 插件set-iterm2-badge
 
 检查node及npm是否安装完成
@@ -1250,6 +1253,84 @@ JavaScript对象是引用关系，如果return的对象引用了外部的一个对象，那这个对象就是共
 
 
 :model是v-bind:model的缩写
+
+vue中
+1.父组件通过props传参给子组件
+2.子组件通过$emit('父组件中方法',参数)传参给父组件
+3.子组件与子组件传参，可以先子组件传参至父组件再由父组件传入子组件。为方便传参vue 推出了一个状态管理工具 vuex
+
+
+==========================================
+vue组件懒加载
+component:resolve=>require(["../components/login.vue"],resolve)
+
+<script>
+    export default{
+        data(){
+            return {}
+        },
+        methods: {},
+        components: {
+            searchSearch: function (resolve) {
+                //异步组件写法
+                require(['./service-search.vue'], resolve)
+            }
+        }
+    }
+</script>
+
+
+
+require 中的路径总是相对于包含它的文件
+__dirname 总是指向被执行 js 文件的绝对路径
+
+webpack.conf.js中的resolve.alias对导入目录及名称进行重定义
+
+node require.js
+1）.实现js文件的异步加载，避免网页失去响应；
+2）.管理模块之间的依赖性，便于代码的编写和维护。
+一般情况下，它会依赖于其他的js框架，比如jquery等等
+require(['jquery', 'B', 'C'], function (A, B, C){
+　　// js代码
+});
+require()函数接受两个参数。第一个参数是一个数组，表示所依赖的框架，上例就是['A', 'B', 'C']，即main.js里的代码需要用到这三个模块；
+第二个参数是一个回调函数，当前面指定的模块都加载成功后，它将被调用。加载的模块会以参数形式传入该函数，从而在回调函数内部就可以使用这些模块。
+
+
+npm init : 用于生成一个基础的package.json文件
+
+=====================================================
+vue 开发运行环境搭建
+1.安装node.js
+2.安装NPM(默认已包含在NODE中且默认安装)
+3.设置npm的私有镜像（如果有且有需要的话）
+	npm set registry http://127.0.0.1:4873  设置私有镜像
+	npm install -g cnpm --registry=https://registry.npm.taobao.org 设置安装淘宝镜像
+4.安装webpack
+	npm install webpack -g （全局安装）
+5.安装vue脚手架
+  npm install vue-cli -g
+6.创建vue项目
+  vue init webpack demo
+  npm install
+  cd demo
+  npm run dev
+======================================================
+v-model是vue.js中内置的双向数据绑定指令，用于表单控件以外的标签是不起作用的(即只对表单控件标签的数据双向绑定有效)。
+:model相当于v-bind:model的缩写，v-bind动态绑定指令，默认情况下标签自带属性的值是固定的，可以使用v-bind:'需要绑定的值'='表达式'，（如 :disabled等）。
+
+vue 数据绑定语法
+1.文本插值 <p>{{msg}}</p>   //msg变化时 dom自动更新
+2.原始HTML <p>{{{html}}}</p>
+3.单次插值 <span>This will never change: {{* msg }}</span>
+4.绑定表达式,仅表达式或三元表达式如下：
+{{ok?'yes':'no'}}
+{{number+1}}
+{{ message.split('').reverse().join('') }}
+5.允许使用过滤器如下：
+{{message | capitalize}} //  message 的值“管输（pipe）”到内置的 capitalize 过滤器，这个过滤器其实只是一个 JavaScript 函数，返回大写化的值
+
+
 
 
 

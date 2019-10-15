@@ -1,0 +1,46 @@
+yum 安装JENKINS  参考：https://blog.csdn.net/qq_34599132/article/details/87450355
+
+#wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo  //添加Jenkins库到yum库，Jenkins将从这里下载安装
+#rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key  //导入公钥
+#yum install -y jenkins  //安装jenkins
+
+如果不能安装就到官网下载jenkis的rmp包，官网地址（http://pkg.jenkins-ci.org/redhat-stable/）
+#wget http://pkg.jenkins-ci.org/redhat-stable/jenkins-2.7.3-1.1.noarch.rpm
+#rpm -ivh jenkins-2.7.3-1.1.noarch.rpm
+
+
+查看jenkins安装文件
+[root@jenkins ~]# rpm -ql jenkins 
+/etc/init.d/jenkins     //需要在candidates中添加java目录
+/etc/logrotate.d/jenkins
+/etc/sysconfig/jenkins   //jenkins配置文件，“端口”，“JENKINS_HOME”,"JENKINS_USER"等都可以在这里配置。JENKINS默认用户为jenkins，需要修改JENKINS_USER=“root”
+/usr/lib/jenkins  
+/usr/lib/jenkins/jenkins.war
+/usr/sbin/rcjenkins
+/var/cache/jenkins
+/var/lib/jenkins //默认的JENKINS_HOME。
+/var/log/jenkins //jenkins日志文件。
+
+
+配置jenkis的端口
+#vi /etc/sysconfig/jenkins
+找到修改端口号：
+JENKINS_PORT="8080"  此端口不冲突可以不修改 
+
+3、启动jenkins
+service jenkins start/stop/restart
+加入开机自启动
+systemctl enable jenkins.service
+systemctl daemon-reload 使得配置生效
+service jenkins restart 重启jenkins
+chkconfig jenkins on 设置开机自启动
+
+关闭jenkins只需要在浏览器上输入jenkins服务器地址+/exit 就行，
+如http://localhost:8080/exit 网址就能关闭jenkins服务.
+
+
+
+在浏览器中访问 
+首次进入会要求输入初始密码如下图， 
+初始密码在：/var/lib/jenkins/secrets/initialAdminPassword 
+

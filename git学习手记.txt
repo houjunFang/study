@@ -318,5 +318,93 @@ $ git config --global core.quotepath false
 
 2、【git remote -v 】查看远程仓库的地址
 --------------------- 
+设置提交忽略换行回车配置
+
+git config --global core.autocrlf false
+git config --global core.whitespace cr-at-eol
+git config --global core.filemode false
+
+==============================================
+git bash
+cd ~ //是跳转到当前用户的家目录
+
+设计git的全局用户名及邮箱
+git config --global user.name “用户名”
+git config --global user.email “邮箱”
+
+
+cd ~/.ssh  //切换进入当前用户.ssh文件夹
+ssh-keygen -t rsa -C "fanghoujun@126.com" (-f ~/.ssh/github_id_rsa)
+cat ~/.ssh/github_id_rsa.pub  //查看生成的公钥
+
+在~/.ssh目录下创建config文件设置多个git仓库方式如下：
+cat ~/.ssh/config  //查看config配置如下：
+# gitee
+Host gitee.com
+HostName gitee.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/gitee_id_rsa
+
+# github
+Host github.com
+HostName github.com
+PreferredAuthentications publickey
+IdentityFile ~/.ssh/github_id_rsa
+
+ssh -T git@github.com   //测试连接情况
+================================================================
+git add .
+git commit -m "some str"
+git push
+
+可以合成如下：
+git commit -am "some str"
+git push
+
+==============================================
+列出两个版本差异：
+git diff --name-status v1.3.5_1 v1.4.2_2   //--name-status 仅显示已更改文件的名称和状态
+
+查看提交记录
+git log  //查看提交记录
+git log --pretty=oneline //美化提交信息输出
+git log --stat //查看提交文件增减情况
+git log -p //查看所有提交详情
+git log -p -n //查看最近n次提交的修改
+git show commit_id  //查看commit内容
+git show commitId fileName  //查看指定commit提交中的fileName文件修改详情
+ 
+-------------------------------------------------------------------------
+git diff commitId --name-status   //查看某次提交记录增删改文件信息
+git log -p -n
+
+在某个分支下执行：
+git log //查看提交信息commitID
+
+git checkout master  //切换当前分支至master
+git cherry-pick 7fcb3defff  //将之前某个分支的某次commitID对应提交合并至当前master分支
+git push  //交本地合并推送至远端
+============================================
+1.  git  remote update origin --prune       更新本地分支列表与远程一致
+
+2.  git branch    查看本地分支，是否已经更新出分支branch-two  （此步可以省略）
+
+3.  git checkout branch-two  切换到分支branch-two
+
+4.  git merge branch-one  合并branch-one到当前分支branch-two上，该解决冲突的解决冲突
+
+5.  git push    更新到远程 （如果有需要的话）
+
+--------------------------------------------------
+Git撤销已经推送(push)至远端仓库的提交(commit)信息
+1.git log //获取commitID
+2.git reset --soft commitId  //重置至指定版本的提交，达到撤销提交的目的(参数soft指的是：保留当前工作区，以便重新提交;还可以选择参数hard，会撤销相应工作区的修改，一定要谨慎使用)
+3.git push origin master –force  //必须添加参数force进行强制提交，否则会提交失败，并报错：报错原因：本地项目版本号低于远端仓库版本号。
+
+
+
+
+
+
 
 

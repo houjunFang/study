@@ -218,5 +218,163 @@ $("#id").click(function () {
 
 
 
+==============================================================
+SpringBoot启动
+
+1.方式一
+@SpringBootApplication
+public class App{
+	public static void main(String args[]){
+		SpringApplication.run(App.class,args);
+	}
+}
+
+2.方式二
+@SpringBootApplication
+public class App{
+	public static void main(String args[]){
+		SpringApplication sp = new SpringApplication(App.class);
+		sp.run(args);
+	}
+}
+
+-----------------------------------------------------------
+SpringBoot测试 https://www.zhihu.com/collection/188110676
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class XxxTestClassName{
+
+}
+说明：
+1.@RunWith(SpringRunner.class) 等价 @RunWith(SpringJUnit4ClassRunner.class) SpringRunner是SpringJUnit4ClassRunner的一个别名,简写，继承关系。
+其作用为自动创建spring应用上下文，启用spring容器环境，直白说就是启用spring容器环境来运行测试代码。
+2.SpringBootTest 作用以@SpringBootApplication标解的类实体作为入口，加载配置并初始化上下文环境。
+
+-------------------------------------------------------------------------------------------------------
 
 
+
+@SpringBootTest  //默认会使用SpringBootContextLoader类用于上下文加载,不需要手动增加@ContextConfiguration(loader=...)指定加载配置，可以自定义配置
+
+@SpringBootTest的作用
+
+其代码注释如下：
+Annotation that can be specified on a test class that runs Spring Boot based tests. 
+Provides the following features over and above the regular Spring TestContext Framework: 
+
+1. Uses SpringBootContextLoader as the default ContextLoader when no specific @ContextConfiguration(loader=...) is defined. 
+2. Automatically searches for a @SpringBootConfiguration when nested @Configuration is not used, and no explicit classes are specified. 
+3. Allows custom Environment properties to be defined using the properties attribute. 
+4. Provides support for different webEnvironment modes, including the ability to start a fully running container listening on a defined or random port. 
+5. Registers a TestRestTemplate bean for use in web tests that are using a fully running container. 
+
+要点
+1.默认会使用SpringBootContextLoader类用于上下文加载，
+这个类将会使用所配置的SpringBootApplication实体类作为入口，加载配置并初始化Spring上下文环境；
+
+2.可以支持自定义的配置，通过 Environment 属性设置；
+
+3.支持不同的 web 环境模式，可以是固定端口、随机端口、无端口几种模式。
+
+
+
+
+@RunWith
+当一个类用@RunWith注释或继承一个用@RunWith注释的类时，JUnit将调用它所引用的类来运行该类中的测试而不是开发者去在junit内部去构建它。我们在开发过程中使用这个特性
+
+SpringRunner是SpringJUnit4ClassRunner的一个别名。
+@RunWith(SpringRunner.class) 等价 @RunWith(SpringJUnit4ClassRunner.class) //SpringRunner 继承了SpringJUnit4ClassRunner，没有扩展任何功能；使用前者，名字简短而已
+
+@RunWith（SpringRunner.class） //spring注解启用
+
+@ContextConfiguration : 加载配置文件
+单个文件 @ContextConfiguration(Locations="../applicationContext.xml")
+@ContextConfiguration(classes = SimpleConfiguration.class)
+多个文件时，可用
+@ContextConfiguration(locations = { "classpath*:/spring1.xml", "classpath*:/spring2.xml" })
+
+
+=============================================================================
+@Configuration //告诉sprin该类是一个配置类 相当于我们所写的xxx.xml配置文件
+@Bean //给容器中注入一个Bean，相当于<bean></bean>进行实例化一个bean
+@ComponentScan() //  等同于：<context:component-scan  base-package=""></context:component-scan>
+@Scope //bean作用域定义 默认单例  prototype  多实例的      singleton-》单例
+
+
+-----------------------------------------------------------------------
+spring-boot-starter-parent 与 spring-boot-dependencies
+参考：https://www.cnblogs.com/sjshare/p/10669001.html
+1.继承spring-boot-starter-parent
+<parent>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-parent</artifactId>
+   <version>2.1.3.RELEASE</version>
+</parent>
+
+使用这个配置，你还可以通过property覆盖内部的依赖。例如，在pom.xml中升级Spring Data release train。
+<properties>
+     <spring-data-releasetrain.version>Fowler-SR2</spring-data-releasetrain.version>
+</properties>
+可以通过spring-boot-dependencies pom，查看支持的属性列表。
+
+2.spring-boot-dependencies 通过scope=import 来进行版本管理
+<dependencyManagement> //父pom中的依赖版本管理
+     <dependencies>
+        <dependency>
+            <!-- Import dependency management from Spring Boot -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>2.1.3.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+这种方式不能使用property的形式覆盖原始的依赖项。要达到同样的效果，需要在dependencyManagement里面的spring-boot-dependencies之前添加依赖的东西。
+例如，要升级Spring Data release train，pom.xml应该是这样的：
+<dependencyManagement>
+    <dependencies>
+        <!-- Override Spring Data release train provided by Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-releasetrain</artifactId>
+            <version>Fowler-SR2</version>
+            <scope>import</scope>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>2.1.3.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+
+=====================================================================================
+pluginManagement
+dependencyManagement
+
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.0.1.RELEASE</version>
+</parent>
+或者在父工程中
+<dependencyManagement>
+     <dependencies>
+        <dependency>
+            <!-- Import dependency management from Spring Boot -->
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-dependencies</artifactId>
+            <version>2.1.3.RELEASE</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+引入springBoot的相关依赖，后面子工程中直接引用依赖时不用再指定版号即可

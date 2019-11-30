@@ -4,3 +4,38 @@
 3.还可以在运行时指定本地仓库位置：
 	mvn clean install -Dmaven.repo.local=/home/juven/myrepo/
 	
+	
+	-DarchetypeCatalog=internal
+	
+maven组件依赖生命周期
+<scope>test|provided(编译测试阶段有效，最终的JAR包中不含此依赖JAR,解决同生产环境已存在包冲突问题)|compile(默认)</scope>
+	
+
+
+=======================================================
+父POM的作用是消除配置的重复。
+父POM必须<packaging>pom</packaging>。
+还有
+
+<modules>
+    <module>子模块1</module>    
+    <module>子模块2</module>  
+<modules>
+来指定这些子模块可以一起构建。
+一起构建是指，构建父模块的同时把子模块也构建了。
+
+子POM通过
+
+<parent>
+    <groupId>com.juvenxu.mvnbook.account</groupId>  
+    <artifactId>account-parent</artifactId>  
+    <version>1.0.0-SNAPSHOT</version>  
+    <relativePath>../account-parent/pom.xml</relativePath>  
+</parent> 
+找到父POM文件，来继承父POM文件的属性。
+
+其中，子POM无条件继承父POM的dependencies元素。
+子POM的dependencies元素可以有选择的继承父POM的dependencyManagement元素。
+
+类似，子POM无条件继承父POM的plugins元素。
+子POM的plugins元素可以有选择的继承父POM的pluginManagement元素。

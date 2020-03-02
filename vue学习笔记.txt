@@ -3,6 +3,9 @@ hbuildx 将vue转成app
 
 https://github.com/caochangkui
 
+vscode code runner插件使用不起来解决方案：https://www.jianshu.com/p/7719d4ccd49e
+C:\Users\fang_houjun\.vscode\extensions\formulahendry.code-runner-0.9.10\out\src\codeManager.js
+
 
 插件set-iterm2-badge
 
@@ -1331,6 +1334,468 @@ vue 数据绑定语法
 {{message | capitalize}} //  message 的值“管输（pipe）”到内置的 capitalize 过滤器，这个过滤器其实只是一个 JavaScript 函数，返回大写化的值
 
 
+template的作用是模板占位符，可帮助我们包裹元素，但在循环过程当中，template不会被渲染到页面上
+
+<template v-for="product in prdlist" :key="product.id">
+	<span>{{product.id}}</span>
+</template>
+
+当我们在使用v-for进行渲染时，尽可能使用渲染元素自身属性的id给渲染的元素绑定一个key值，这样在当前渲染元素的DOM结构发生变化时，
+能够单独响应该元素而不触发所有元素的渲染。
+
+vue 的 methods 中的 this 默认是自动执行 vue 实例的
+
+
+main.js中
+
+import VueResource from 'vue-resource'
+Vue.use(VueResource) //使用某个插件
+
+
+//启用生产消息提示，改成false阻止生产环境消息提示
+Vue.config.productionTip = true;
+
+/* 使用一个空的Vue实例来处理简单的组件之间的通信 */
+/* 该对象在所有组件中可用 */
+//定义全局对象vHandler
+Vue.prototype.vHandler = new Vue({
+	data() {
+		return {
+			productIds: []
+		}
+	}
+});
+
+--------------------------------------------------
+es6 export 和export default的区别
+export
+每个文件中可使用多次export命令
+import时需要知道所加载的变量名或函数名
+import时需要使用{}，或者整体加载方法
+
+export	
+每个文件中可使用多次export命令	
+import时需要知道所加载的变量名或函数名
+
+export default
+每个文件中只能使用一次export default命令
+import时可指定任意名字
+
+
+-------------------------------------------------------------------------------------------------
+1、一种是声明式。
+而声明式会导致函数提升，function会被解释器优先编译。即我们用声明式写函数，可以在任何区域声明，不会影响我们调用。
+function XXX(){}
+
+一种是函数表达式
+函数表达式我们经常使用，而函数表达式中的function则不会出现函数提升。而是JS解释器逐行解释，到了这一句才会解释。因此如果调用在函数表达式之前，则会调用失败。
+var k = function(){}
+
+具体如下：
+fn1();
+function fn1(){}//可以正常调用
+ 
+fn2();
+var fn2 = function(){}//无法调用
+
+------------------------------------------
+vue 实例中为啥data为函数
+如果为具体一个对象则所有实例共用一个对象，会造成脏数据
+通过data(){return {}} 通过函数返回对象，则每一个对象都是函数返回生成的副本，就不再相互影响了
+
+created:在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图。 
+mounted:在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+
+
+this 
+在Vue所有的生命周期钩子方法（如created，mounted， updated以及destroyed）里使用this，this指向调用它的Vue实例，即（new Vue）。 
+data:{}里的this指向Window
+data(){}中return{}里的this指向Vue的实例
+
+箭头函数内部的this是词法作用域，由上下文确定,所有上述钩子方法中使用箭头函数里面的this指向vue实例
 
 
 
+
+------------------------------------------------------------------------------------------------------------------------
+str.replace(reg,function(){}) 应用的地方很多啊，最基本的就是 比如str 是一串数字，比如你要把这些数字替换成 大写的汉字
+
+var ary=["一","二","三","四","五","六"]
+"123456".replace(/\d/g,function(i){
+    return ary[i - 1];
+})
+还有一种用法就是 不替换 字符串，只是利用replace 可以 匹配几次，这个function 就执行几次的特性。来做一些事情，比如格式化时间字符串。等等。
+$1--$9 是RegExp 自带的，只要放生了匹配就会有。 test exec str的replace 都会有。代表的是 分组，即小括号里面的小正则 捕获到的内容。 
+/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/ 
+比如这个 简单的匹配 年月日的正则，
+我们就可以通过 $1 $2 $3 获取到并进行处理。
+
+---------------------------------------------------------------------
+js replace
+str.replace(正则表达式,function(rs,s1,s2){})
+其中rs为整个正则匹配的字符串，$1为正则表过式$1,s2为正则表达式$2
+
+用法1
+const str='abc1314520def';
+str.replace(/\D/g,'');/*\D非数字，g全局匹配，每个地方都匹配一次*/
+结果：
+'1314520'
+
+
+
+用法2：
+str.replace('abc','');/*直接用字符串匹配*/
+结果：
+'1314520def'
+
+
+
+用法3：
+str.replace(/\D/g,function(rs){return rs.toUpperCase()})
+结果：
+'ABC1314520DEF'
+/*第二个参数可传入函数，会对每个匹配到的字符串'rs'做一次处理，然后你可以将结果return 出来*/
+
+
+
+进阶用法：将网址查询的search部分转化为键值对（就是url问号后面的东西）
+function parseURL(url=window.location.href){/*es6语法直接设置默认值*/
+　　const search = url.substr(url.indexOf('?')+1);
+　　const obj={};
+　　search.replace(/([^&=]+)=([^&=]*)/g,function(rs,$1,$2){
+
+　　　　obj[decodeURIComponent($1)]=decodeURIComponent($2)
+
+　　})
+　　return obj
+}
+
+$1——$99就是匹配第1到第99个子表达式的文本，表达式1:'([^&=]+)'，表达式2:'([^&=]*)'等等*/
+/*这里我们没有用到rs 只是为了占位而已，因为第一个参数默认为rs*/
+
+
+js replace方法：http://www.softwhy.com/article-8667-1.html
+let str="ant88"; 
+let newStr=str.replace(/(\d+)/,"$1$&"); 
+console.log(newStr);
+
+$1是第一个子表达式匹配的内容（88）,$&是正则表达式匹配的内容（88）。
+那么$1$&就是8888，用四个8替换字符中的两个8，结果自然是ant8888。
+
+正则表达式中
+.可以匹配任意字符
+要表示变长的字符
+* 任意字符包括0个
++ 至少一个字符
+？0个或一个字符
+{n} 表示N个字符
+{n,m} 表示N至M个字符 n<=x<=M
+
+new RegExp('正则表达式')创建一个RegExp对象
+RegExp对象的test()方法用于测试给定的字符串是否符合条件
+或/\d/.test(1122)
+
+-------------------------------------------------------
+千分位处理货币：
+function format(val) {
+	var num = parseFloat(val).toFixed(2);
+	var reg = /\d{1,3}(?=(\d{3})+$)/g;
+	var currency = num.toString().replace(/^(\d+)((\.\d+)?)$/,function(s,s1,s2){return s1.replace(reg,"$&,")+s2;}); //加千分位
+	return "￥"+currency;
+}
+
+
+main->> app.vue + router--->
+       app.vue-->使用menus 及router-view
+       
+       
+按需引用的方法是使用 babel-plugin-component
+
+注册页面：https://www.cnblogs.com/cckui/p/10349827.html        
+
+
+vue.prototype.xx=xxxxx
+实现全局变量
+
+vue.filter
+
+交易所定制化K线 https://github.com/webdatavisualdev/vue-tradingview
+
+https://blog.csdn.net/weixin_43776985/article/details/90644028
+
+微操盘规则：http://finance.sina.com.cn/stock/t/20140718/173019751828.shtml
+
+--------------------------------------------------------------------------
+————————————————--------------------------------------------------------------------------------------------
+
+vue ref
+
+1.基本用法，本页面获取dom元素
+<template>
+  <div id="app">
+    <div ref="testDom">11111</div>
+    <button @click="getTest">获取test节点</button>
+  </div>
+</template>
+
+<script>
+export default {
+  methods: {
+    getTest() {
+      console.log(this.$refs.testDom)
+    }
+  }
+};
+</script>
+
+2.用在子组件引用上。在父组件的DATA中引用子组件的方法或属性
+子组件
+
+<template>
+  <div>
+      {{ msg }}
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      msg: "hello world"
+    }
+  },
+  methods:{
+  	open(){
+  		console.log('test')
+  	}
+  }
+}
+</script>
+父组件
+
+<template>
+  <div id="app">
+    <HelloWorld ref="hello"/>
+    <button @click="getHello">获取helloworld组件中的值</button>
+  </div>
+</template>
+
+<script>
+import HelloWorld from "./components/HelloWorld.vue";
+
+export default {
+  components: {
+    HelloWorld
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    getHello() {
+      console.log(this.$refs.hello.msg)
+    },
+    test(){
+       this.$refs.hello.open()
+    }
+  }
+};
+</script>
+
+
+3.子组件调用父组件方法
+子组件
+<template>
+  <div>
+</div>
+</template>
+
+<script>
+export default {
+  methods: {
+    open() {
+      console.log("调用了");
+      //  调用父组件方法
+      this.$emit("refreshData");
+    }
+  }
+}
+</script>
+父组件
+
+<template>
+  <div id="app">
+    <HelloWorld ref="hello" @refreshData="getData"/>
+    <button @click="getHello">获取helloworld组件中的值</button>
+  </div>
+</template>
+
+<script>
+import HelloWorld from "./components/HelloWorld.vue";
+
+export default {
+  components: {
+    HelloWorld
+  },
+  data() {
+    return {}
+  },
+  methods: {
+    getHello() {
+      this.$refs.hello.open()
+    },
+    getData() {
+      console.log('111111')
+    }
+  }
+};
+</script>
+
+---------------------------------------------------------------------------------
+1.echarts安装
+npm install echarts --save
+
+2.全局引入
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts
+这种方法是直接绑定在vue实例上，所以在项目中任何页面，直接 this.$echarts 即可
+
+3.局部引入
+import echarts from 'echarts'
+
+4.在需要echarts的页面创建一个DOM
+<div id="myCharts" ref="myCharts"></div>
+
+5.在mounted中初始化echarts(不能在created中！！！)
+mounted(){
+    以下三步即可完成echarts的初始化使用,代码注释的详解别忘了看看
+   1.  const  myCharts = this.$echarts.init(this.$refs.myCharts);
+   2.   let options = {
+          title: { 
+             text: '未来一周气温变化',   //图表顶部的标题 
+             subtext: '纯属虚构'    //副标题
+          },
+          tooltip: {   //鼠标悬浮框的提示文字
+              trigger: 'axis'
+            },
+          legend: {
+            data:['最高气温','最低气温']
+          },
+          xAxis : [{  //x轴坐标数据
+            type : 'category',
+            boundaryGap : false,
+            data : ['周一','周二','周三','周四','周五','周六','周日']
+            }],
+           yAxis : [{   //y轴坐标数据
+              type : 'value',
+              axisLabel : {
+                formatter: '{value} °C'
+              }
+            }],
+          series: [  //驱动图表生成的数据内容数组，几条折现，数组中就会有几个对应对象，来表示对应的折线
+            {
+              name:"最高气温",
+              type: "line",  //pie->饼状图  line->折线图  bar->柱状图
+              data:[11, 11, 15, 13, 12, 13, 10], 
+              },
+            {
+              name:"最低气温",
+              type: "line",  //pie->饼状图  line->折线图  bar->柱状图
+              data:[1, -2, 2, 5, 3, 2, 0],
+              }
+          ]}
+
+    3.  myCharts.setOption(options);
+}
+
+-----------------------------------------
+methods: {
+    functionA: function() {},
+    functionB() {}  //等同上面 ES6语法
+}
+
+------------------------------------------------
+echart
+title 标题
+legend 图例
+grid 布局
+xAxis
+yAxis
+tooltip 图标悬停提示内容
+series 系统数据
+
+
+
+vue roter中
+routes // (缩写) 相当于 routes: routes
+
+
+vue组件名称
+当使用 kebab-case (短横线分隔命名) 定义一个组件时，你也必须在引用这个自定义元素时使用 kebab-case，例如 <my-component-name>
+当使用 PascalCase (驼峰式命名) 定义一个组件时，你在引用这个自定义元素时两种命名法都可以使用。也就是说 <my-component-name> 和 <MyComponentName> 都是可接受的
+注意，尽管如此，直接在 DOM (即非字符串的模板) 中使用时只有 kebab-case 是有效的Vue.component('MyComponentName', { /* ... */ })
+
+ES6中 使用export 或 export default 向外暴露成员
+export default导出时 import时可以任意变量名称来接收；
+export 导出（按需导出）时，只能通过｛｝的形式来接收；或者通过as来换个名称来接收 import {x as nn} from ''
+export 可以向外暴露多个成员
+
+
+Math.random()产生0-1之间的随机数
+
+<script>
+
+function bfkfffff(){
+var bykf=['kf1','kf2','kf3','kf4','kf5','kf6','kf7','kf8'];//多个备用客服 注意严格按照格式填写
+var item = bykf[Math.floor(Math.random()*bykf.length)]
+return item;
+}
+var uuid;
+    uuid = localStorage.getItem("uuid");
+    console.log(uuid);
+    if (typeof (uuid) == 'undefined' || typeof (uuid) == 'null' || typeof (uuid) == '' || uuid == null) {
+        let ls = randomString()
+        localStorage.setItem("uuid",ls );
+        uuid = ls;
+    }
+var ma = document.createElement('script'); ma.type = 'text/javascript'; ma.async = true;
+ma.src = 'http://xxxxxx/values/xtjtj?bmid=2&uuid='+uuid;
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ma, s);
+    
+function randomString(len) {
+    len = len || 32;
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    var maxPos = $chars.length;
+    var pwd = '';
+    for (i = 0; i < len; i++) {
+        pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+}
+
+</script>
+
+加载JS
+<script type="text/javascript">
+    (function () {
+        var ja = document.createElement('script');
+        ja.type = 'text/javascript';
+        ja.async = true;
+        ja.src = document.location.protocol+'//wl.jd.com/wl.js';
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(ja, s);
+    })();
+</script>
+
+
+js 闭包，可以把局部变量驻留在内存中,可以避免使用全局变量
+<script type="text/javascript">
+$(function(){
+  window.SysConfig = {
+  encryptInfo:  true  };
+});
+</script>
+
+-----------------------------------------------------------------
+window.location.search 查询(参数)部分。得到的是url中？部分
+window.location.href 整个URl字符串(在浏览器中就是完整的地址栏)
+window.location.hash 锚点。得到的是url中#部分

@@ -1,0 +1,55 @@
+<<深入浅出webpack>> https://webpack.wuhaolin.cn/
+1.webpack的安装
+npm install webpack -i -D 等价 npm install webpack --save-dev 
+npm install webpack -g //全局安装
+
+npm install webpack --save-dev  //安装最新webpack稳定版本
+npm -i -D webpack@version号     //安装指定版本号的webpack
+
+2.查看安装webpack版本号
+webpack -v  
+
+3.全局卸载
+npm  uninstall  webpack  -g
+--------------------------------------------
+
+npm package.json文件创建初始化
+npm init -y
+
+npm set init.author.name "fanghoujun"  //设置初始化author信息
+
+
+查看当前npm 仓库源地址：
+npm config get registry
+
+设置npm下载安装包的源为npmjs
+npm config set registry=http://registry.npmjs.org
+
+设置npm下载安装包的源为淘宝源
+npm config set registry http://registry.npm.taobao.org/
+
+npm install 默认安装package.json中的所有模块。
+
+如果只想安装dependencies中的内容，可以使用--dependencies字段：
+
+npm install --dependencies
+同样只想安装devDependencies中的内容，可以使用--devDependencies字段：
+
+npm install --devDependencies
+这里安装的package.json中所有依赖的模块，都是package.json中指定的版本。如果需要安装最新的版本则要：
+
+npm update <package_name>//要安装的模块的名字
+
+
+--save：将保存配置信息到pacjage.json的dependencies节点中。
+--save-dev：将保存配置信息到pacjage.json的devDependencies节点中。
+dependencies：运行时的依赖，发布后，即生产环境下还需要用的模块
+devDependencies：开发时的依赖。里面的模块是开发时用的，发布时用不到它。
+
+
+
+注：“__dirname”是node.js中的一个全局变量，它指向当前执行脚本所在的目录。
+
+修改配置 "dev" 加入 --open --port 3000 来自定义端口和启动服务器之后直接打开网址
+
+=====================================================================================

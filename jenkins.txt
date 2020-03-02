@@ -9,7 +9,7 @@ yum 安装JENKINS  参考：https://blog.csdn.net/qq_34599132/article/details/8745035
 #rpm -ivh jenkins-2.7.3-1.1.noarch.rpm
 
 
-查看jenkins安装文件
+yum安装后查看jenkins安装文件
 [root@jenkins ~]# rpm -ql jenkins 
 /etc/init.d/jenkins     //需要在candidates中添加java目录
 /etc/logrotate.d/jenkins

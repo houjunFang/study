@@ -230,6 +230,9 @@ git tag -d 标签名
 git push origin :refs/tags/标签名 
 例：git push origin :refs/tags/V3.0.1-Release
 
+强制创建一个基于指定的tag的分支
+git checkout -B test v0.1.0 
+
 4、其他本地操作
 
 打标签 ：git tag -a V3.0.1-Release -m "Tagging version 3.0.1-Release?" 
@@ -402,9 +405,46 @@ Git撤销已经推送(push)至远端仓库的提交(commit)信息
 3.git push origin master –force  //必须添加参数force进行强制提交，否则会提交失败，并报错：报错原因：本地项目版本号低于远端仓库版本号。
 
 
+===================================================
+GIT关联远程仓库
+git init
+git remote add origin http://xxx.git
+git pull
+git checkout master  //不操作可能看不到pull下来的代码
+
+
+查看远程仓库：$ git remote -v
+添加远程仓库：$ git remote add [name] [url]
+删除远程仓库：$ git remote rm [name]
+git branch -r -d origin/分支名称
 
 
 
+git remote rm origin
+git remote add origin git@52.82.8.87:iot3.0-service/test.git
+git push -u origin
 
 
+git clone git_仓库_url 获取全部branch内容，整体下载时间较长 & 所占磁盘空间较大
+git clone -b git_分支名称 git_仓库_url 根上述 1. 结果一致
+git clone -b git_分支名称 --single--branch git_仓库_url 获取指定分支的代码
+git clone --depth 10 git_仓库_url 只会获取最近 xx（10条提交记录的）代码，默认是master分支， 如果想要指定分支，可以结合 -b --single--branch 使用！
 
+克隆指定tag的代码
+git clone --branch [tags标签] [git地址]
+
+克隆指定分支的代码
+git clone -b 分支名称 git地址
+
+----------------------------------------------------------------
+git clone整个仓库后使用，以下命令就可以取得该 tag?对应的代码了
+
+git checkout tag_name
+但是，这时候git可能会提示你当前处于一个“detached?HEAD"状态。
+
+因为tag相当于是一个快照，是不能更改它的代码的。
+
+如果要在tag代码的基础上做修改，你需要一个分支：
+
+git checkout -b branch_name tag_name
+这样会从tag创建一个分支，然后就和普通的git操作一样了。

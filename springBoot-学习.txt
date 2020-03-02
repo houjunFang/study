@@ -378,3 +378,230 @@ dependencyManagement
     </dependencies>
 </dependencyManagement>
 引入springBoot的相关依赖，后面子工程中直接引用依赖时不用再指定版号即可
+
+============================================================================
+@SpringBootTest(classes = App.class)//指定sprintBoot启动类	获取启动类、加载配置，确定装载Spring Boot。
+@TestPropertySource("classpath:pay.properties") //测试类中加载属性文件
+
+
+@RunWith(SpringRunner.class) //启用spring测试
+@ContextConfiguration(classes = ConfigTest.class)  //加载配置类 或者通过@Import(ConfigTest.class)也可以
+@TestPropertySource("classpath:application.properties") //指定加载配置文件而非test目录resource下的资源
+public class TestA {
+    @Resource
+    private ConfigTest test;
+
+    @Test
+    public void testA(){
+        System.out.println(test.getEsurl());
+    }
+}
+
+
+
+@RunWith(SpringRunner.class)
+@Import({TestBean.class,JestClientUtils.class}) //导入测试类自动注入到容器
+@TestPropertySource("classpath:application.properties") //加载指定配置属性文件
+public class ElasticsearchJestTest {
+    @Autowired
+    private TestBean testBean;
+
+    @Autowired
+    private JestClientUtils jestClientUtils;
+
+
+    @Test
+    public void testA(){
+     System.out.println("::::::="+jestClientUtils.getEsUrl());
+      testBean.getName();
+
+    }
+}
+
+=============================================================
+@PropertySource("*.properties")  //加载指定属性文件
+<1>配置@Value使用  //将指定属性文件中指定属性值绑定至当前JAVA对应属性上
+<2>配合@ConfigurationProperties使用  //将指定的属性文件属性绑定至当前JAVA类
+
+@Component
+@PropertySource(value = {"demo/props/demo.properties"})
+public class ReadByPropertySourceAndValue {
+
+    @Value("${demo.name}")
+    private String name;
+
+    @Value("${demo.sex}")
+    private int sex;
+
+    @Value("${demo.type}")
+    private String type;
+
+    @Override
+    public String toString() {
+        return "ReadByPropertySourceAndValue{" +
+                "name='" + name + '\'' +
+                ", sex=" + sex +
+                ", type='" + type + '\'' +
+                '}';
+    }
+}
+--------------------------------------------------------------
+@Component
+@PropertySource(value = {"demo/props/demo.properties"})
+//@PropertySource("classpath:/com/acme/app.properties")
+@ConfigurationProperties(prefix = "demo")
+public class ReadByPropertySourceAndConfProperties {
+
+    private String name;
+
+    private int sex;
+
+    private String type;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSex(int sex) {
+        this.sex = sex;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getSex() {
+        return sex;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return "ReadByPropertySourceAndConfProperties{" +
+                "name='" + name + '\'' +
+                ", sex=" + sex +
+                ", type='" + type + '\'' +
+                '}';
+    }
+}
+
+=====================================================================================================
+1.实现 CommandLineRunner 接口，Springboot启动前 SpringApplication.run（）前执行动作。多个需要指定执行顺序加@Order(1)
+
+2.@SpringBootConfiguration注解是@Configuration注解的派生注解，跟@Configuration注解的功能一致，标注这个类是一个配置类，只不过@SpringBootConfiguration是springboot的注解，
+而@Configuration是spring的注解
+
+3.@Configuration 表明所注解类为配置类
+@Configuration用于定义配置类，可替换xml配置文件，被注解的类内部包含有一个或多个被@Bean注解的方法，这些方法将会被AnnotationConfigApplicationContext或AnnotationConfigWebApplicationContext类进行扫描，并用于构建bean定义，初始化Spring容器
+
+4.@ConfigurationProperties 绑定属性及配置文件
+@ConfigurationProperties(prefix = "myapp.mail", ignoreInvalidFields = true) //
+
+@EnableConfigurationProperties(HelloServiceProperties.class) //手动注入加载指定属性配置类
+@EnableConfigurationProperties注解的作用是：使使用 @ConfigurationProperties 注解的类生效。
+
+@ConfigurationProperties 与 @EnableConfigurationProperties 的关系。
+@EnableConfigurationProperties 文档中解释：
+当@EnableConfigurationProperties注解应用到你的@Configuration时， 任何被@ConfigurationProperties注解的beans将自动被Environment属性配置
+
+与@Component配合使用 将配置类作组件注入
+
+
+
+
+
+5.@ImportResource("classpath:applicationContext-configuration.xml"):将xml文件中配置的bean，也引用到配置类中，以便在该配置类中使用xml文件中配置好的bean
+
+
+
+@Component
+public class OutputPropsRunner implements CommandLineRunner {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OutputPropsRunner.class);
+
+    @Autowired
+    private ReadByPropertySourceAndValue readByPropertySourceAndValue;
+
+    @Autowired
+    private ReadByPropertySourceAndConfProperties readByPropertySourceAndConfProperties;
+
+
+    @Override
+    public void run(String... args) throws Exception {
+        LOGGER.info(readByPropertySourceAndValue.toString());
+        LOGGER.info(readByPropertySourceAndConfProperties.toString());
+    }
+
+}
+===================================================
+@EnableConfigurationProperties
+@ConfigurationProperties
+@Configuration
+
+@ContextConfiguration(locations = { "classpath*:/spring1.xml", "classpath*:/spring2.xml" })
+@ContextConfiguration(classes = SimpleConfiguration.class)
+
+
+有点要注意的，就是一旦使用@Autowired那就默认代表当前Bean一定是已经存在的，如果为null，会报错。所以这里要修改下。
+@Autowired(required=false) //required=false 的意思就是允许当前的Bean对象为null。
+
+@ConditionalOnBean         //   当给定的在bean存在时,则实例化当前Bean
+@ConditionalOnMissingBean  //   当给定的在bean不存在时,则实例化当前Bean
+@ConditionalOnClass        //   当给定的类名在类路径上存在，则实例化当前Bean
+@ConditionalOnMissingClass //   当给定的类名在类路径上不存在，则实例化当前Bean
+
+------------------------------------------------------------------------------------------------------------
+通过@Value("${xx.xx}")获取配置文件.properties中的配置信息
+
+@Value将属性文件中指定的KEY-value值注入赋值给类非静态属性
+如下：
+1.直接在在类属性上方
+@Value("${xx.xx}")
+private String name;
+
+2.或者属性SETTER方法上(静态变量通过此方法变通下，在方法内部将值赋值给静态方法)
+@Value("${xx.xx}")
+public void setName(String name){}
+
+3.注意：@Value对应的类上需要加@Configuration 或 @Component
+
+-----------------------------------------------------------------------------------------------------------------------
+Spring应用启动过程中，肯定是要自动扫描有@Component注解的类，加载类并初始化对象进行自动注入。
+加载类时首先要执行static静态代码块中的代码，之后再初始化对象时会执行构造方法。在对象注入完成后，
+调用带有@PostConstruct注解的方法。当容器启动成功后，再根据@Order注解的顺序调用CommandLineRunner和ApplicationRunner接口类中的run方法。
+因此，加载顺序为static>constructer>@PostConstruct>CommandLineRunner（接口）和ApplicationRunner.
+
+Spring的核心，是IOC注入，但是静态方法，是在注入IOC之前执行，如果直接在静态方法中引用Spring IOC注入的变量，执行时会出现该变量为NULL
+
+ https://blog.csdn.net/evo_steven/article/details/86005965
+ @Scheduled
+ 
+ 
+ -----------------------------------------------------------------
+ 1. spring-boot-starter-parent（控制版本信息）
+ <parent>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-parent</artifactId>
+   <version>2.1.4.RELEASE</version>
+   <relativePath/> 
+</parent>
+
+2.spring-boot-starter //Spring Boot的核心启动器，包含了自动配置、日志和YAML
+
+3. spring-boot-starter-web
+web的场景，自动帮我们引入了web模块开发需要的相关jar包
+
+4. spring-boot-starter-test
+springboot程序测试依赖，如果是自动创建项目默认添加
+
+
+pom.xml中
+查找顺序：relativePath元素中的地址–本地仓库–远程仓库
+<relativePath/>设定一个空值将始终从仓库中获取，不从本地路径获取

@@ -2,10 +2,13 @@
 ES-SQL插件
 
 
+kibana: http://172.16.100.122:5601  DELETE /biplog* 删除索引
+elasticsearch-head http://172.16.100.122:9100/
+springboot elk https://segmentfault.com/a/1190000015606497?utm_source=tag-newest
 
 
-
-
+qwx572511-3
+@!zsGhIATM0&
 
 
 

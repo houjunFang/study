@@ -22,6 +22,18 @@ GET http://ip:9200/_cat/nodes?v
 创建索引文件时，不指定ID，会自生成一个随机ID
 指定已存在的ID时会覆盖更新原文档内容，不存在自动以此ID创建文档
 
+文档更新(ES更新实际是先删除再新增的过程)
+POST http://ip:9200/indexName/typeName/id/_update?pretty
+{
+ "doc":{
+   "field1":"value1", //更新字段值
+   "field2":"xxx"     //还可以新增一些字段及值
+   .....
+ }
+}
+
+
+
 
 
 ES-SQL插件

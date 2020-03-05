@@ -1,16 +1,84 @@
 ﻿PUT 更新操作
 
+Meta-Fields(元数据)
+
+
 ES分片[shards ]：文档划分成多份，这些份叫分片（允许水平分割扩展，进行分布并行操作提高性能吞吐量）;
 replicas 副本：上述分片的一份或多份的拷贝.（为了提高可用性副本，复制分片从不与原/主要（original/primary）分片置于同一节点上）
 默认5个主分片1份副本
+
+搜索引擎的核心是倒排索引，而倒排索引的基础就是分词
+ES中处理分词的部分叫作分词器Analyzer
+ES的分词不仅仅发生成文档创建时 也发生成搜索时（读时分词（处理写入请求）和写时分词（处理读取请求））
+ES 自带了很多默认的分词器，比如Standard、Keyword、Whitespace等等，默认是Standard。当我们在读时或者写时分词时可以指定要使用的分词器
+
+写时分词器需要在 mapping 中指定，而且一经指定就不能再修改，若要修改必须新建索引
+
+ES分片修改，MAPPING需要修改 都需要reindex
+复制数据重建索引
+POST http://ip:9200/_reindex
+{
+  "source": {
+    "index": "old_index"
+  },
+  "dest": {
+    "index": "new_index"
+  }
+}
+
+设置别名
+POST /_aliases
+{
+      "actions": [
+          {"add": {"index": "my_index2", "alias": "my_index"}}
+      ]
+}
+
+
+1.创建带mapping设置的索引
+PUT http://ip:9200/indexname
+{
+	"mappings":{
+		"docType":{
+			"properties":{
+				"filedOne":{
+					"type":"keyword"
+					"analyzer":"standard"
+				}
+			}
+		}
+	}
+}
+
  
+创建索引并指定设置分片及mappings信息
+PUT http://ip:9200/indexName
+{
+ "settings":{
+ 		"number_of_shards":5,
+ 		"number_of_replicas":1
+ },
+ "mappings":{
+ 		"docTypeName":{
+ 			"properties":{
+ 				"name":{
+ 					"type":"text"
+ 				}
+ 				"age":{
+ 					"type":"integer"
+ 				}
+ 			}
+ 		}
+ }
+}
 
+先关闭index后再更新settings（仅能修改副本数，索引分片数在索引创建好了之后就不能调整了，只能重建索引）
+PUT http://ip:9200/indexName/_settings
+{
+	"number_of_replicas":0
+}
 
-
-
-GET http://172.16.100.122:9200/indexName/_settings?pretty
-
-查看ES 各索引情况
+查看ES 各索引情况（后加?v显示列头项）
 GET http://172.16.100.122:9200/_cat/indices?v
 
 查看集群健康状态
@@ -19,8 +87,26 @@ GET http://ip:port:/_cat/health?v
 查询获取集群结点列表
 GET http://ip:9200/_cat/nodes?v
 
-创建索引文件时，不指定ID，会自生成一个随机ID
-指定已存在的ID时会覆盖更新原文档内容，不存在自动以此ID创建文档
+查看index对应的_mapping及_setting配置信息
+GET http://ip:9200/indexName
+
+查看index对应的setting配置信息
+GET http://172.16.100.122:9200/indexName/_settings
+
+查看对应index的mapping配置信息
+GET http://172.16.100.122:9200/indexName/_mapping
+GET http://172.16.100.122:9200/indexName/_mappings
+
+删除index
+DELETE http://ip:9200/indexName
+DELETE http://ip:9200/indexOne,indexTwo
+DELETE http://ip:9200/index*
+DELETE http://ip:9200/_all
+
+无法删除文档类型
+DELETE http://ip:9200/index/doc/id  //删除指定文档
+
+
 
 文档更新(ES更新实际是先删除再新增的过程)
 POST http://ip:9200/indexName/typeName/id/_update?pretty
@@ -31,6 +117,32 @@ POST http://ip:9200/indexName/typeName/id/_update?pretty
    .....
  }
 }
+
+
+关闭/打开 index
+POST http://ip:9200/indexName/_open
+POST http://ip:9200/indexName/_close
+
+
+查询文档
+post http://ip:9200/indexName/_search
+{
+ "query":{
+ 	"match":{
+ 		"fieldname":"value"
+ 	}
+ }
+}
+
+
+
+
+
+
+创建索引文件时，不指定ID，会自生成一个随机ID
+指定已存在的ID时会覆盖更新原文档内容，不存在自动以此ID创建文档
+
+
 
 
 

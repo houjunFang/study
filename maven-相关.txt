@@ -1,3 +1,16 @@
+
+maven命令行窗口指定特定settings.xml
+mvn install --settings c:\user\settings.xml 
+mvn clean package --settings F:\Maven\settings.xml -Dmaven.test.skip=true
+
+mvn deploy:deploy-file --settings E:\maven_setting_cfg\cip-sofa.xml -DgroupId=com.uisftech -DartifactId=sofa-iap-facade -Dversion=1.0.1_R1_20200320 -Dpackaging=jar -Dfile=E:\mvn-\sofa-iap-facade\1.0.1_R1_20200320\sofa-iap-facade-1.0.1_R1_20200320.jar -Durl=http://172.16.100.93:8088/nexus/content/repositories/fin-rdc-releases/ -DrepositoryId=fin-rdc-releases 
+
+mvn deploy:deploy-file --settings E:\maven_setting_cfg\cip-sofa.xml -DgroupId=com.uisftech -DartifactId=sofa-iap-facade -Dversion=1.0.1_R1_20200320 -Dpackaging=pom -Dfile=E:\mvn-\sofa-iap-parent\1.0.1_R1_20200320\sofa-iap-parent-1.0.1_R1_20200320.pom -Durl=http://172.16.100.93:8088/nexus/content/repositories/fin-rdc-releases/ -DrepositoryId=fin-rdc-releases 
+
+
+
+
+
 1.Maven缺省的本地仓库地址为${user.home}/.m2/repository
 2.你也可以自定义本地仓库的位置，修改${user.home}/.m2/settings.xml ：
 	<localRepository>D:/.m2/repository</localRepository>  

@@ -1,6 +1,120 @@
 ﻿PUT 更新操作
 
+
+自定义分词器
+PUT http://ip:9200/indexname/_settings
+{
+"settings": {
+    "analysis": {
+      "analyzer": {
+        "自定义分词器名称":{
+              //todo ...自定义分词器具体内部实现
+        }
+      }
+    }
+  }
+}
+
+自定义按逗号分词
+post http://ip:9200/index/_settings
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "comma": {
+          "type": "pattern",
+          "pattern": ","
+        }
+      }
+    }
+  }
+}
+
+在需要分词的字段加入如下设置
+
+"goods_tag": {
+  "type": "text",
+  "analyzer": "comma",
+  "search_analyzer": "comma"
+}
+
+
+ES内置文本分析器
+standard 根据Unicode Text Segmentation algorithm对文本进行分词，移除大多数的标点符号，将文本转为小写，并将停止词去掉。
+
+Simple Analyzer
+
+遇到非字母的符号就切分文本，并且将大写字母转为小写。
+
+Whitespace Analyzer
+
+以空白字符为切割符分割文本，不会进行大小写转换。
+
+Stop Analyzer
+
+与Simple Analyzer行为很像，只是在分词过程中过滤了停止词。
+
+Keyword Analyzer
+
+不对字段进行分词，将整个字段当做一个单独的分词。
+
+Pattern Analyzer
+
+允许指定一个分词切分的模式，同时支持大写字母转为小写和停止词过滤；
+
+Language Analyzers
+
+特定语言的分析器，需要指定语言。比如english 、french。
+
+Fingerprint Analyzer
+
+该分词器将输入的文本转为小写，并过滤重复的词，最后再将过滤的词重新组成文本。如果有定义停止词，那么也会移除停止词。
+
+
+
+ScreenToGif 转GIF开源软件
+markdown all in one
+markdown preview github styling
+
+https://github.com/用户名/repository仓库名/raw/分支名master/图片文件夹名称/.png or.jpg
+
 Meta-Fields(元数据)
+
+
+elasticsearch
+简介：
+Elasticsearch是一个高度可扩展的、开源的、基于 Lucene 的全文搜索和分析引擎。它允许您快速，近实时地存储，搜索和分析大量数据，并支持多租户
+
+
+
+映射Mapping：映射(Mapping)相当于数据表的表结构。ElasticSearch中的映射（Mapping）用来定义一个文档，可以定义所包含的字段以及字段的类型、分词器及属性等等
+动态映射:根据文档字段自动识别类型
+静态映射:事先定义好
+
+
+http://ip:9200/
+
+手动创建MAPPING
+post http://ip:9200/indexName
+{
+  "settings": {
+	 "number_of_shards": 3,  //定义好后不可再修改默认为5分片1份副本
+	 "number_of_replicas": 0 //仅可修改副本
+  },
+  "mappings": {
+	 "books": {
+	  "dynamic": true（缺省）| false | strict
+		"properties": {
+			"title": {"type": "text"},
+			"name": {"type": "text", "ayalyzer": "standard","search_analyzer": "ik"},  //启用standard分词器写入读取
+			"publish_date": {"type": "date", "index": false},  //index 该字段是否分词
+			"price": {"type": "double"},
+			"number": {"type": "integer"}
+		}
+	 }
+  }
+}
+
 
 
 ES分片[shards ]：文档划分成多份，这些份叫分片（允许水平分割扩展，进行分布并行操作提高性能吞吐量）;
@@ -50,7 +164,34 @@ PUT http://ip:9200/indexname
 	}
 }
 
- 
+
+设置默认分词器和字段指定分词器
+http://172.16.100.122:9200/fan
+{
+  "settings": {
+    "index.analysis.analyzer.default.type": "ik_max_word"
+    },
+
+  "mappings": {
+    "_doc": {
+      "properties": {
+        "tags": {
+          "type":     "text",
+          "analyzer": "whitespace"
+        }
+      }
+    }
+  }
+}
+
+分词器测试
+POST my_index/_analyze
+{
+  "analyzer": "standard",
+  "text": "The 2 QUICK Brown-Foxes jumped over the lazy dog's bone."
+}
+
+
 创建索引并指定设置分片及mappings信息
 PUT http://ip:9200/indexName
 {
@@ -966,4 +1107,485 @@ Jest开源GIT地址：https://github.com/searchbox-io/Jest/tree/master/jest
 　　3）、编写ElasticSearchRepository的子接口来操作es
 2.配置ElasticSearch
 spring.elasticsearch.jest.uris=http://tanghu.tk:9200
-           
+    
+客户中心索引及类型 idx_cust_val/doc
+GET http://172.16.67.3:24148/idx_cust_val    
+{
+  "idx_cust_val": {
+    "aliases": {},
+    "mappings": {
+      "_doc": {
+        "properties": {
+          "f_CVAL090001": {
+            "type": "double"
+          },
+          "f_CVAL090002": {
+            "type": "double"
+          },
+          "f_CVAL090003": {
+            "type": "double"
+          },
+          "f_CVAL090004": {
+            "type": "double"
+          },
+          "f_CVAL090005": {
+            "type": "double"
+          },
+          "f_CVAL090006": {
+            "type": "double"
+          },
+          "f_CVAL090055": {
+            "type": "double"
+          },
+          "f_CVAL090056": {
+            "type": "double"
+          },
+          "f_CVAL090057": {
+            "type": "double"
+          },
+          "f_CVAL090058": {
+            "type": "double"
+          },
+          "f_CVAL090059": {
+            "type": "double"
+          },
+          "f_CVAL090060": {
+            "type": "double"
+          },
+          "f_CVAL090061": {
+            "type": "long"
+          },
+          "f_CVAL090062": {
+            "type": "long"
+          },
+          "f_CVAL090063": {
+            "type": "long"
+          },
+          "f_CVAL090064": {
+            "type": "long"
+          },
+          "f_CVAL090065": {
+            "type": "long"
+          },
+          "f_CVAL090066": {
+            "type": "long"
+          },
+          "f_CVAL100002": {
+            "type": "long"
+          },
+          "f_CVAL100004": {
+            "type": "long"
+          },
+          "f_CVAL100006": {
+            "type": "long"
+          },
+          "f_CVAL100008": {
+            "type": "long"
+          },
+          "f_CVAL100010": {
+            "type": "long"
+          },
+          "f_CVAL100012": {
+            "type": "long"
+          },
+          "f_CVAL100014": {
+            "type": "long"
+          },
+          "f_CVAL100016": {
+            "type": "long"
+          },
+          "f_CVAL100018": {
+            "type": "long"
+          },
+          "f_CVAL100020": {
+            "type": "long"
+          },
+          "f_CVAL100021": {
+            "type": "long"
+          },
+          "f_CVAL100022": {
+            "type": "long"
+          },
+          "f_CVAL100023": {
+            "type": "long"
+          },
+          "f_CVAL100024": {
+            "type": "long"
+          },
+          "f_CVAL100025": {
+            "type": "long"
+          },
+          "f_CVAL100026": {
+            "type": "long"
+          },
+          "f_CVAL100027": {
+            "type": "long"
+          },
+          "f_CVAL100028": {
+            "type": "long"
+          },
+          "f_CVAL100274": {
+            "type": "long"
+          },
+          "f_CVAL100275": {
+            "type": "long"
+          },
+          "f_CVAL100276": {
+            "type": "long"
+          },
+          "f_CVAL100277": {
+            "type": "long"
+          },
+          "f_CVAL100278": {
+            "type": "long"
+          },
+          "f_CVAL100279": {
+            "type": "long"
+          },
+          "f_CVAL100280": {
+            "type": "long"
+          },
+          "f_CVAL100281": {
+            "type": "long"
+          },
+          "f_CVAL100282": {
+            "type": "long"
+          },
+          "f_CVAL140001": {
+            "type": "double"
+          },
+          "f_CVAL200001": {
+            "type": "double"
+          },
+          "f_CVAL200002": {
+            "type": "double"
+          },
+          "f_CVAL200003": {
+            "type": "double"
+          },
+          "f_CVAL200004": {
+            "type": "double"
+          },
+          "f_CVAL200005": {
+            "type": "double"
+          },
+          "f_CVAL200006": {
+            "type": "double"
+          },
+          "f_CVAL200007": {
+            "type": "double"
+          },
+          "f_CVAL200008": {
+            "type": "double"
+          },
+          "f_CVAL200009": {
+            "type": "double"
+          },
+          "f_CVAL200010": {
+            "type": "double"
+          },
+          "f_CVAL200011": {
+            "type": "double"
+          },
+          "f_CVAL200012": {
+            "type": "double"
+          },
+          "f_CVAL200013": {
+            "type": "double"
+          },
+          "f_CVAL200014": {
+            "type": "double"
+          },
+          "f_CVAL200015": {
+            "type": "double"
+          },
+          "f_CVAL200016": {
+            "type": "double"
+          },
+          "f_CVAL200017": {
+            "type": "double"
+          },
+          "f_CVAL200018": {
+            "type": "double"
+          },
+          "f_CVAL200019": {
+            "type": "double"
+          },
+          "f_CVAL200020": {
+            "type": "double"
+          },
+          "f_CVAL200021": {
+            "type": "double"
+          },
+          "f_CVAL200022": {
+            "type": "double"
+          },
+          "f_CVAL200023": {
+            "type": "double"
+          },
+          "f_CVAL200024": {
+            "type": "double"
+          },
+          "f_CVAL200025": {
+            "type": "double"
+          },
+          "f_CVAL200026": {
+            "type": "double"
+          },
+          "f_CVAL200027": {
+            "type": "double"
+          },
+          "f_CVAL200028": {
+            "type": "double"
+          },
+          "f_CVAL200029": {
+            "type": "double"
+          },
+          "f_CVAL200030": {
+            "type": "double"
+          },
+          "f_CVAL200031": {
+            "type": "double"
+          },
+          "f_CVAL200032": {
+            "type": "double"
+          },
+          "f_CVAL200033": {
+            "type": "double"
+          },
+          "f_CVAL200034": {
+            "type": "double"
+          },
+          "f_CVAL200035": {
+            "type": "double"
+          },
+          "f_CVAL200036": {
+            "type": "double"
+          },
+          "f_CVAL200037": {
+            "type": "double"
+          },
+          "f_CVAL200038": {
+            "type": "double"
+          },
+          "f_CVAL200039": {
+            "type": "double"
+          },
+          "f_CVAL200040": {
+            "type": "double"
+          },
+          "f_CVAL200041": {
+            "type": "double"
+          },
+          "f_CVAL200042": {
+            "type": "double"
+          },
+          "f_CVAL200043": {
+            "type": "double"
+          },
+          "f_CVAL200044": {
+            "type": "double"
+          },
+          "f_CVAL200045": {
+            "type": "double"
+          },
+          "f_CVAL200046": {
+            "type": "double"
+          },
+          "f_CVAL200047": {
+            "type": "double"
+          },
+          "f_CVAL200048": {
+            "type": "double"
+          },
+          "f_CVAL200049": {
+            "type": "double"
+          },
+          "f_CVAL200050": {
+            "type": "double"
+          },
+          "i_CVAL100002": {
+            "type": "long"
+          },
+          "i_CVAL100005": {
+            "type": "long"
+          },
+          "s_CATR010001": {
+            "type": "keyword"
+          },
+          "s_CATR010002": {
+            "type": "keyword"
+          },
+          "s_CATR010003": {
+            "type": "keyword"
+          },
+          "s_CATR010004": {
+            "type": "keyword"
+          },
+          "s_CATR010008": {
+            "type": "keyword"
+          },
+          "s_CATR010014": {
+            "type": "keyword"
+          },
+          "s_CATR010015": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "s_CATR010017": {
+            "type": "keyword"
+          },
+          "s_CATR010018": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "s_CATR010019": {
+            "type": "keyword"
+          },
+          "s_CATR010020": {
+            "type": "keyword"
+          },
+          "s_CATR010022": {
+            "type": "keyword"
+          },
+          "s_CATR020001": {
+            "type": "keyword"
+          },
+          "s_CATR020002": {
+            "type": "keyword"
+          },
+          "s_CATR070001": {
+            "type": "keyword"
+          },
+          "s_CATR070002": {
+            "type": "keyword"
+          },
+          "s_CATR070003": {
+            "type": "keyword"
+          },
+          "s_CATR070004": {
+            "type": "keyword"
+          },
+          "s_CATR070005": {
+            "type": "keyword"
+          },
+          "s_CATR070006": {
+            "type": "keyword"
+          },
+          "s_CATR070007": {
+            "type": "keyword"
+          },
+          "s_CATR190001": {
+            "type": "keyword"
+          },
+          "s_CPRD190014": {
+            "type": "keyword"
+          },
+          "s_CPRD190052": {
+            "type": "keyword"
+          },
+          "s_CPRD190057": {
+            "type": "keyword"
+          },
+          "w_CATR010001": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR010002": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR030002": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "w_CATR030004": {
+            "type": "text",
+            "fields": {
+              "keyword": {
+                "type": "keyword",
+                "ignore_above": 256
+              }
+            }
+          },
+          "w_CATR070001": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR070002": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR070003": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR070004": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR070005": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR170001": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR170002": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR180002": {
+            "type": "text",
+            "analyzer": "comma"
+          },
+          "w_CATR180004": {
+            "type": "text",
+            "analyzer": "comma"
+          }
+        }
+      }
+    },
+    "settings": {
+      "index": {
+        "refresh_interval": "1s",
+        "number_of_shards": "5",
+        "translog": {
+          "durability": "async"
+        },
+        "provided_name": "idx_cust_val",
+        "max_result_window": "100000000",
+        "creation_date": "1583293286914",
+        "analysis": {
+          "analyzer": {
+            "comma": {
+              "pattern": ",",
+              "type": "pattern"
+            }
+          }
+        },
+        "number_of_replicas": "2",
+        "uuid": "q53urVOYRkCTsQe2LD3SCQ",
+        "version": {
+          "created": "6070199"
+        }
+      }
+    }
+  }
+}       

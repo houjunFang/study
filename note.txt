@@ -1,0 +1,152 @@
+securecrt ftp文件方式：
+ALT+P
+rz 打出上传文件
+命令"sz 文件名",即可利用Zmodem将文件下载到本地某目录下
+
+
+securecrt 按下ALT+P就开启新的会话 进行ftp操作。
+
+　　输入：help命令，显示该FTP提供所有的命令
+
+　　pwd:  查询linux主机所在目录（也就是远程主机目录）
+
+　　lpwd: 查询本地目录（一般指windows上传文件的目录：我们可以通过查看"选项"下拉框中的"会话选项",我们知道本地上传目录为：D:/我的文档）
+
+　　ls:   查询连接到当前linux主机所在目录有哪些文件
+
+　　lls:  查询当前本地上传目录有哪些文件
+
+　　lcd:  改变本地上传目录的路径
+
+　　cd:   改变远程上传目录
+
+　　get:  将远程目录中文件下载到本地目录
+
+　　put:  将本地目录中文件上传到远程主机（linux）
+
+　　quit: 断开FTP连接
+
+
+
+输出内容至前端页面下载方式：
+@RequestMapping(value = "/getPostMan")
+public void exportData2PostManJson(HttpServletResponse response){
+		JSONObject jsonObject = new JSONObject();
+    String uuid = getUUid();
+    jsonObject.put("id",uuid);
+    jsonObject.put("name","TEST-"+uuid);
+    jsonObject.put("description","自动化测试");
+    
+    response.setHeader("Content-Disposition", "attachment; filename="xx.json");
+    Integer contentLength = jsonObject.toJSONString().getBytes().length;
+    response.setHeader("content-length", contentLength + "");
+    try {
+        response.getOutputStream().write(jsonObject.toJSONString().getBytes());
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
+
+  
+springboot中前端ajax传值与后台的接收
+
+第一种方式，不使用任何注解。
+前端 
+   var data = "username="+vm.username+"&password="+vm.password+"&captcha="+vm.captcha;
+            $.ajax({
+                type: "POST",
+                url: "sys/login",
+                data: data,
+                dataType: "json",
+
+后台接收
+    public R login( String username, String password, String captcha)
+
+ 2.使用注解@PathVariable
+
+ 前端
+     $.get(baseURL + "noticeinfo/info/"+noticeid
+
+后台
+    public R info(@PathVariable("noticeid") Integer noticeid) 
+
+  3.使用注解@RequestParam
+
+    前端
+     url : baseURL + "noticeinfo/saveimg?noticeid=" + param 
+
+   后台
+    public R info(@RequestParam(noticeId) String noticeId)
+
+4. 使用注解@RequestBody
+
+前端
+   $.ajax({
+                type: "POST",
+                url: baseURL + url,
+                contentType: "application/json",
+                data : JSON.stringify(vm.noticeInfo)
+
+后台 ，有两种方式
+   public R update(@RequestBody NoticeInfoEntity noticeInfo) 
+
+   可以直接使用一个map来接收。
+
+   public R update(@RequestBody Map<String, Object> params) 
+   
+
+XMLHttpRequest
+  try {
+                var data = {};
+                data['url'] = url;
+                data['requestParams'] = text;
+                data['response'] = content;
+                data['reqTime'] = formatDateToLong(args[0].startedDateTime);
+                var xhr = new XMLHttpRequest();
+                xhr.withCredentials = true;
+                xhr.onerror = function (e) {
+                    log("连接异常:", e.stack || e.toString);
+                };
+
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            log("url:",url,"请求数据成功发送至：" + collectServersIp, xhr.responseText)
+                        } else {
+                            // 错误处理
+                            log("请求数据至收集服务器异常:", xhr.statusText, xhr.responseText);
+                        }
+                    }
+                }
+
+                xhr.open("post", collectServersIp, false);
+                xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+                xhr.send(JSON.stringify(data));
+                //log("请求数据推送状态：",xhr.status,"state:",xhr.state);
+
+
+            } catch (errinfo) {
+                log("请求数据发送服务端异常：", errinfo.stack || errinfo.toString());
+            }
+
+
+java程序启动参数-D含义详解
+-D<name>=<value>  ：  set a system property  设置系统属性。
+java代码中通过System.getProperty("key")获取对应设置的值
+Standard System Properties
+
+
+===================================================================
+springboot 使用spring.profiles.active 区分不同环境下配置文件
+application.properties文件中增加如下配置
+spring.profiles.active=test
+
+则使用test环境，具体resource文件夹下存放文件如下
+application.properties
+application-test.properties
+application-prd.properties
+
+JAVA启动时指定启用配置文件方式：
+java -jar app.jar --spring.profiles.active=dev --server.port=8060  //指定端口
+=====================================================================

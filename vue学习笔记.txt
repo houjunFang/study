@@ -1799,3 +1799,11 @@ $(function(){
 window.location.search 查询(参数)部分。得到的是url中？部分
 window.location.href 整个URl字符串(在浏览器中就是完整的地址栏)
 window.location.hash 锚点。得到的是url中#部分
+
+
+https://cli.vuejs.org/zh/guide/creating-a-project.html#vue-create
+vue serve Test.vue  //单个VUE组件开发
+
+CSS 权威指南
+精通CSS
+https://github.com/cssmagic/CSS-Secrets

@@ -309,3 +309,6 @@ public class RSACoderTest {
 </script>
 
 说明前端生成加密的字符串encrypted，传到后台，java使用私钥进行解密即可。
+
+const url = btoa(`${appBaseUrl}session/getSha1?code=${code}`); // base64 编码
+let decodedData = atob(url); // 解码 成 ASCII

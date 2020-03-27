@@ -1,6 +1,53 @@
 nodejs下载地址:https://nodejs.org/en/
 hbuildx 将vue转成app
 
+
+
+mockjs
+1.安装
+npm install mockjs --save
+2.编写mock.js
+import Mock from 'mockjs'
+Mock.mock(/getXXX/,{
+	'list|5':[{
+			'url':'@url'
+			'titile':@ctitle(5,20)
+	}]
+})
+3.vue中使用
+import mock from 'mock.js' //上面编写的mock.js
+
+
+aixios安装
+npm install axios --save
+
+
+
+
+-----------------------------------------------------
+server-mock
+1.创建一个文件夹A
+2.进入文件夹A 执行server-mock全局安装
+npm install -g server-mock
+3.当前目录下生成样例代码
+mock init
+4.启动mockserver
+mock start
+
+
+
+
+
+
+
+
+
+
+
+
+vue中使用sass https://blog.csdn.net/u014789022/article/details/87854962
+
+
 https://github.com/caochangkui
 
 vscode code runner插件使用不起来解决方案：https://www.jianshu.com/p/7719d4ccd49e
@@ -1807,3 +1854,111 @@ vue serve Test.vue  //单个VUE组件开发
 CSS 权威指南
 精通CSS
 https://github.com/cssmagic/CSS-Secrets
+
+
+创建vue项目的方法：
+1.vue create 项目名称（vue-cli3.x的初始化方式）
+2.vue ui 启用图型化创建向导创建
+3.vue init webpack 项目名称 (vue-cli2.x的初始化方式)
+
+
+1.在使用sass之前，我们首先需要安装相关的插件
+npm install sass  --save-dev
+npm install node-sass --save-dev
+npm install sass-loader --save-dev
+报错
+需要降版本
+npm uninstall sass-loader
+npm install sass-loader@7.3.1 --save-dev
+
+2.在build目录找到webpack.base.conf.js文件
+在该文件module.export中的module.rules加入解释scss文件的loader
+{
+   test: /\.scss$/,
+   loader: 'sass-loader!style-loader!css-loader'
+}
+
+3.vue组件中指定使用
+<style lang="scss">
+</style>
+
+
+localStorge
+
+npm install element-ui --save-dev
+
+
+document.getElementById('back').addEventListener('click', function() { window.history.back() })著作权归作者所有。
+
+
+
+nodejs 做中间件：https://segmentfault.com/a/1190000007992200
+NodeJS异步单线程非阻塞I/O适合运用在高并发、I/O密集、少量业务逻辑的场景 
+NodeJS处理并发的能力强，但处理计算和逻辑的能力反而很弱
+
+
+ES6 解构 https://www.jianshu.com/p/ab4e4338047b
+
+~~ 按位取反运算
+~~true === 1
+~~false === 0
+/ 转成两位 eg: 6 => 06
+function toDou(str) {
+    const num = ~~str;  //将字符转整数 小数点后数去掉，非数值字符统一转成0
+    return num > 9 ? num : "0" + str;
+}
+
+===========================================
+
+自执行匿名函数：
+
+常见格式：(function() { /* code */ })();
+解释：包围函数（function(){})的第一对括号向脚本返回未命名的函数，随后一对空括号立即执行返回的未命名函数，括号内为匿名函数的参数。
+作用：可以用它创建命名空间，只要把自己所有的代码都写在这个特殊的函数包装内，那么外部就不能访问，除非你允许(变量前加上window，这样该函数或变量就成为全局)。各JavaScript库的代码也基本是这种组织形式。
+总结一下，执行函数的作用主要为 匿名 和 自动执行,代码在被解释时就已经在运行了。
+
+其他写法
+(function () { /* code */ } ()); 
+!function () { /* code */ } ();
+~function () { /* code */ } ();
+-function () { /* code */ } ();
++function () { /* code */ } ();
+
+
+js 中 ... 的用法(展开语法(Spread syntax)) //https://blog.csdn.net/hyl999/article/details/97035381
+es6之扩展运算符 三个点（...）
+对象中的扩展运算符(...)用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
+
+
+vue中图片的引用
+<img :src="tpaddr"/>
+
+vue组件中：
+import tp1 '@/xx/xx.jpg'
+export default {
+	data(){
+		return{
+				tpaddr:tp1
+				imgUrl:require("../assets/test.png")  //这种方式也可以
+		}
+	}
+}
+-----------------------------------------------
+vuex
+1.安装 npm install vuex --save
+2.src目录下新建store文件夹index.js
+	import Vue from 'vue';
+	import Vuex from 'vuex';
+	Vue.use(Vuex);
+	const store = new Vuex.Store();
+	export default store;
+3.main.js中引入修改
+import store from './store'//引入store
+ 
+new Vue({
+  el: '#app',
+  router,
+  store,//使用store
+  template: '<App/>',
+  components: { App }
+})

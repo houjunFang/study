@@ -3,6 +3,12 @@ ALT+P
 rz 打出上传文件
 命令"sz 文件名",即可利用Zmodem将文件下载到本地某目录下
 
+---------------------------------------------
+int char可相互转化
+indexOf(58) 等价 indexOf(':') //58 ascii码值对应“:”
+---------------------------------------------
+
+
 
 securecrt 按下ALT+P就开启新的会话 进行ftp操作。
 
@@ -150,3 +156,42 @@ application-prd.properties
 JAVA启动时指定启用配置文件方式：
 java -jar app.jar --spring.profiles.active=dev --server.port=8060  //指定端口
 =====================================================================
+
+在pom.xml中使用distributionManagement将项目打包上传到nexus私服
+
+
+1、pom.xml文件添加distributionManagement节点
+<!-- 使用分发管理将本项目打成jar包，直接上传到指定服务器 -->
+  <distributionManagement>
+    <!--正式版本-->
+    <repository>
+        <!-- nexus服务器中用户名：在settings.xml中<server>的id-->
+        <id>yang</id>
+        <!-- 这个名称自己定义 -->
+        <name>Release repository</name>
+        <url>http://192.168.1.105:8081/repository/yang/</url>
+    </repository>
+    <!--快照
+    <snapshotRepository>
+        <id>nexus-snapshots</id>
+        <name>Snapshots repository</name>
+        <url>http://192.168.1.105/repository/yang/</url>
+    </snapshotRepository>-->
+  </distributionManagement>
+
+< repository >节点下的< id >对应setting.xml文件中的server的id
+
+    <!--maven连接nexus需要验证用户名和密码-->
+    <server>
+      <id>yang</id>
+       <username>admin</username>
+       <password>admin123</password>
+     </server>
+
+上传正式版本，pom.xml文件version中不能有SNAPSHOT，快照版本才有
+
+  <groupId>com.yang</groupId>
+  <artifactId>shade-plugin</artifactId>
+  <version>0.0.1</version>
+  <!--  <version>0.0.1-SNAPSHOT</version> -->
+

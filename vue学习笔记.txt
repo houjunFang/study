@@ -1928,6 +1928,19 @@ function toDou(str) {
 js 中 ... 的用法(展开语法(Spread syntax)) //https://blog.csdn.net/hyl999/article/details/97035381
 es6之扩展运算符 三个点（...）
 对象中的扩展运算符(...)用于取出参数对象中的所有可遍历属性，拷贝到当前对象之中
+1.使用扩展运算符进行对象拷贝是浅拷贝
+let a = {a:1,b:{aa:1,bb:2}}
+let c = {...a}
+
+
+
+
+ES6 解构
+ES6 中允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）
+作用：这是一种将数据结构分解为更小的部分的过程，从而达到简化提取信息的目的
+ let colors = [ "red", "green", "blue" ];
+ let [ firstColor, ...restColors ] = colors;
+ 等价于firstColor=red, restColors=["green", "blue"] 将colors中第一个值取出给firstColor，余下的赋值给restColors
 
 
 vue中图片的引用

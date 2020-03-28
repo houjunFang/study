@@ -75,6 +75,7 @@ git diff HEAD~2 HEAD^ 比较上一次commit（即当前commit的前一次）与上上次commit之间
 
 
 git reset  --hard：彻底回退到某个版本，本地的源码也会变为上一个版本的内容
+git push -f  强制推送本地分支至远程
 
 #git checkout -b branchName 相当于
 git branch branchName

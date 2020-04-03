@@ -1895,6 +1895,7 @@ document.getElementById('back').addEventListener('click', function() { window.hi
 nodejs 做中间件：https://segmentfault.com/a/1190000007992200
 NodeJS异步单线程非阻塞I/O适合运用在高并发、I/O密集、少量业务逻辑的场景 
 NodeJS处理并发的能力强，但处理计算和逻辑的能力反而很弱
+无阻塞高并发
 
 
 ES6 解构 https://www.jianshu.com/p/ab4e4338047b
@@ -1975,3 +1976,38 @@ new Vue({
   template: '<App/>',
   components: { App }
 })
+====================================================
+移动端POC端判断
+1.navigator.userAgent（包含指定字符/i不区分大小写）
+// document.write("用户代理：" + navigator.userAgent)
+
+methods: {
+  // 添加判断方法
+  isMobile() {
+    let flag = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i);
+    return flag;
+   }
+},
+mounted: {
+  if(this.isMobile) {
+    alert("移动端");
+    this.$router.replace('/pc_index');
+  }else {
+    alert("pc端");
+    this.$router.replace('/m_index');
+  }
+}
+2.windows.matchMedia 根据当前设备的视口宽度判断是否是移动端设备
+var isPc = windows.matchMedia("min-width:400px").matches;
+console.log(isPc)
+window.matchMedia 方法会返回两个参数，一个是 media，就是查询的语句内容。另一个是 matches，是返回的结果，为 boolean 类型
+-----------------------------------------------------------------
+SEO Search Engine Optimization
+
+document.getElementById('#start').addEventListener('click', start, false);
+function start() {
+  // 响应事件，进行相应的操作
+}
+
+------------------------------
+console.dir(对象)  //打印出该对象的所有属性和属性值.

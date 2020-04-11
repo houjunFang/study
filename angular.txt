@@ -1,0 +1,83 @@
+Angular 1  PC端
+Angular 2  解决APP 跨平台问题 支持移动端 基于TypeScript 
+Angular 4 比angular2更快 
+angular1.5 angularjs
+angular1.5+ angular
+
+1.环境搭建
+安装如下：
+nvm  https://github.com/coreybutler/nvm-windows/releases
+nodejs
+npm
+
+安装Angular脚手架
+npm install -g @angular/cli
+npm install -g @angular/cli@latest  //安装最新版本
+
+卸载
+npm uninstall -g @angular/cli
+npm cache clean
+
+@latest
+
+检查angular版本
+ng v | ng version
+
+创建新项目
+ng new appname
+cd appname
+ng serve  --open  //启动服务 --open 自动打开浏览器
+npm start 
+
+备注：
+ng new angularDemo01 --style=scss //创建ng项目同时指定css style为 scss
+ng new app-demo --style=sass  //创建ng项目同时指定css style为 sass
+
+------------------------------------------------------------
+查看npm 配置信息
+npm config ls
+
+设置npm 全局安装目录
+npm config set prefix "E:\web-wks\gloabal-node-modules"
+---------------------------------------------------------------
+nvm list  // 你本机中所有的node的版本列表
+nvm install latest  // 安装最新版本
+nvm install 4.8.4  // 安装指定版本
+nvm use 10.8.0  // 当前使用版本
+
+--------------------------------------
+angular 安装SASS语法修改为SCSS
+1.修改angular.json 配置文件 替换 styles.sass 为styles.scss
+"styles": [
+       "src/styles.scss"
+  ],
+  
+  "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "sass" //此处修改成scss
+        }
+  
+2.手动修改src/app app.component.sass   为app.component.scss
+3.手动修改src styles.sass     为  styles.scss
+4.手动修改src/app/app.component.ts 中styleUrls: ['./app.component.sass'] 为['./app.component.scss']
+--------------------------------------------------
+在Angular CLI 6+的版本后，原先的angular-cli.json就被换成了angular.json
+
+修改端口
+直接使用命令：ng serve --port 4201
+或简写：ng serve -p 4201
+------------------------------------------------------------------------------------------------------
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+ng generate component /test/test1 //这样就会对应test文件下生成test1的component
+简写形式
+ng g c test/test1
+ng g s core/auth s是service的缩写。
+
+
+---------------------------------------------------------
+vscode 终端中不能识别NODE NG 命令解决办法：
+vscode快捷方式属性 兼容性标签 下 勾选“已管理员身份运行此程序” 重启VSCODE 即可
+
+
+

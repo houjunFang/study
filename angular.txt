@@ -14,6 +14,11 @@ npm
 npm install -g @angular/cli
 npm install -g @angular/cli@latest  //安装最新版本
 
+ng new hello-angular --skip-install //先跳过安装生成项目后再安装
+cd hello-angular
+cnpm install
+
+
 卸载
 npm uninstall -g @angular/cli
 npm cache clean
@@ -78,6 +83,59 @@ ng g s core/auth s是service的缩写。
 ---------------------------------------------------------
 vscode 终端中不能识别NODE NG 命令解决办法：
 vscode快捷方式属性 兼容性标签 下 勾选“已管理员身份运行此程序” 重启VSCODE 即可
+
+
+
+--------------------------------------------------------------------------------
+@Component装饰器能接受一个配置对象， Angular 会基于这些信息创建和展示组件及其视图
+select :css选择器
+templateUrl: 组件 HTML 模板的模块相对地址
+providers - 组件所需服务的依赖注入提供商数组
+
+redux
+material ui
+Rxjs
+Angular Material，Material UI
+
+code .  //快捷打开vscode
+
+@NgModule
+
+
+有三种情况（ngModel）、[ngModel]、([ngModel])
+以input框为例子：
+1、<input type='text' (ngModel)='username' /> 
+这种时候数据的传递方向是 input ----> 组件
+一般使用单括号的绑定方式会出现在一些操作行为上
+比如 <button (click)='buttonClick()'>点击</button> ———当button触发点击事件的时候调用组件的buttonClick()方法
+
+2、<input type='text' [ngModel]='username' /> 
+这种时候数据的传递方向是  组件 ----->  input
+这是单向绑定，就是说在组件中给username赋了值可以影响到input的值，但input的值发生改变的时候，不会影响组件中username的值
+
+3、<input type='text' ([ngModel])='username' /> 
+这种时候数据的传递方向是 组件 -----> input , input --------> 组件
+这是双向绑定，就是说在组件中給username赋了值可以影响到input的值，并且input的值发生改变的时候组件中的username的值也会随之变化。
+
+
+
+==========================================================================================
+npm install --save-dev  xx //项目部署后不需要
+npn install --save xx      //项目部署运行需要
+比如项目中使用的 gulp ，压缩css、js的模块。这些模块在我们的项目部署后是不需要的，所以我们可以使用 -save-dev 的形式安装。
+像 express 这些模块是项目运行必备的，应该安装在 dependencies 节点下，所以我们应该使用 -save 的形式安装
+
+1、npm install <=> npm i
+--save<=> -S
+--save-dev <=> -D
+2、npm i --save-dev? <packname>??
+工程构建（开发时、“打包”时）依赖 ；例：xxx-cli , less-loader , babel-loader...
+3、npm i --save <packname>
+项目（运行时、发布到生产环境时）依赖；例：antd , element,react...
+
+
+
+
 
 
 

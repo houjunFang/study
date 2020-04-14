@@ -1,3 +1,9 @@
+ngModel指令需要引入 import {FromsModule} '@angular/froms'
+当在表单中使用[(ngModel)]时，必须要定义name属性。
+
+providers - 一个数组，包含组件所依赖的服务所需要的依赖注入提供者，可用于当前Component及其子视图；
+
+
 securecrt ftp文件方式：
 ALT+P
 rz 打出上传文件

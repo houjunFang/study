@@ -37,6 +37,7 @@ npm start
 备注：
 ng new angularDemo01 --style=scss //创建ng项目同时指定css style为 scss
 ng new app-demo --style=sass  //创建ng项目同时指定css style为 sass
+ng g m order --routing //创建的订单模块带路由(路由独立模块)
 
 ------------------------------------------------------------
 查看npm 配置信息
@@ -102,6 +103,16 @@ code .  //快捷打开vscode
 @NgModule
 
 
+--------------------------------------------------------------------
+ngModel指令的使用需要
+在根模块app.module.ts引入FormModule  
+import { FormsModule } from '@angular/forms';
+
+<form (ngSubmit)="onSubmit(submitForm)" #submitForm="ngForm">
+// ....
+</form>
+--------------------------------------------------
+
 有三种情况（ngModel）、[ngModel]、([ngModel])
 以input框为例子：
 1、<input type='text' (ngModel)='username' /> 
@@ -117,7 +128,8 @@ code .  //快捷打开vscode
 这种时候数据的传递方向是 组件 -----> input , input --------> 组件
 这是双向绑定，就是说在组件中給username赋了值可以影响到input的值，并且input的值发生改变的时候组件中的username的值也会随之变化。
 
-
+4.双向绑定可以简写如下：
+<input type="text" ngModel name="username"/>
 
 ==========================================================================================
 npm install --save-dev  xx //项目部署后不需要
@@ -133,9 +145,141 @@ npn install --save xx      //项目部署运行需要
 3、npm i --save <packname>
 项目（运行时、发布到生产环境时）依赖；例：antd , element,react...
 
+--------------------------------------------
+angular 
+
+@NgModule
+NgModule主要就是为了实现模块话，为了把某块业务区域相关的一系列组件（component），指令（directive），服务（service）内聚到一个模块中，便于管理，也便于打包
+
+NgIf和NgFor 等这些指令放在CommonModule里面，使用的时候需要：
+import { CommonModule } from ‘@angular/common‘;
+
+
+模板引用变量 ( #var )
+模板引用变量通常用来引用模板中的某个 DOM 元素，它还可以引用 Angular 组件或指令或Web Component。
+
+1.使用井号 (#) 来声明引用变量
+2.可以用 ref-前缀代替
+<div>
+ <input type="text" #userNameRef/>
+ <input type="password" ref-pwd/>
+ <button (click)="onClick(userNameRef.value,pwd.value)">submit</button>
+</div>
+
+-------------------------------------
+ng数据双向绑定
+在组件中提供成员数据变量，然后在模板中引用这个数据变量
+
+<input ref-fax placeholder="fax number">
+<button (click)="callFax(fax.value)">Fax</button>
+
+
+constructor(@Inject(Http) private http) { }
+constructor(@Inject(Http) private http: Http) { }
+constructor(private http: Http) { }
 
 
 
 
+placeholder
+<form #formRef="ngForm" (ngSubmit)="onSubmit(formRef.value)">
+<fieldset ngModelGroup="loginInfo">
+<legend>Login:</legend>
+</fieldset>
+</form>
 
 
+
+---------------------------------------------
+$money-bg-img: url('../../../assets/images/money.png');
+.money {
+    display: flex;
+    flex-direction: column;
+    padding: .5em 1em;
+    flex-grow: 1;
+    background: $money-bg-img;
+}
+
+.money .money-u{
+    text-align: right;
+    margin-bottom: .5em;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.money .money-b{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+-------------------------------------------------------------------------
+angular 引导过程：
+main.ts(platformBrowserDynamic().bootstrapModule(AppModule)) ----> app.module(bootstrap: [AppComponent])-->app.component(selector:'app-root',templateUrl:'app.component.html');
+
+
+ng new ng-app --routing  //创建ng-app项目且带路由
+ng g m user --routing  //创建带路由的特性module
+ng g c user/uerlist    //向module中添加组件 在user文件夹下创建userlist.compent.ts
+
+app-routing.module.ts中挂上module
+如下：
+const routes: Routes = [{
+  path: 'customers',
+  loadChildren: './customers/customers.module#CustomersModule'  //模块路径#模块类名
+  //./customers/customers.module 它指向模块的相对路径 （模块中需要带有routing 创建ng g c customer --routing）
+},
+];
+
+customer-routing.module.ts
+const routes: Routes = [{
+  path:'',
+  component:CustomerListComponent
+}];
+
+备注：
+RouterModule.forRoot() 包含的注入器配置是全局性的，比如对路由器的配置。RouterModule.forChild() 中没有注入器配置，只有像 [RouterOutlet] 和 [RouterLink]这样的指令。
+<router-outlet></router-outlet>
+------------------------------------------------------
+angular页面跳转
+1.引入Router
+import {Router} from '@angular/router';
+
+2.将Router服务注入
+construct(private router:Router){}
+
+3.调用方法
+this.router.navigateByUrl('/login')
+
+html点击跳转<a class="register" routerLink="/passport/register">注册账户</a>
+ts跳转 this.router.navigate(['/sysweb/web-roleid-permid'])
+
+------------------------------------------------------------------------
+加载路由库
+1.往壳组件的模板中添加一个导航条，导航条中有一些 A 标签、routerLink 指令和 routerLinkActive 指令
+2.往壳组件的模板中添加一个 router-outlet 指令，视图将会被显示在那里
+3.用 RouterModule.forRoot() 配置路由器模块
+4.设置路由器，使其合成 HTML5 模式的浏览器 URL
+5.使用通配符路由来处理无效路由
+6.当应用在空路径下启动时，导航到默认路由
+
+把 Angular 的 RouterModule添加到该模块的 exports 数组中，以便再次导出它 。 通过再次导出 RouterModule，当在 AppModule 中导入了 AppRoutingModule 之后，那些声明在 AppModule 中的组件就可以访问路由指令了，比如 RouterLink 和 RouterOutlet。
+
+----------------------------------------------------------------------------------------------------
+ng generate module heroes/heroes --module app --flat --routing  //--flat 将文件存放在heroes目录下
+ng g m heroes --routing  --module app //等价上面  --module app 将创建的module导入至appModule中
+
+ng generate class mock-heroes    //在 src/app/ 文件夹中创建一个名叫 mock-heroes.ts 的文件
+
+
+
+// 创建第三方库 (--prefix: 前缀；在用命令行新建组件/指令时，selector的属性值的前缀)
+ng g library zero --prefix zm
+
+reactive应用(响应式应用)允许开发人员构建事件驱动（event-driven），可扩展性，弹性的反应系统
+
+Observable 更确切的说法是 Observable Stream，也就是 Rx 的响应式数据流
+
+Angular 的CSS类绑定机制让根据条件添加或移除一个 CSS 类变得很容易。 只要把 [class.some-css-class]="some-condition" 添加到你要施加样式的元素上就可以了

@@ -784,3 +784,54 @@ eval执行上下文（不建议使用，会有安全，性能等问题）
 变量对象  活动对象
 
 
+<pre> 标签可定义预格式化的文本。
+被包围在 <pre> 标签 元素中的文本通常会保留空格和换行符。而文本也会呈现为等宽字体。
+
+throttle/debounce
+Reactive Extension 也叫 ReactiveX,或者简称Rx,指的是实践响应式编程的一套工具。Rx是一个大家族它包含 RxJava、RxPy等，RxJS是Rx用JavaScript语言实现。
+RxJS是Rx用JavaScript语言实现
+
+
+npm init 
+在node开发中使用npm init会生成一个pakeage.json文件
+
+setInterval() 方法可按照指定的周期（以毫秒计）来调用函数或计算表达式。
+
+Angular父子组件间传值
+1.@Input 父组件传值给子组件
+子组件中定义接收变量
+@Input
+hero: Hero; 
+
+父组件中使用
+<子组件引用名 [hero]="父组件中需要传值变量"></子组件引用名>
+
+ 
+ 
+
+2.@Output 子组件传值给父组件
+父组件中使用
+<子组件引用名 (eventName)="emiterFun($event)"></子组件引用名>如下：
+<app-price-quote (lastPrice)="priceQuoteHandler($event)"></app-price-quote><br>
+<div>这是在报价组件外部，<br>
+股票代码是{{priceQuote.stockCode}},
+股票的价格是{{priceQuote.lastPrice | number:'2.2-6'}}</div>
+
+父组件中定义接收方法如下：
+export class AppComponent {
+  // aaa = "";
+  priceQuote: PriceQuote = new PriceQuote("", 0);
+  // 书写一个方法接收$event,这个event的类型就是字组件emit发射过来的类型
+  priceQuoteHandler(event) {
+    this.priceQuote = event;
+  }
+}
+
+子组件定义@Output如下：
+@Output
+lastPrice:EventEmitter<PriceQuote> = new EventEmitter();
+
+constructor(){
+  new priceQuote();
+	this.lastPrice.emit(需要传的值或对对象priceQuote);
+}

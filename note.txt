@@ -1,3 +1,6 @@
+Xmind
+-------------------
+
 ngModel指令需要引入 import {FromsModule} '@angular/froms'
 当在表单中使用[(ngModel)]时，必须要定义name属性。
 

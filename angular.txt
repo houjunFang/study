@@ -38,6 +38,7 @@ npm start
 ng new angularDemo01 --style=scss //创建ng项目同时指定css style为 scss
 ng new app-demo --style=sass  //创建ng项目同时指定css style为 sass
 ng g m order --routing //创建的订单模块带路由(路由独立模块)
+ng g class mock-heroes //CREATE src/app/mock-heroes.ts
 
 ------------------------------------------------------------
 查看npm 配置信息
@@ -266,7 +267,7 @@ ts跳转 this.router.navigate(['/sysweb/web-roleid-permid'])
 6.当应用在空路径下启动时，导航到默认路由
 
 把 Angular 的 RouterModule添加到该模块的 exports 数组中，以便再次导出它 。 通过再次导出 RouterModule，当在 AppModule 中导入了 AppRoutingModule 之后，那些声明在 AppModule 中的组件就可以访问路由指令了，比如 RouterLink 和 RouterOutlet。
-
+只在根模块 AppRoutingModule 中调用 RouterModule.forRoot()（如果在 AppModule 中注册应用的顶层路由，那就在 AppModule 中调用）。 在其它模块中，你就必须调用RouterModule.forChild方法来注册附属路由。
 ----------------------------------------------------------------------------------------------------
 ng generate module heroes/heroes --module app --flat --routing  //--flat 将文件存放在heroes目录下
 ng g m heroes --routing  --module app //等价上面  --module app 将创建的module导入至appModule中
@@ -283,3 +284,81 @@ reactive应用(响应式应用)允许开发人员构建事件驱动（event-driven），可扩展性，弹性
 Observable 更确切的说法是 Observable Stream，也就是 Rx 的响应式数据流
 
 Angular 的CSS类绑定机制让根据条件添加或移除一个 CSS 类变得很容易。 只要把 [class.some-css-class]="some-condition" 添加到你要施加样式的元素上就可以了
+
+-------------------------------------------------------------
+注意：[(ngModel)] 需要在 app.module.ts 中引入模块 FormsModule
+
+
+当一个提供器声明在模块上，它是对所有组件可见的，所有组件都是可以使用的。
+当一个提供器声明在组件中，它只对组件以及其子组件可见，其他组件不可以注入它。
+当模块中的提供器和组件中的提供器重名时，声明在组件中的提供器会覆盖声明在模块中的提供器，这时使用的是声明在组件中的提供器。
+一般情况下，优先将服务器供器声明在模块中。
+
+
+@Input 父组件传值给子组件
+1.子组件中引入Input
+import {Input} from '@angular/core'
+
+2.子组件ts文件中定义用于接收父组件传入的对象或变量
+@Input() person;
+
+3.父组件中使用
+<app-son [person]="父组件需要传的值或对象"></app-son>
+-------------------------------------------------------------------
+
+Angular 路由守卫:当用户满足一定条件才被允许进入或者离开一个路由
+CanActivate: 处理导航到某路由的情况。(一般情况很少需要同时写多个守卫，如果有也是分开几个文件（针对复杂场景，否则一般使用canActivated足够）)
+CanDeactivate: 处理从当前路由离开的情况。
+Resolve: 在路由激活之前获取路由数据。
+
+4种守卫类型
+按照触发顺序依次为：canload（加载）、canActivate（进入）、canActivateChild（进入子路由）和canDeactivate（离开）。
+
+
+
+多个outlet
+<div style="font-size:20px;">
+    <router-outlet name="left"></router-outlet> 
+</div>
+<div style="color:red;">
+    <router-outlet name="right"></router-outlet>
+</div>
+
+组件module
+export const rou:Routes = [
+    {
+        path:'',
+        component:LeftComponent,
+        outlet:'left'
+    },
+    {
+        path:'',
+        component:RightComponent,
+        outlet:'right'
+    }
+]
+
+
+单页应用中，组件是构建应用的基础元素，页面展示什么内容均是靠页面有什么组件决定的，而展示什么组件又是由一组路由（带有Url元素的特定集合，可用于导航视图）决定的。
+
+
+ng new 项目名
+cd 项目文件夹
+npm install ng-zorro-antd --save
+ng add ng-zorro-antd
+
+
+ng g c testa --module app  //--module app 指定创建的组件testa导入到指定的app.module.ts文件中，当目录下存在多个module.ts结尾的文件时需要指定
+
+
+------------------------------------
+nrm管理npm registry地址
+下载nrm
+npm install -g nrm
+b.添加registry地址
+nrm add npm http://registry.npmjs.org
+nrm add taobao https://registry.npm.taobao.org
+c.切换npm registry地址
+nrm use taobao
+nrm use npm
+

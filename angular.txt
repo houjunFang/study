@@ -362,3 +362,35 @@ c.切换npm registry地址
 nrm use taobao
 nrm use npm
 
+
+import { ModuleWithProviders } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+ 
+export const routes: Routes = [
+ { path: '', redirectTo: 'contact', pathMatch: 'full'},
+ { path: 'crisis', loadChildren: 'app/crisis/crisis.module#CrisisModule' }, // 可以延迟加载子模块，子模块的结构和父模块一样，它会去加载子模块中的Routes配置，并跳转对应的组件中去。
+ { path: 'heroes', loadChildren: 'app/hero/hero.module#HeroModule' }
+];
+ 
+export const routing: ModuleWithProviders = RouterModule.forRoot(routes);
+
+
+----------------------------------------------------------
+VSCODE本地调试 chrome支持跨域
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "pricemanage-debug",
+            "url": "http://localhost:4100",
+            "webRoot": "${workspaceFolder}",
+            "runtimeArgs": ["--disable-web-security", "--user-data-dir"]
+        }
+    ]
+}

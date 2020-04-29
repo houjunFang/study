@@ -4,6 +4,14 @@ Angular 4 比angular2更快
 angular1.5 angularjs
 angular1.5+ angular
 
+PrimeNG 一个强大的 Angular UI 组件库
+NG-ZORRO
+angular框架本身提供的指令就叫做内置指令，例如：NgClass、NgStyle、NgIf、NgFor、NgSwitch等，利用NgClass、NgStyle和Class指令来动态绑定CSS样式
+
+//novalidate 清除浏览器默认的校验行为
+<form novalidate>
+</form>
+
 1.环境搭建
 安装如下：
 nvm  https://github.com/coreybutler/nvm-windows/releases
@@ -394,3 +402,24 @@ VSCODE本地调试 chrome支持跨域
         }
     ]
 }
+
+--------------------------------------------------------------
+Angular 模板语法
+1.插值表达式{{}} 可以将计算后的字符串插入html,也可值为属性值来使用<img src="{{imageUrl}}" />.
+但是表达式不支持位运算(|,&),不可以自增 += new操作；
+2.属性绑定：把视图元素的属性设置为模板表达式
+<img [src]="imageUrl"/>  //将组件属性imageUrl绑定至img元素的src属性上
+<button [disabled]="isEdit" >test</button>//组件的isEdit未改变时 button为禁用
+3.设置指令属性
+<div [ngClass]="classes">[ngClass]绑定至classes属性</div>  
+4.设置自定义组件属性（父子级件通讯传值重要途径）
+<sun-compent [params] = "father's value"></sun-compent>
+5.css及style绑定
+<div [class.class-name]="css-classname"></div>
+<div [style.color]="isSpecial?'red':'green'">haha</div>
+
+6.属性绑定
+<td [attr.colspan]="1+1"></td>
+7.事件绑定
+事件绑定的语法是由等号左侧小括号内的 目标事件 和右侧引号中的 模板声明 组成
+<button (click)="onSave()">save</button>

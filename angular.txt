@@ -4,6 +4,27 @@ Angular 4 比angular2更快
 angular1.5 angularjs
 angular1.5+ angular
 
+FormBuilder 服务提供了一些便捷方法来生成表单控件
+import { FormBuilder } from '@angular/forms';
+constructor(private fb: FormBuilder) { }
+你可以使用 group() 方法，用和前面一样的名字来定义这些属性。这里，每个控件名对应的值都是一个数组，这个数组中的第一项是其初始值。你可以只使用初始值来定义控件，但是如果你的控件还需要同步或异步验证器，那就在这个数组中的第二项和第三项提供同步和异步验证器
+
+ngModelOptions
+---------------------------------------------------
+typescript中的get/set存储器 
+class Peson{
+	 private _age:Number;
+	 get age(){
+	 		return this._age;
+	 }
+	 
+	 set age(inputAge:Number){
+	 	 this._age= inputAge;
+	 }
+}
+----------------------------------------------
+
+
 PrimeNG 一个强大的 Angular UI 组件库
 NG-ZORRO
 angular框架本身提供的指令就叫做内置指令，例如：NgClass、NgStyle、NgIf、NgFor、NgSwitch等，利用NgClass、NgStyle和Class指令来动态绑定CSS样式
@@ -11,6 +32,16 @@ angular框架本身提供的指令就叫做内置指令，例如：NgClass、NgStyle、NgIf、NgFor、Ng
 //novalidate 清除浏览器默认的校验行为
 <form novalidate>
 </form>
+
+//不启用angular渲染识别，直接输出{{param}}
+<span ngNonBindable> {{ param }} </span>
+
+
+import { FormGroup, //表单对象类
+　　　　　　 FormBuilder, //表单生成工具类
+　　　　　　 Validators} //表单验证类
+  from "@angular/forms";
+
 
 1.环境搭建
 安装如下：
@@ -309,6 +340,7 @@ import {Input} from '@angular/core'
 
 2.子组件ts文件中定义用于接收父组件传入的对象或变量
 @Input() person;
+@Input('account-id') id:string;//account-id为id的别名，不要也没关系
 
 3.父组件中使用
 <app-son [person]="父组件需要传的值或对象"></app-son>

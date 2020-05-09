@@ -4,6 +4,12 @@ Angular 4 比angular2更快
 angular1.5 angularjs
 angular1.5+ angular
 
+scss（语法同css） sass都是css预处理语言
+angular 使用scss需要安装node-sass
+
+
+npm config get registry
+
 FormBuilder 服务提供了一些便捷方法来生成表单控件
 import { FormBuilder } from '@angular/forms';
 constructor(private fb: FormBuilder) { }
@@ -28,6 +34,7 @@ class Peson{
 PrimeNG 一个强大的 Angular UI 组件库
 NG-ZORRO
 angular框架本身提供的指令就叫做内置指令，例如：NgClass、NgStyle、NgIf、NgFor、NgSwitch等，利用NgClass、NgStyle和Class指令来动态绑定CSS样式
+ng-bootstrap
 
 //novalidate 清除浏览器默认的校验行为
 <form novalidate>
@@ -455,3 +462,362 @@ Angular 模板语法
 7.事件绑定
 事件绑定的语法是由等号左侧小括号内的 目标事件 和右侧引号中的 模板声明 组成
 <button (click)="onSave()">save</button>
+
+------------------------------------------
+Angular中显示隐藏
+1.hidden 原生hidden属性上的相当于CSS display: none 存在被其他样式覆盖的风险，可以给元素的hidden属性增加隐藏的优先级，譬如：display: none !important，来达到这个效果
+<div [hidden]="!showGreeting">
+   Hello, there!
+</div>
+
+2.*ngIf 直接通过从模版中增加/删除元素该元素来达成显示与否这一效果的
+<div *ngIf="showGreeting">
+   Hello, there!
+</div>
+
+================================================
+
+
+:not(sub_selector)：只有当元素不匹配子选择器 sub_selector 的时候才选取。
+selector1, selector2：无论 selector1 还是 selector2 匹配时都选取。
+
+0.NgModel 根据领域对象创建一个 FormControl 实例，并把它绑定到一个表单控件元素上 且需要在@NgModule中导入formsModule(ngForm)
+1.表单中使用ngModel需要注意,必须带有name属性或者使用 [ngModelOptions]=”{standalone: true}”，二选其一
+<form #testform="ngform">
+    <input name="username" [(ngModel)]=user.name />
+</form> 
+
+<form #testform="ngform">
+    <input [ngModelOptions]="{standalone: true}" [(ngModel)]=user.name />
+</form> 
+
+2.使用button时需要注明type类型,未注明类型的button会默认为submit，当你点击一个非提交表单按钮时也会提交表单，所以要注明type=”button”
+3.如果单独使用ngModel，且没有为其赋值的话，它会在其所在的ngForm.value对象上添加一个property，此property的key值为ngModel所在组件设置的name属性的值\
+<form novalidate #f="ngForm">
+    <input type='text' name='userName' placeholder='Input your userName' ngModel>
+</form>
+<p>
+    {{ f.value | json }}    // { "userName": "" }
+</p>
+4.如果使用[ngModel]则会将组件中设置的默认值体现到ngForm.value中去，即添加一个带有默认值的property，注意此处是单向绑定，不会影响组件中的值
+<form #f="ngForm" (ngSubmit)="submit(f)">
+         <input type="text"  name="userName" [ngModel]="userName"/>
+        <button type="submit">submit</button>
+    </form>
+5.如果使用 [(ngModel)] 语法来双向绑定到 ngModel，那么视图中值的变化会随时同步回组件类中的领域模型。
+备注：当在 <form> 标签中使用 ngModel 时，你还需要提供一个 name 属性，以便该控件可以使用这个名字把自己注册到父表单中
+在内部，Angular 创建了一些 FormControl，并把它们注册到 Angular 附加到 <form> 标签上的 NgForm 指令。 注册每个 FormControl 时，使用 name 属性值作为键值
+
+<input name="last" [ngModel]="last"> //组件中对期初始化值 单向绑定
+<input name="first" ngModel/>      //没有初始值
+
+=======================================
+每个 input 元素都有 id 属性，label 元素的 for 属性用它来匹配到对应的输入控件。
+每个 input 元素都有 name 属性，Angular 表单用它注册控件。
+
+ngModel对应控件CSS
+控件被访问过 ng-touched/ng-untouched
+控件的值变化了 ng-dirty/ng-pristine
+控件的值有效 ng-valid/ng-invalid
+<input type="text" class="form-control" id="name"
+  required
+  [(ngModel)]="model.name" name="name"
+  #spy>
+<br>TODO: remove this: {{spy.className}}
+=======================================================
+ngForm
+ngModel
+<div ngModelGroup="address">
+
+FormsModule
+NgModel 指令 ：根据领域对象创建一个formControl实例并把它绑定到一个表单控件元素上。
+选择器：[ngModel]:not([formControlName]):not([formControl])
+
+当在 <form> 标签中使用 ngModel 时，你还需要提供一个 name 属性，以便该控件可以使用这个名字把自己注册到父表单中
+只要你导入了 FormsModule，该指令就会默认在所有 <form> 标签上生效
+
+模块引用变量 ngFrom  ngModel
+
+模板驱动表单：FormsModule 
+响应式表单（模型驱动表单）：ReactiveFormsModule 响应式表单区别于模板驱动型表单的的主要特点在于：是由组件类去创建、维护和跟踪表单的变化，而不是依赖模板
+
+<form [formGroup]="user" (ngSubmit)="onSubmit(user)">
+ <input type="text" formControlName="email" placeholder="请输入您的 email 地址"
+ <div formGroupName="address">
+    <label>
+      <span>省份</span>
+      <select formControlName="province">
+        <option value="">请选择省份</option>
+        <option [value]="province" *ngFor="let province of provinces">{{province}}</option>
+      </select>
+    </label>
+ </div>
+</form>
+
+<form novalidate #f="ngForm">
+
+ng-model 指令根据表单域的状态添加/移除以下类：
+1.input为为空的时候ng-empty
+2.input不为空的时候ng-not-empty
+3.控件已失去焦点ng-touched
+4.控件未失去焦点的时候ng-untouched
+5.验证通过ng-valid
+6.验证失败ng-invalid
+7.控件输入值已变更ng-dirty
+8.ng-pristine控件为初始状态
+9.ng-pending: 任何为满足$asyncValidators的情况
+
+
+1.使用 ngIf 控制 span 元素的显示：
+
+<span *ngIf="hero$">{{ (hero$ | async).id }}</span>
+2.使用 ?. 安全导航操作符，控制 name 属性的显示：
+<span>{{ (hero$ | async)?.name }}</span>
+
+
+angular 中的 ? 和 !
+? 用来检查 问号前面的变量为 null 或 undefined 时，程序不会出错。
+  stu2: Student = {
+    id: 1,
+    name: undefined,
+    age: 3
+  };
+
+<h1>stu2 name {{stu2!.name}}</h1>  // stu2 name 
+<h1>stu2 id {{stu2!.id}}</h1>            // stu2 id 1
+! 用来检查 感叹号后面的变量为 null 或 undefined 时， 程序不会出错。
+stu3: Student;
+
+<h1>stu3 id{{stu3?.id}}</h1>                // stu3 id
+<h1>stu3 name{{stu3?.name}}</h1>      // stu3 name
+
+https://juejin.im/
+
+<!-- ngForm 并不需要显示声明，任何 <form> 标签默认都是 ngForm -->
+<form novalidate ngForm>
+  <input
+    type="text"
+    name="email"
+    placeholder="请输入您的 email 地址"
+    ngModel>
+</form>
+
+--------------------------------------------------
+无论如何，这个 [()] 表达真是很奇怪的样子，其实这个表达是一个语法糖。
+只要我们知道下面的两种写法是等价的，我们就会很清楚的理解了：用这个语法糖你就不用既写数据绑定又写事件绑定了。
+<input [(ngModel)]="user.email">
+<input [ngModel]="user.email" (ngModelChange)="user.email = $event">
+
+
+
+
+--------------------------------------------
+<form [formGroup]="user" (ngSubmit)="onSubmit(user)">
+  <label>
+    <span>电子邮件地址</span>
+    <input type="text" formControlName="email" placeholder="请输入您的 email 地址">
+  </label>
+  <div *ngIf="user.get('email').hasError('required') && user.get('email').touched" class="error">
+    email 是必填项
+  </div>
+  <div *ngIf="user.get('email').hasError('pattern') && user.get('email').touched" class="error">
+    email 格式不正确
+  </div>
+  <div>
+    <label>
+      <span>密码</span>
+      <input type="password" formControlName="password" placeholder="请输入您的密码">
+    </label>
+    <div *ngIf="user.get('password').hasError('required') && user.get('password').touched" class="error">
+      密码是必填项
+    </div>
+    <label>
+      <span>确认密码</span>
+      <input type="password" formControlName="repeat" placeholder="请再次输入密码">
+    </label>   
+    <div *ngIf="user.get('repeat').hasError('required') && user.get('repeat').touched" class="error">
+      确认密码是必填项
+    </div>
+    <div *ngIf="user.hasError('validateEqual') && user.get('repeat').touched" class="error">
+      确认密码和密码不一致
+    </div>
+  </div>
+  <div formGroupName="address">
+    <label>
+      <span>省份</span>
+      <select formControlName="province">
+        <option value="">请选择省份</option>
+        <option [value]="province" *ngFor="let province of provinces">{{province}}</option>
+      </select>
+    </label>
+    <label>
+      <span>城市</span>
+      <select formControlName="city">
+        <option value="">请选择城市</option>
+        <option [value]="city" *ngFor="let city of (cities$ | async)">{{city}}</option>
+      </select>
+    </label>
+    <label>
+      <span>区县</span>
+      <select formControlName="area">
+        <option value="">请选择区县</option>
+        <option [value]="area" *ngFor="let area of (areas$ | async)">{{area}}</option>
+      </select>
+    </label>
+    <label>
+      <span>地址</span>
+      <input type="text" formControlName="addr">
+    </label>
+  </div>
+  <button type="submit" [disabled]="user.invalid">注册</button>
+</form>
+
+-----------------------------------------
+ng version
+
+Angular CLI: 7.0.7
+Node: 11.0.0
+OS: win32 x64
+Angular: 7.0.4
+Package                           Version
+-----------------------------------------------------------
+@angular-devkit/architect         0.10.7
+@angular-devkit/build-angular     0.10.7
+@angular-devkit/build-optimizer   0.10.7
+@angular-devkit/build-webpack     0.10.7
+@angular-devkit/core              7.0.7
+@angular-devkit/schematics        7.0.7
+@angular/cli                      7.0.7
+@ngtools/json-schema              1.1.0
+@ngtools/webpack                  7.0.7
+@schematics/angular               7.0.7
+@schematics/update                0.10.7
+ng-packagr                        5.0.0
+rxjs                              6.3.3
+typescript                        3.1.6
+webpack                           4.19.1
+
+npm 打包（基于ng-packagr打包组件V6及以下版本）
+1.安装ng-packagr
+	npm install ng-packagr --save-dev
+2.修改package.json
+	2.1增加"lib":{"entryFile":"public_api.ts"},public_api.ts文件中将需要打包modules导出如 exports * from './src/app/modules/header/header.module'
+	2.2 修改"private":true 修改成false;
+	2.3 修改Dependencies 为 peerDependencies；
+	2.4 增加script:{"packagr":"ng-packagr -p package.json"}
+3.执行 npm run packagr
+4.cd dist && npm pack
+5.npm login (npm config get registry //查看检查当前npm registry地址)
+6.npm publish
+7.其他工程中可以使用npm install 包名 即可安装包了
+备注：在其他的 Angular 项目中有依赖你的组件库，则可以使用 `npm install ./path/dist/my-component-library-0.0.0.tgz 安装本地依赖包
+
+------------------------------------------
+使用angular内置命令创建组件打包工程（angular版本在v6及以上已集成ng-packagr）
+1.ng g library my-library
+2.修改angular.json文件中的defaultProject项目名称为"my-library"
+3.npm run build 或 ng build //至 V6 以后 Angular Cli 也基于 ng-packagr 实现了另一个 @angular-devkit/build-ng-packagr 应用构建器
+4.cd ./dist/libraryCompents  &&  npm pack
+5.npm login
+6.npm publish
+7.在使用这个包的地方import {要引入的东西} from ‘mylib’; 其中mylib为引入路径在tsconfig.json中配置如：
+"paths": {
+      "mylib": [  //配置mylib 引入时路径别称 import * from 'mylib';
+        "dist/mylib1"
+      ],
+      "mylib/*": [
+        "dist/mylib11*"
+      ],
+      "mylibdev": [
+      	 "projects/mylib"
+      ],
+      "mylibdev/*": [
+        "projects/mylib/*"
+      ]
+    }
+8.library会生成library/src/public_api.ts，这个文件就是统一的暴露这个library需要暴露的component、module等你想暴露的
+
+
+angular.json
+  "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          ......
+--------------------------------------------------------------------------------------
+
+
+ng g library libraryname --prefix prefix  # libraryname : 第三方包名字 # prefix : 组件前缀(如 nz-zorro 的组件前都是 nz-xxx)
+ng g c --spec=false --styleext=scss  //不带测试文件且使用scss样式
+
+
+CLI其实内置了几个快捷命令来对应默认生成的配置如ng serve、ng build等等，如果是我们额外自定义的配置，
+则可以使用ng run <project>:<architect>[:configurations] [其他配置]
+命令来实现，其中project和architect为必填，configurations为选填。
+比如我们简单额外自定义一个本地运行的服务器命令：
+{
+  "architect":{
+    "myServe":{
+      "builder": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "browserTarget": "xxxx:build",
+        "port": 8800
+      },
+      "configurations": {
+        "port1": {
+          "port": 8801
+        },
+        "port2": {
+          "port": 880
+        }
+      }
+    }
+  }
+}
+配置使用了内置的运行本地服务器程序，然后使用默认的build配置，加上自定义的运行端口，另外加上两个不同模式，运行不同端口。
+
+使用ng run xxxx:myServe可以正常运行本地服务器跑项目，端口是8800
+使用ng run xxxx:myServe:port1端口是8801
+
+当然，我们还可以直接使用额外的命令行配置直接覆盖已经定义的配置：
+ng run xxxx:myServe:port1 --port=8808
+
+-------------------------------------
+npm run dev  // package.json 中script:{"dev":"ng build"}
+使用npm run script执行脚本的时候都会创建一个shell，然后在shell中执行指定的脚本。
+这个shell会将当前项目的可执行依赖目录（即node_modules/.bin）添加到环境变量path中，
+当执行之后之后再恢复原样。就是说脚本命令中的依赖名会直接找到node_modules/.bin下面的对应脚本，而不需要加上路径。
+
+
+–routing 使用生成router
+–style css格式如scss、sass、less
+–prefix 指令或者组件selector的前缀
+–inline-templet 默认true，true：不生成html文件，false：生成单独的html文件
+–inline-style 同inline-templet
+
+ng generate application --help
+
+ng build 项目名称
+ng serve 项目名称
+
+ng new 项目名称 (一个工作空间一个项目)
+ng generate application 项目名称   //可以在本工作空间创建很多项目projects
+
+npm view sass-loader versions //查看sass-loader一共有多少版本
+npm view sass-loader@8.0.0 peerDependencies  //查看sass-loader@8.0.0 依赖版本情况
+
+
+
+@NgModule 可以组件组织在一起；
+@NgModule exports出相关内容，外部module引入import了这个模块module才可以使用其中的组件；
+@NgModule 是 @angular/cli 打包的最小单位
+每个应用至少有一个根模块，默认叫AppModule
+组件、指令、管道都必须属于一个模块，而且只能属于一个模块
+要使用另外一个模块module A中的组件，那么这个组件必须在另外的模块A中exports,否则即便import引入该module也无法使用其组件
+@NgModule中providers声明的服务是全局的，需要全局单例服务时可以定义一个共享NgModule，然后app.module中引入NgModule即可
+
+declarations：模块内部Components/Directives/Pipes的列表，声明一下这个模块内部成员。
+imports：导入其他module，其它module暴露的出的Components、Directives、Pipes等可以在本module的组件中被使用。比如导入CommonModule后就可以使用NgIf、NgFor等指令。
+exports：用来控制将哪些内部成员暴露给外部使用。导入一个module并不意味着会自动导入这个module内部导入的module所暴露出的公共成员。除非导入的这个module把它内部导入的module写到exports中
+providers：指定应用程序的根级别需要使用的service。（Angular2中没有模块级别的service，所有在NgModule中声明的Provider都是注册在根级别的Dependency Injector中）。
+bootstrap：定义启动组件。你可能注意到了这个配置项是一个数组，也就是说可以指定做个组件作为启动点，但是这种用法是很罕见的。
+

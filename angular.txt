@@ -7,8 +7,23 @@ angular1.5+ angular
 scss（语法同css） sass都是css预处理语言
 angular 使用scss需要安装node-sass
 
+<ng-content></ng-content> //https://www.cnblogs.com/laixiangran/p/8723166.html
+
 
 npm config get registry
+npm cache clean --force  //强制清空npm缓存
+npm install -verbose  //-verbose 查看当前安装的具体进度
+npm run 构建命令  //执行具体命令script中的
+node -v  //查看node版本
+npm -v  //查看npm版本号
+ng -v  //查看angular版本号
+
+npm view sass-loader versions //查看sass-loader一共有多少版本
+npm view @angular/cli versions //查看angular 所有版本
+npm view node version  //查看node的当前最新版本
+
+npm view sass-loader@8.0.0 peerDependencies  //查看sass-loader@8.0.0 依赖版本情况
+
 
 FormBuilder 服务提供了一些便捷方法来生成表单控件
 import { FormBuilder } from '@angular/forms';
@@ -538,7 +553,7 @@ NgModel 指令 ：根据领域对象创建一个formControl实例并把它绑定到一个表单控件元素上
 
 模块引用变量 ngFrom  ngModel
 
-模板驱动表单：FormsModule 
+模板驱动表单：FormsModule ：
 响应式表单（模型驱动表单）：ReactiveFormsModule 响应式表单区别于模板驱动型表单的的主要特点在于：是由组件类去创建、维护和跟踪表单的变化，而不是依赖模板
 
 <form [formGroup]="user" (ngSubmit)="onSubmit(user)">
@@ -802,8 +817,10 @@ ng serve 项目名称
 ng new 项目名称 (一个工作空间一个项目)
 ng generate application 项目名称   //可以在本工作空间创建很多项目projects
 
-npm view sass-loader versions //查看sass-loader一共有多少版本
-npm view sass-loader@8.0.0 peerDependencies  //查看sass-loader@8.0.0 依赖版本情况
+ng g m moduleName --project=项目名称 //多个项目时 指定存放到哪个项目下
+
+
+
 
 
 
@@ -820,4 +837,179 @@ imports：导入其他module，其它module暴露的出的Components、Directives、Pipes等可以
 exports：用来控制将哪些内部成员暴露给外部使用。导入一个module并不意味着会自动导入这个module内部导入的module所暴露出的公共成员。除非导入的这个module把它内部导入的module写到exports中
 providers：指定应用程序的根级别需要使用的service。（Angular2中没有模块级别的service，所有在NgModule中声明的Provider都是注册在根级别的Dependency Injector中）。
 bootstrap：定义启动组件。你可能注意到了这个配置项是一个数组，也就是说可以指定做个组件作为启动点，但是这种用法是很罕见的。
+
+------------------------------------------------------
+formGroup 获取formControl值方式
+[formGroup]="user"
+user.get("email").value
+user.controls['email'].value
+
+formBuilder
+
+
+template html:
+<form [formGroup]="user" (ngSubmit)="onSubmit(user)">
+
+	<input type="text" formControlName="email" placeholder="please input email!"/>
+	<div fromGroupName="address">
+		<select value="">请选择</select>
+		<select [value]="province" *ngFor="let province of provinces">{{province}}</select>
+	</div>
+	
+	<button [disabled]="user.invalid">submit</button>
+	
+</form>
+
+
+
+@Compent
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+
+onSubmit({value,valid}){
+    console.log("valid:"+valid);
+    console.log(JSON.stringify(value));
+}
+
+
+=========================================
+typeScript as 类型断言
+
+function func(val: string | number): number {
+  if ((val as string).length) {
+    return (val as string).length
+  } else {
+    return val.toString().length
+  }
+}
+或者
+function func(val: string | number): number {
+  if ((<string>val).length) {
+    return (<string>val).length
+  } else {
+    return val.toString().length
+  }
+}
+
+=============================================
+<ng-template> 		//直接使用不显示，需要给合NgIf NgFor指令使用
+<ng-container>		//渲染所包含的模板内容，不包含自身,利用ng-container标签可以在实现功能的基础上减少层级的嵌套
+注意：<ng-template>是angular4的标签，<template>是angular2的标签。
+
+<form [formGroup]="user">
+<div formArrayName="addrs">
+ <div *ngFor="let item of user.controls['addrs'].controls; let i=index;">
+ 	<div [formGroupName]=i>
+ 	</div>
+ </div>
+</div>
+</form>
+
+<form [formGroup]="user">
+	<div fromArrayName="addrs">
+	  <div *ngFor="let item of user.get('addrs').controls as FormArray;let i=index"
+		<div [formGroupName]=i></di>
+		</div>
+	</div>
+</form>
+-------------------------------------------
+1.formControl 独立表单控件；
+2.formGroup 一组formControl实例；
+3.formArray 控件数组 可为formControl formArray formGroup实例
+4.FormBuilder :根据用户配置创建abstractControl,可快速实例化formControl\formGroup\fromArray
+this.formBuilder.control();
+this.formBuilder.group();
+this.formBuilder.array();
+5.formArray 常用方法：
+	at($index)  //获取数组index处的控件
+	push()      //数组尾位插入新控件
+	removeAt($index) //移去数组中的index处的控件
+	patchValue() //赋值
+	
+-------------------------------------------------
+ng serve --open --port 4200   //启动angular 并指定端口及自动启用浏览器打开
+
+
+
+<div>
+  <input type="text" placeholder="name" [formControl]="nameControl">
+  <input type="text" placeholder="age" [formControl]="ageControl">
+</div>
+todo:{{nameControl.value|json}}
+age:{{ageControl.value|json}}
+
+
+
+js Array对象map()方法：
+map() 方法返回一个新数组，数组中的元素为原始数组元素调用函数处理后的值
+array.map(function(currentValue,index,arr), thisValue)
+
+
+angular 模板引用变量：通过“#”来创建一个变量以对html元素或组件元素的引用。
+参考:https://www.jianshu.com/p/ad9d375bf76b
+作用范围：整个模板范围；
+作用在html元素上可以调用元素上所有方法 <input #tes type="text" placeholder="please input you value"/>   you input:{{tes.value}}
+作用在组件元素上可以调用组件实例上的所有方法
+
+作用在指令上
+<form (ngSubmit)="onSubmit(myForm)" #myForm="ngForm"> //myForm是一个指向（应用于表单的）ngForm指令的引用
+
+NgForm指令源码
+@Directive({
+  selector: 'form:not([ngNoForm]):not([formGroup]),ngForm,[ngForm]',
+  ...
+  exportAs: 'ngForm'
+})
+
+ngForm指令：创建一个顶级formGroup实例，并把它绑定到一个表单，以跟踪表单聚合值及其验证状态value|valid
+ngModel指令：根据领域对象创建一个 FormControl 实例，并把它绑定到一个表单控件元素上
+在 <form> 表单中使用 ngModel 时，我们需要设置一个 name 属性，以便该控件可以使用该名称在表单中进行注册<input name="age" ngModel>
+单向绑定
+<input type="text" [ngModel]="user.name" name="xx">
+双向绑定
+<input type="text" ([ngModel])="user.name" name="xx">
+
+相应@NgModules中需要导入import {FromsModule} from '@angular\forms'
+导入FromsModule后，ngForm指令会默认在所有<form>标签上生效，可以通过#myForm="ngForm" 模板引用变量来引用该指令（ngForm）
+
+ngModelGroup 会创建并绑定一个 FormGroup 到该 DOM 元素
+NgModelGroup 指令可以对表单进行分组
+<div ngModelGroup="addr">
+	 <input type="text" ngModel name="city">
+</div>
+
+ngModel指令:NgModel 根据领域对象创建一个 FormControl 实例，并把它绑定到一个表单控件元素上 且需要在@NgModule中导入formsModule(ngForm)
+可以进行数据绑定 [(ngModel)]双向 [ngModel]单向
+把上述ngModel标识控件放在一个 Form 表单中， ngModel 会自动将这个 FormControl 注册为 Form 的子控件
+
+
+<form [formGroup]="userForm">
+	<input type="text" formControlName="userName">
+	<div formArrayName="address" *ngFor="let addr of userForm.controls['address'].controls;let addrId = index" [formGroupName]="addrId">
+		<input type="text" formControlName="province">
+		<input type="text" formControlName="city">
+	<div>
+</from>
+
+
+总结：
+angular form接口实现
+*内置指令NgForm,ngModel,ngModelGroup,需要在对应的@ngModule中导入FormsModule
+*指令FormGroupDirective(即formGroup),formControlDirective(即formControl),fromArrayName,fromGroupName,formControlName 需要在对应的@ngModule中导入ReactiveFromsModule
+
+一、ngForm 模板驱动表单
+ngForm 创建一个顶级formGroup实例绑定到表单，通过#myVar="ngForm"来跟踪表单的聚合值及其验证状态；
+ngModel 创建一个formControl实例并绑定到表单控件元素上； #temp = "ngModel"; 数据绑定[ngModel]=""|[(ngModel)]=""
+ngModelGroup 创建一个formGroup实例并绑定到表单控件元素上  #myTemplateVar="ngModelGroup"
+
+二、响应式表单（模型驱动表单）
+<form [formGroup]="userInfo">  //创建顶级formGroup
+  <input type="text"  formControlName="userName">
+  <ng-container formArrayName="address" *ngFor="let addr of userInfo.get('address').controls;let addressId = index" [formGroupName]=addressId>
+	  <input type="text" formControlName="province">
+	  <input type="text" formControlName="city">
+  </ng-container>
+</form>
+
+
+
 

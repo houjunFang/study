@@ -1,3 +1,23 @@
+https://blog.csdn.net/jw2015_8/article/details/84855820?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+pom.xml中配置的仓库地址仅对应的项目起作用；
+settings中配置的地址对所有项目均启作用；
+setttings.xml中尽量不要使用<mirrorOf>*</mirrorOf>，因为他对所会拦截所有仓库地址为设置的
+* = everything
+external:* = everything not on the localhost and not file based.
+repo,repo1 = repo or repo1
+*,!repo1 = everything except repo1
+
+尽量使用<profile></profile>来配置
+
+
+
+
+
+
+
+
+
+
 1.pom文件中增加仓库配置
 	
 	

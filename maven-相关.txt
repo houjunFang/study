@@ -52,3 +52,23 @@ maven组件依赖生命周期
 
 类似，子POM无条件继承父POM的plugins元素。
 子POM的plugins元素可以有选择的继承父POM的pluginManagement元素。
+
+
+
+maven搜索jar包顺序
+1、本地仓库   
+2、maven settings profile中的repository；  
+3、pom.xml中profile中定义的repository；  
+4、pom.xml中的repositorys(定义多个repository，按定义顺序找)；  
+5、mirror  
+可是，如果mirror设置了
+[html] view plain copy
+<mirrors>   
+  <mirror>   
+    <id>my_mirror</id>    
+    <name>my_mirror</name>    
+    <url>http://nexus.xx.yy/nexus/content/groups/public/</url>    
+    <mirrorOf>*</mirrorOf>   
+  </mirror>   
+</mirrors>  
+那么其他仓库配的地址，都会失效了，以这个为准。

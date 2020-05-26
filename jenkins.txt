@@ -44,3 +44,71 @@ chkconfig jenkins on 设置开机自启动
 首次进入会要求输入初始密码如下图， 
 初始密码在：/var/lib/jenkins/secrets/initialAdminPassword 
 
+
+
+JDK安装
+查询要安装jdk的版本：yum -y list java*
+安装JDK1.8: yum install -y java-1.8.0-openjdk.x86_64
+查看版本：java -version
+
+
+安装yum -y install git
+
+
+systemctl daemon-reload 使得配置生效
+service jenkins restart 重启jenkins
+chkconfig jenkins on 设置开机自启动
+
+
+
+
+下载rpm包
+1.wget https://pkg.jenkins.io/redhat-stable/jenkins-2.121.1-1.1.noarch.rpm
+
+2.安装：sudo rpm -ih jenkins-2.121.1-1.1.noarch.rpm
+
+3.配置文件：/etc/sysconfig/jenkins
+修改 jenkins的配置文件：/etc/sysconfig/jenkins将 JENKINS_USER=”jenkins” 修改为JENKINS_USER=”root”
+
+4.启动：sudo service jenkins start 
+停止：sudo service jenkins stop
+
+5.解锁密码：cat /var/lib/jenkins/secrets/initialAdminPassword
+
+6.日志文件：/var/log/jenkins/jenkins.log
+
+自动安装完成之后：
+
+/usr/lib/jenkins/jenkins.war WAR包
+
+/etc/sysconfig/jenkins 配置文件
+
+/var/lib/jenkins/ 默认的JENKINS_HOME目录
+
+/var/log/jenkins/jenkins.log Jenkins日志文件
+————————————————
+版权声明：本文为CSDN博主「飞奔的裸羊羊」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/walle167/java/article/details/80972696
+
+
+安装插件Maven Integration plugin
+安装中文插件  Localization: Chinese (Simplified)
+
+安装maven
+wget http://mirrors.cnnic.cn/apache/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+tar -zxvf apache-maven-3.5.4-bin.tar.gz
+配置maven：vim /etc/profile
+在配置文件配置中加上：
+export JAVA_HOME=
+export MAVEN_HOME=/opt/apache-maven-3.5.4  （这个目录换成你的 maven 解压后的文件所在目录）
+export PATH=$MAVEN_HOME/bin:$JAVA_HOME/bin/:$PATH
+
+使配置立即生效：source /etc/profile
+
+
+查找JDK安装目录
+1.先找到java的执行目录whereis java
+2.通过执行文件找到链接文件 ls -lrt /usr/bin/java
+3.不是可执行文件继续找 ls -lrt /etc/alternatives/java
+找到进入
+cd /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.191.b12-1.el7_6.x86_64-debug/jre/bin

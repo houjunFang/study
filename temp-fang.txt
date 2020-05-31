@@ -1,0 +1,87 @@
+npm install ts-node --save-dev
+
+{
+  "name": "Current TS File",
+  "type": "node",
+  "request": "launch",
+  "args": [
+    //"${workspaceRoot}/src/index.ts" // 入口文件
+    "${workspaceRoot}/${relativeFile}"
+  ],
+  "runtimeArgs": [
+    "--nolazy",
+    "-r",
+    "ts-node/register"
+  ],
+  "sourceMaps": true,
+  "cwd": "${workspaceRoot}",
+  "protocol": "inspector",
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen"
+}
+
+
+
+tsconfig.json
+"include": [
+      "src/**/*"
+    ],
+    
+launch.json
+
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "运行或调试当前文件",
+            "program": "${workspaceFolder}/${relativeFile}",
+            "outFiles": [
+                "${workspaceFolder}/build/es5/**/*.js"
+            ]
+        },
+        {
+            "name": "Current TS File",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "${workspaceRoot}/${relativeFile}" // 入口文件
+            ],
+            "runtimeArgs": [
+                "--nolazy",
+                "-r",
+                "ts-node/register"
+            ],
+            "sourceMaps": true,
+            "cwd": "${workspaceRoot}",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        }
+    ]
+}
+
+参考：https://segmentfault.com/a/1190000010605261?utm_source=tag-newest
+https://www.jianshu.com/p/954c2eef2048
+
+
+Lodash 通过降低 array、number、objects、string 等等的使用难度从而让 JavaScript 变得更简单。
+https://www.jianshu.com/p/d46abfa4ddc9
+
+typescript教程
+https://ts.xcatliu.com/basics/declaration-files.html
+
+typescript中引入jquery
+
+npm search @types/jquery
+
+npm install --save-dev @types/jquery
+
+import $ form 'jquery'
+
+
+或者增加.d.ts文件如下
+自己加个ts的声明文件
+如果是自己写的js，如utils.js，这里就需要再加个utils.d.ts文件，内容如下：
+declare var utils: any;

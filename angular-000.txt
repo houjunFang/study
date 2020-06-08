@@ -838,3 +838,42 @@ js中获取对象属性值的方式
 svg教程
 
 
+
+angular 总结：https://www.jianshu.com/p/8e107265b8b4
+
+
+angular 样式
+1.全局样式在angular.json
+2.组件样式@componet styleUrls  styles
+
+
+创建一个组件 
+1.ng g c user-list     //独立模板
+2.ng g c user-list -it //内联模板
+
+显示值{{msg}}
+
+
+@Injectable
+ 一般用在Angular的Service中，他的意思是该Service实例可以注入到其他的service、component或者其他实例里面。换句话说，就是其他的实例要依赖他
+@Injectable({
+  providedIn: 'root',//加上providedIn: ‘root’，自动将服务加入到跟模块的providers中，这样该服务就可以在应用中的任何地方使用
+})
+export class MockService(){
+    public foo(){
+        console.log("Mock service say: Hello world");
+    }
+}
+
+@Injectable({   providedIn: 'root', })代表这个类将被注入到根module中，也就是说该module中被注入了唯一的MockService实例。
+其他component就可以使用这个实例export class MockComponent{
+    constructor(private mockService:MockService){
+        this.mockService.foo();
+    }
+}在这个例子里面，mock service只创建了唯一的实例，你看官方文档还有其他的provide方式
+
+
+
+
+
+

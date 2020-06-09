@@ -72,3 +72,8 @@ maven搜索jar包顺序
   </mirror>   
 </mirrors>  
 那么其他仓库配的地址，都会失效了，以这个为准。
+
+
+ideal中查看pom.xml的Effective POM 实际生效pom
+右击pom.xml->maven->show effective pom
+

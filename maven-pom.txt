@@ -187,3 +187,31 @@ ${project.build.finalName} 产出物名称，缺省为${project.artifactId}-${pr
 ${project.packaging} 打包类型，缺省为jar
 ${project.xxx} 当前pom文件的任意节点的内容
 --------------------- 
+
+
+pom.xml中通过设置sourceDirectory目录来设置源码source root
+<build>
+<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+</build>
+
+
+pom.xml中设置jdk版本
+<build>
+<plugins> 
+<plugin> 
+　　<groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <configuration>
+        <source>8</source>
+        <target>8</target>
+    </configuration>
+</plugin>
+</plugins> 
+</build>
+
+或
+<properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+</properties>

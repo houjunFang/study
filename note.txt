@@ -869,3 +869,20 @@ tcp 0 0 0.0.0.0:21 0.0.0.0:* LISTEN
 #vi /etc/vsftpd.ftpusers中注释掉root
 #vi /etc/vsftpd.user_list中也注释掉root
 然后重新启动ftp服务。
+
+
+===============================
+nginx
+
+whereis nginx
+
+# nginx指定配置文件启动
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+
+
+1.首先利用配置文件启动nginx。
+命令:nginx -c /usr/local/nginx/conf/nginx.conf
+重启服务：service nginx restart
+2快速停止或关闭Nginx：nginx -s stop
+3.正常停止或关闭Nginx：nginx -s quit
+4. 配置文件修改重装载命令：nginx -s reload

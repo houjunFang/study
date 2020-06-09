@@ -811,18 +811,13 @@ npm run dev  // package.json 中script:{"dev":"ng build"}
 
 ng generate application --help
 
-ng build 项目名称
-ng serve 项目名称
-
-ng new 项目名称 (一个工作空间一个项目)
-ng generate application 项目名称   //可以在本工作空间创建很多项目projects
-
-ng g m moduleName --project=项目名称 //多个项目时 指定存放到哪个项目下
 
 
 
 
 
+ModuleWithProviders，其实就是想把module和providers给区分开来，它的意思就是告诉导入模块可以共享被导入模块中的组件（被exports出的组件），
+但是服务注入一次就好了，以后要是再有同样的服务需要注入就忽略之，不要创建两个不同实例的服务。
 
 @NgModule 可以组件组织在一起；
 @NgModule exports出相关内容，外部module引入import了这个模块module才可以使用其中的组件；
@@ -1009,6 +1004,162 @@ ngModelGroup 创建一个formGroup实例并绑定到表单控件元素上  #myTemplateVar="ngMode
 	  <input type="text" formControlName="city">
   </ng-container>
 </form>
+
+===========================================
+
+declare
+引入了三方JS，三方JS定义的全局变量，在引入到代码里，编译会报错：没有定义。需要在前面加个申明 declare let thirdVar:any;
+
+http
+使用http相关API，需要注入HttpModule，否则会报错: No provider for Http
+import { HttpModule } from '@angular/http';
+
+
+angular中引入集成第三方JS插件
+1.angular-cli.json中引入js插件文件如下：
+"scripts": [
+ "src/assets/lib/jquery/jquery.min.js",
+]
+2.在需要该js插件的组件中做如下声明
+import * as $ from 'jquery';
+declare var $:any；
+3.在ngOnInit使用该js插件
+import { Component, OnInit } from '@angular/core';
+import * as $ from 'jquery';
+declare var $:any;
+
+@Component({
+	selector: 'app-header',
+	templateUrl: './header.component.html',
+	styleUrls: ['./header.component.css']
+})
+export class HeaderComponent implements OnInit {
+
+ constructor() {
+
+ }
+
+ ngOnInit() {
+ 	$('.nav-menu').XXXX
+ }
+);
+————————————————
+版权声明：本文为CSDN博主「daqiang012」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+原文链接：https://blog.csdn.net/daqiang012/java/article/details/85553081
+
+
+window.sessionStorage
+
+
+-------------------------------------------------------------------
+语法: Object.assign(target, …sources) target: 目标对象,sources: 源对象
+用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+
+@Component
+providers - 组件所需服务的依赖注入提供商数组
+
+1.angular 组件
+import {Component,OnInit} from '@angular/core'
+@Component({
+	selector:''
+	templateUrl:'', //template:``
+	styleUrls:[], //styles
+	providers:[]
+})
+
+export class xx implements OnInit
+
+
+LoginCanActivateGuard
+
+赋值表达式的运算顺序是从右到左的，因此，可以通过以下方法对多个变量赋值
+i=j=k=0;//也就是把三个变量初始化为0 
+
+
+----------------------------------------------------------------------------
+ng new 项目名称 (一个工作空间一个项目)
+ng generate application 项目名称   //可以在本工作空间创建很多项目projects
+
+ng build 项目名称
+ng serve 项目名称
+
+ng g m moduleName --project=项目名称 //多个项目时 指定存放到哪个项目下
+
+ng generate application --help
+
+
+
+-------------------------------------
+angular-cli
+1.环境检查 
+node -v
+npm -v
+ng -v
+
+2.ng new angular-demo --skip-install
+3.ng g application cc
+
+
+
+
+
+$ ng new helloKeriy --skip-install  // 先跳过npm安装
+$ cd helloKeriy
+$ cnpm install                      // 使用淘宝源安装
+
+npm install module-name -save 自动把模块和版本号添加到dependencies部分  
+npm install module-name -save-dev 自动把模块和版本号添加到devdependencies部分 开发环境时依赖！！！
+
+
+
+JavaScript 和 TypeScript 交叉口 —— 类型定义文件(*.d.ts)
+
+
+ng serve --vendorSourceMap
+
+webpack:///ng:/ngx-spinner/lib/ngx-spinner.component.ts
+
+
+ng serve
+start debug for chrome  //lunch.json
+
+
+
+1.创建Library库工作空间
+Angular CLI 7.0.0的键入以下命令：
+ng new foo-lib --create-application=false  //默认为true
+
+2.初始化Library库项目
+cd foo-lib
+ng generate library foo-lib --prefix=foo //默认为lib
+
+3.创建Library库测试项目
+ng generate application foo-tester
+
+4.编译library 打包
+ng build foo-lib
+cd dist/foo-lib
+npm pack
+
+5.发布
+npm publish
+
+如果想构建自己的测试项目则键入以下命令：
+ng build foo-tester --prod  //和构建Library库不一样的是，构建测试应用必须指定：--prod。
+
+如果想启动自己的测试项目，则键入以下命令：
+ng serve foo-tester
+如果想测试自己的Library，则键入以下命令：
+
+ng test foo-lib
+
+如果想测试自己的测试项目，则键入以下命令：
+ng test foo-tester
+
+
+当以名称导入库时，Angular CLI 首先查找tsconfig.json paths，然后是 node_modules
+
+ng new hjapp-angular-demo --create-application=false --skip-install
 
 
 

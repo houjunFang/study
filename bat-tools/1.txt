@@ -1,0 +1,53 @@
+@echo off
+echo ------------------------------------
+echo 欢迎使用标准工程生成脚本
+echo 说明：
+echo   直接回车启用默认配置。
+echo   CTRL+C退出
+echo 
+echo -------------------------------------
+
+set /p bosent_home_temp=请输入工作目录(d:\temp):
+if "%bosent_home_temp%"=="" (
+	set bosent_home_temp=d:\temp
+)
+
+if NOT exist %bosent_home_temp% echo 目录不存在 & mkdir %bosent_home_temp% & echo 成功创建目录%bosent_home_temp%
+
+set bosent_home=%bosent_home_temp%
+echo 成功设置bosent_home成%bosent_home%
+
+
+:NAME
+set /p bosent_git_user=GIT帐户名：
+if (%bosent_git_user%)==() goto NAME
+
+:PASSWORD
+set /p bosent_git_pwd=GIT帐户密码：
+if "%bosent_git_pwd%"=="" goto PASSWORD
+
+:gitAddr
+set /p bosent_git_url=git地址：
+if "%bosent_git_url%"=="" goto gitAddr
+
+:gitBranch
+set /p bosent_git_branch=git分支：
+if "%bosent_git_branch%"=="" goto gitBranch
+
+set bosent_workspace=wkspc
+
+cd /D %bosent_home%
+if exist %bosent_workspace% rd /S /Q  %bosent_workspace% & echo 成功删除工作空间目录:%bosent_workspace%
+mkdir %bosent_workspace% 
+echo 成功创建工作空间目录：%bosent_workspace%
+cd %bosent_workspace%
+
+echo ------------按任意键准入拉取代码--------------------
+pause
+
+set bosent_git_url=%bosent_git_url:http://=%
+git clone -b %bosent_git_branch%  http://%bosent_git_user%:%bosent_git_pwd%@%bosent_git_url% --depth 1
+
+
+
+pause

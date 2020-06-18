@@ -155,6 +155,83 @@ select :css选择器
 templateUrl: 组件 HTML 模板的模块相对地址
 providers - 组件所需服务的依赖注入提供商数组
 
+组件就是一个html+css+js的集合体，可以是一个按钮，一个输入框，一个弹层，或者一个页面，每个组件都有它自己外观和行为
+组件本质是页面上的一个区域，一个功能块，具有自己的外观和行为
+angular组件文件命令规则
+name.component.ts
+name.component.html
+name.component.css
+
+重点：一个组件必须且只能属于一个模块!!!!!
+这里面有两层含义：
+（1）组件必须属于一个模块，如果这个组件不属于任何模块，则它无法被angular加载并显示在界面上
+（2）组件只能属于一个模块，比如上面的订单页面组件，属于订单模块，就不能再把他划给用户模块。
+组件复用：需要使用的module中import入包含的组件（该module中需要exports该组件）的module即可
+
+
+@NgModule
+一个Angular应用至少有一个用于启动的根模块（root module）, 根模块通常命名为AppModule，并位于一个名叫 app.module.ts 的文件中。还会有很多特性模块（feature module）
+
+t.module.ts 
+原文链接：https://blog.csdn.net/QQ401476683/java/article/details/82417704
+import {NgModule} from '@angular/core'
+import {BrowserModule} from '@angular/platform-browser';
+@NgModule({
+  imports:      [ BrowserModule ],
+  providers:    [ Logger ],
+  declarations: [ AppComponent ],
+  exports:      [ AppComponent ],
+  bootstrap:    [ AppComponent ]
+})
+export class AppModule { }
+
+imports: 导入其他模块，表示该模块依赖其他模块的组件（本NgModule声明的组件需要使用它们的导出类）
+declarations: 声明哪些组件属于该模块（属于本 NgModule 的组件、指令、管道）
+exports:声明哪些组件可以被导出，其他模块引入该模块时，可以使用该模块导出组件
+providers：申明该模块使用哪些service；本模块向全局服务中贡献的那些服务的创建器。 这些服务能被本应用中的任何部分使用。（你也可以在组件级别指定服务提供商，这通常是首选方式。）
+bootstrap：模块的启动组件，应用的主视图，称为根组件（这个一般在app根模块才会使用，只有根模块才应该设置这个 bootstrap 属性）
+
+
+
+
+
+备注：
+BrowserModule	@angular/platform-browser	当你想要在浏览器中运行app 时  //仅在根App.module中引入且只导入一次
+CommonModule	@angular/common	当你想要使用NgIf 和NgFor时
+FormsModule	@angular/forms	当要构建模板驱动表单时
+ReactiveFormsModule	@angular/forms	当要构建响应式表单时
+RouterModule	@angular/router	当要使用路由功能，并且你要用到RouterLink, forRoot() 和.forChild()时
+HttpClientModule	@angular/common/http	当要和服务器对话时
+
+BrowserModule 导入了 CommonModule，它贡献了很多通用的指令，比如 ngIf 和 ngFor。 另外，BrowserModule 重新导出了 CommonModule，以便它所有的指令在任何导入了 
+BrowserModule 的模块中都可以使用。对于运行在浏览器中的应用来说，都必须在根模块 AppModule 中导入 BrowserModule ，因为它提供了启动和运行浏览器应用时某些必须的服务。
+BrowserModule 的提供商是面向整个应用的，所以它只能在根模块中使用，而不是特性模块。 特性模块只需要 CommonModule 中的常用指令，它们不需要重新安装所有全应用级的服务。
+
+
+
+@Injectable()  //表示这个类可以被其他组件引用
+1.在模块中声明，表示该模块使用此service
+@NgModule({
+  .......
+  providers:    [ Logger ],
+  declarations: [ HelloComponent ]
+  .....
+ 
+})
+
+2.在需要的组件中通过constructor构造器注入
+export class HelloComponent {
+  constructor(
+    private logger: Logger) { }
+ 
+  show() {
+    this.logger.warn("这是一个警告");
+  }
+}
+
+
+ 
+
 redux
 material ui
 Rxjs
@@ -1161,6 +1238,139 @@ ng test foo-tester
 
 ng new hjapp-angular-demo --create-application=false --skip-install
 
+ng g c pages/product/product-store --styleext=scss
+
+---------------------------------
+参考：https://blog.51cto.com/13876655/2393237
+:host 表示选择当前的组件。
+::ng-deep 可以忽略中间className的嵌套层级关系。直接找到你要修改的className。
+/deep/ >>>（已经废弃） 或 ::ng-deep选择器来强制一个样式对各级子组件的视图也生效
+
+深度选择器 /deep/ 对第三方组件样式进行局部修改
+/deep/ .el-input {
+    display: inline-block;
+    height: 30px;
+    width: auto;
+}
+.ztree /deep/ {
+    // ......
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===================================================================================
+组件复用：https://segmentfault.com/q/1010000011540335/a-1020000011542369
+页面动态生成angular代码并执行：https://www.cnblogs.com/liaoshiqi/p/8583220.html
+
+
+
+angular 渲染特性模块中的组件模板步骤
+1.
+
+
+
+@NgModule
+
+1.providers:[]   //@NgModule中的providers不常见，一般用于根模块app.module ; 常用在@Component中的
+2.declarations:[] //属于该模块的一组组件、指令或管道
+3.imports:[]
+4.exports:[]
+5.schemas: [NO_ERRORS_SCHEMA｜CUSTOM_ELEMENTS_SCHEMA] //模块中含 不属于Angular的组件或者指令的元素或者属性则启用该配置项
+说明：NO_ERRORS_SCHEMA： 当前模板中存在未知选择器时它不会显示错误 ②CUSTOM_ELEMENTS_SCHEMA： 当前模板中可以使用任何类型的自定义元素
+
+
+@Injectable({providedIn:值}) //表示该类或服务是可以注入的,在别的组件中就可以通过依赖注入的方式来使用
+说明：
+providedIn的值 Type<any>,root,null
+① null：若想使用需要在NgModule装饰器或者Component装饰器里面的元数据providers中指定。
+② root：代表顶级AppModule。表明当前服务可以在整个Angular应用里面使用。且在整个Angular应用中只有一个服务实例。
+③ XXXNgModule：通过providedIn指定一个NgModule。让当前服务只能在该指定NgModule里使用
+
+一、定义@Injectable服务
+hero.serve.ts
+import { Injectable } from '@angular/core';
+@Injectable()
+export class HeroService {
+  constructor() { }
+  
+	getHeroes(): Hero[] {
+	 return HEROES;
+	 }
+}
+
+二、在@NgModule中导入并providers中声明
+import {HeroService} from './hero.serve';
+@NgModule({
+declarations:[HeroComponent],
+imports:[],
+providers:[HeroService]
+})
+
+export class xxx{}
+
+三、组件中使用
+//导入
+import {HeroService} from  './hero.serve';
+//构造函数中导入
+constructor(private heroService:HeroService )
+//使用导入的服务中的方法
+getXXX:void{
+	this.xxx = this.heroService.getHeroes();
+}
+
+说明：
+在组件需要某个服务的实例时，不需要手动创建这个实例，只需要在构造函数的参数中指定这个实例的变量，以及这个实例的类，
+然后angular会根据这个类的名字找到providers属性中指定的同名的provide，再找到它对应的useclass，最终自动创建这个服务的实例
+
+提供器的不同写法：
+// 两个属性同名
+providers: [ProductService]
+// 完整写法
+providers: [{provide: ProductService, useClass: ProductService}]
+// 不同名写法
+providers: [{provide: ProductService, useClass: AnotherProductService}]
+// 用工厂方式创建这个实例
+providers: [{provide: ProductService, useFactory: ()=>{...}}]
+
+提供器的作用域原则
+1.提供器声明在模块时是对所有组件是可见的，所有组件都可以注入。
+
+2.当一个提供器声明在组件时，只对他声明的组件和子组件可见，其他组件不可注入。
+
+3.当声明在模块的提供器和组件的提供器具有相同的token时，声明在组件的提供器会覆盖模块的提供。
+
+4.服务提供器优先声明在模块中，只有服务必须在某个组件可见，对其他组件不可见时才声明在组件中
+当组件在构造函数中说明自己想要依赖一个类时，Angular首先会在这个组件自身找看有没有这个提供器，
+如果没有就去这个组件的父组件中找，如果也没有就去应用级（app.modules.ts）中去找。找到后，就会按照提供器可说明的为组件注入它想要的。
+
+
+
+
+
+
+
+
+
+
+Object.assign 深度复制
+方法用于对象的合并，将源对象（source）的所有可枚举属性，复制到目标对象（target）。
+const target = { a: 1 };
+const source1 = { b: 2 };
+const source2 = { c: 3 };
+Object.assign(target, source1, source2);
+target // {a:1, b:2, c:3}
+Object.assign方法的第一个参数是目标对象，后面的参数都是源对象。
 

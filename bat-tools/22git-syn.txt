@@ -1,0 +1,45 @@
+@echo off
+echo ------------------------------------
+echo 开始初始化工程为标准化工程
+echo -------------------------------------
+
+rem base_source_dir 源码目录，需要同步的目标目录base_dest_dir
+set base_source_dir=D:\temp-workspace\bosent1611_pcms\bosent_baseline_hot-deploy
+set base_dest_dir=E:\business_platform\pcms_springcloud\bosent1611_pcms
+
+
+
+rem 生成代码类型:springcloud,cse,dubbo,sofa
+set bosent_out_proj_type=springcloud
+
+rem 目前一共有如下channalcatalog,paymethod,pricemanager,productmix,quotamanager,workeffort,workflow项目不需要生成可以去掉以加快构建速度
+set product_prj_name=channalcatalog,paymethod,productmix,quotamanager,workeffort,workflow
+
+
+
+if "%bosent_out_proj_type%" == "cse" (
+set type_flag=CSE
+)
+
+if "%bosent_out_proj_type%" == "springcloud" (
+set type_flag=SPRINGCLOUD
+)
+
+if "%bosent_out_proj_type%" == "dubbo" (
+set type_flag=DUBBO
+)
+
+if "%bosent_out_proj_type%" == "sofa" (
+set type_flag=SOFA
+)
+
+
+
+for %%I in (%product_prj_name%) do (
+  rem echo %base_source_dir%\bosent_baseline_hot-deploy-%type_flag%-pcms%%I\src\main\java %base_dest_dir%\bosent_baseline_hot-deploy-%type_flag%-pcms%%I\src\main\java
+	xcopy /Y /S /E /F %base_source_dir%\bosent_baseline_hot-deploy-%type_flag%-pcms%%I\src\main\java %base_dest_dir%\bosent_baseline_hot-deploy-%type_flag%-pcms%%I\src\main\java
+)
+
+pause
+echo 同步生成代码至GIT空间
+start explorer "%base_dest_dir%"

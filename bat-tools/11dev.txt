@@ -1,0 +1,85 @@
+@echo off
+echo ------------------------------------
+echo 开始自动拉取代码至指定工作目录
+echo -------------------------------------
+
+set bosent_git_user=fang_houjun
+set bosent_git_pwd=
+set bosent_git_url=http://172.16.101.154/BRM_cpghsyb/bosent1611_pcms.git
+set bosent_git_branch=bussiness-platform-product-v1.0
+set maven_cfg_dir=E:\maven_setting_cfg\cip-sofa.xml
+rem 生成代码类型:springcloud,cse,dubbo,sofa
+set bosent_out_proj_type=springcloud
+
+rem set bosent_servics=QueryOrgTreeService,CalIntRateFloat,CalRate,ChrgArrears,QryRateCgy,AddRateCgy,UpdateRateCgy,DelRateCgy,CalFee,AddRatePlnGrpDetr,QryRatePlnGrpDetr,DelRatePlnGrpDetr,UpdateRatePlnGrpDetr,AddIRatePrefRule,UpdateIRatePrefRule,QueryIRatePrefRuleList,DelIRatePrefRuleById,QueryIRatePrefRuleByIdNew,QryRatePlnGrp,AddRatePlnGrp,DelRatePlnGrp,UpdateRatePlnGrp,AddRatePln,DelRatePln,QryRatePlnDetail,QryRatePlnList,UpdateRatePln,DualDimeService,QueryDimeService,QueryByDimeIdServiceForfee,AddFeeDfrtnRuleGrp,QueryFeeDfrtnRuleGrp,QueryFeeDfrtnRuleGrpByCode,EditFeeDfrtnRuleGrp,DeleteFeeDfrtnRuleGrp,QueryFeeDfrtnRule,DualBaseRateService,QueryBaseRateService,DeleteBaseRateService,ChrgCycleArsgnFee,ChrgAnnualFee,QueryChargeList,QueryArrearsList,CreateFeeRecord,ArrearsRemit,QueryFeeCodeTree,WriteOffFeeRecord,QueryC2Attributes,QueryArrearsExemptList,CreateFeeRecordInner,QueryArrearsDetMsg,QueryChargeDetMsg,SaveIntTaxRateService,QueryIntTaxRateService,QueryIntTaxRateByPkService,SaverateControllerInformation,ModifyRateControllerInformation,QueryRateControllerService,DetailRateControllerService,RemoveRateController,AddFeePrefRule,QueryDimeValue,QueryFeePrefRule,QueryFeeBase,EditFeePrefRule,QueryDimeValueById,QueryFeePrefRuleByCode,DeleteFeePrefRule,QueryDimeValues,SearchFDRuleDimes,DualFeeCfrmRuleService,SearchPrpFeeCfrmRule,DetailPrpFeeCfrmRule,QryRateExecInf,DelRateExecInf,AddRateExecInf,UpdateRateExecInf,UnifiedSign,getEnumInfoForXj,RateImport,QueryDetailBaseRateService,CalPocRate,DualTaxItmParam,QueryTaxItmParam,QueryTaxItmParamByPrimaryKey,DualCalAddValueTaxParam,QueryCalAddValueTaxParam,QueryCalAddValueTaxParamByPrimaryKey,CalAddValueTax,DualTaxPrefRule,QueryTaxPrefRule,QueryTaxPrefRuleByPrimaryKey,DualBaseExgRate,QueryBaseExgRate,QueryBaseExgRateByPrimaryKey,CalExgRate,DualExgSetlPrefSngn,QueryExgSetlPrefSngn,QueryExgSetlPrefSngnByPrimaryKey,QuerySpclArSgnIRate,DoSpclArSgnIRate,QuerySpclArSgnIRateByPk,QuerySpclArSgnFee,DoSpclArSgnFee,QuerySpclArSgnFeeByPk,getUomInfoByuomTypeId,QryEchoRateExecInf,QueryRatePlnGrpTplList,AddRatePlnGrpTpl,DelRatePlnGrpTpl,QueryRatePlnGrpTplInfo,EditRatePlnGrpTpl,QueryRatePlnGrpDetrInfo,CreateCycleFeeInfo,GenerateAccountFee,QueryFeeInfoListForCharge,DepositCalculate,MiddleIncomeCalculate,QueryExgRate,CalFeeForLoan,AddRatePlnTpl,DelRatePlnTpl,QryRatePlnDtl,QryRatePlnTpl,UpdateRatePlnTpl
+set bosent_servics=deleteStoreCfgByStoreCode,updateStoreCfgByStoreCode,queryStoreInfoDetailByStoreCode,queryStoreInfo,saveStoreConfig,addSupplierRoute,updateSupplierRoute,selectSupplierRoute,deleteSupplierRoute
+
+rem 目前一共有如下channalcatalog,paymethod,pricemanager,productmix,quotamanager,workeffort,workflow项目不需要生成可以去掉以加快构建速度
+set product_prj_name=channalcatalog
+
+if "%bosent_out_proj_type%" == "cse" (
+set bosetn_create_class=com.bosent.service.rpc.cse.CreateRPCClasses_CSE
+)
+
+if "%bosent_out_proj_type%" == "springcloud" (
+set bosetn_create_class=com.bosent.service.rpc.springcloud.CreateRPCClasses_SPRINGCLOUD
+)
+
+if "%bosent_out_proj_type%" == "dubbo" (
+set bosetn_create_class=com.bosent.service.rpc.dubbo.CreateRPCClasses_DUBBO
+)
+
+if "%bosent_out_proj_type%" == "sofa" (
+set bosetn_create_class=com.bosent.service.rpc.sofa.CreateRPCClasses_SOFA
+)
+
+
+set bosent_wks=d:\temp-workspace
+if exist %bosent_wks% (
+if exist %bosent_wks%\bosent1611_pcms goto updateGitCode
+del /S /Q %bosent_wks%\*.* &echo 成功删除目录下文件
+rd  /S /Q %bosent_wks% & echo 成功删除工作空间目录:%bosent_wks%
+)
+mkdir %bosent_wks% & echo 成功创建工作空间目录：%bosent_wks%
+cd /D %bosent_wks%
+set bosent_git_url=%bosent_git_url:http://=%
+git clone -b %bosent_git_branch%  http://%bosent_git_user%:%bosent_git_pwd%@%bosent_git_url% --depth 1
+
+
+:updateGitCode
+cd /D %bosent_wks%\bosent1611_pcms
+call git pull
+
+
+echo 代码已同步,按任意键进行specialpurpose工程编译
+pause
+
+for %%A in (%product_prj_name%) do (
+echo %bosent_wks%\bosent1611_pcms\bosent_baseline_specialpurpose\specialpurpose_%%A
+cd /D %bosent_wks%\bosent1611_pcms\bosent_baseline_specialpurpose\specialpurpose_%%A
+call mvn clean install --settings %maven_cfg_dir%
+)
+
+echo 按任意键进行hotdeploy代码编译....
+pause
+
+for %%B in (%product_prj_name%) do (
+echo %bosent_wks%\bosent1611_pcms\bosent_baseline_hot-deploy\hotdeploy_%%B
+cd /D %bosent_wks%\bosent1611_pcms\bosent_baseline_hot-deploy\hotdeploy_%%B
+call mvn clean install --settings %maven_cfg_dir%
+)
+
+echo 按任意键进行开始生成代码......
+pause
+
+
+set hotdeploy_dir=%bosent_wks%\bosent1611_pcms\bosent_baseline_hot-deploy
+for %%I in (%product_prj_name%) do (
+	xcopy /Y %hotdeploy_dir%\hotdeploy_%%I\target\bosent_baseline_hotdeploy_%%I-161102-08-1.2-executable.jar  %hotdeploy_dir%\hotdeploy_%%I\
+	cd /D %hotdeploy_dir%/hotdeploy_%%I
+	java -jar -Dfile.encoding=utf-8 bosent_baseline_hotdeploy_%%I-161102-08-1.2-executable.jar --tools toolname=%bosetn_create_class% --tools component=pcms%%I --tools agrs="{'service_names':'%bosent_servics%'}"
+)
+
+pause
+echo 代码生成完成。。。。
+start explorer "D:\temp-workspace\bosent1611_pcms"

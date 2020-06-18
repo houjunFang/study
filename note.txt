@@ -1,5 +1,11 @@
 Xmind
 -------------------
+股票量化：https://blog.csdn.net/wuu1299/article/details/78965555?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-10.nonecase&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-10.nonecase
+https://blog.csdn.net/weixin_44434573/article/details/86491664?utm_medium=distribute.pc_relevant_download.none-task-blog-BlogCommendFromBaidu-6.nonecase&depth_1-utm_source=distribute.pc_relevant_download.none-task-blog-BlogCommendFromBaidu-6.nonecas
+
+https://github.com/daveqin/stock/blob/master/README.md
+
+
 
 ngModel指令需要引入 import {FromsModule} '@angular/froms'
 当在表单中使用[(ngModel)]时，必须要定义name属性。
@@ -886,3 +892,37 @@ whereis nginx
 2快速停止或关闭Nginx：nginx -s stop
 3.正常停止或关闭Nginx：nginx -s quit
 4. 配置文件修改重装载命令：nginx -s reload
+
+
+获取yum安装rpm包
+
+yum -y install --downloadonly --downloaddir=./ openssh   //获取openssh rpm包至当前目录下，且不安装仅下载
+
+rpm -ivh *.rpm --nodeps --force  // cd 至当前目录后安装所有rpm包 不清楚rpm包依赖关系
+
+ rpm -qa|grep openssl  //查询openssl 安装情况
+ 
+ 
+ 
+------------------------------------------
+windows openssh
+1.ssh-keygen -t dsa|rsa  生成密钥 (会生成id_dsa, id_dsa.pub 私公密钥对)
+2.将公钥复制至远程电脑 ~/.ssh/authorized_keys 中如下：
+ cat id_dsa.pub >> ~/.ssh/authorized_keys
+3.ssh user@ip 即可
+
+
+修改 sshd 服务配置(可修改端口等)
+vi /etc/ssh/sshd_config 
+
+systemctl status sshd.service  //查看sshd 服务状态
+systemctl restart sshd.service //重启sshd 服务
+
+
+ssh -p 8920 -i C:\Users\fang_houjun\.ssh\id_rsa root@10.30.32.12 -t "pwd;ls"   //-t 'pwd;ls'  创建虚拟交互终端 并执行pwd ls后返回
+
+sftp -P 8920 -i C:\Users\fang_houjun\.ssh\id_dsa root@10.30.32.12   //-i 指定私钥文件位置
+
+%cd%  //获取当前执行目录
+
+%A:B=C%  // dos中 A:B=C的方式来替换字符串，具体含义就是在字符串变量A中查找所有的子串B并且替换成子串C

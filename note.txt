@@ -1027,3 +1027,28 @@ function decorateArmour(target, key, descriptor) {
 // @param  descriptor 属性描述符
 // @return descriptor 属性描述符
 function decorator(target,prop,descriptor){}
+
+
+====================================
+linux yum安装指定版本node
+
+需要安装不同版本的node仅需要替换setup_8.x 成setup_9.x即可
+
+curl --silent --location https://rpm.nodesource.com/setup_8.x | sudo bash -    
+sudo yum -y install nodejs
+
+
+卸载node
+yum remove nodejs npm -y
+
+curl --silent --location https://rpm.nodesource.com/setup_9.x | sudo bash -
+
+==============================================================================
+数据库设计：
+1.概念模型 use case 用例图 用例图由参与者参与者（Actor）、用例（Use Case）、系统边界、箭头组成，用画图的方法来完成
+2.逻辑模型 ER图是实体-关系图 实体 属性 关系（对概念模型具体化）
+3.物理模型
+
+UML 
+
+

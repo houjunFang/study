@@ -1240,6 +1240,20 @@ ng new hjapp-angular-demo --create-application=false --skip-install
 
 ng g c pages/product/product-store --styleext=scss
 
+
+
+
+
+
+1.ng new firstPrj --create-application=false --skip-install  //创建一个ng项目空间
+2.ng g library mylibray --prefix=hjapp-lib --skip-install   //创建自定义library
+3.ng g application appname --routing --style=css  //创建测试应用 带路由 指定样式文件使用CSS
+
+
+
+
+
+
 ---------------------------------
 参考：https://blog.51cto.com/13876655/2393237
 :host 表示选择当前的组件。
@@ -1356,13 +1370,101 @@ providers: [{provide: ProductService, useFactory: ()=>{...}}]
 当组件在构造函数中说明自己想要依赖一个类时，Angular首先会在这个组件自身找看有没有这个提供器，
 如果没有就去这个组件的父组件中找，如果也没有就去应用级（app.modules.ts）中去找。找到后，就会按照提供器可说明的为组件注入它想要的。
 
+===================================================================
+
+Top属性返回当前窗口的最顶层浏览器窗口
+window.top.
+
+sessionStorage 用于临时保存同一窗口(或标签页)的数据，在关闭窗口或标签页之后将会删除这些数据
+localStorage 和 sessionStorage 属性允许在浏览器中存储 key/value 对的数据。
+localStorage 用于长久保存整个网站的数据，保存的数据没有过期时间，直到手动去删除。
+localStorage 属性是只读的。
+提示: 如果你只想将数据保存在当前会话中，可以使用 sessionStorage 属性， 该数据对象临时保存同一窗口(或标签页)的数据，在关闭窗口或标签页之后将会删除这些数据。
 
 
 
 
+ngx-translate 国际化
+DomSanitizer    https://blog.csdn.net/always_____/article/details/80350968
+
+链接在这儿http://momentjs.cn/
+
+想要获取单独的年份或者月份可以使用:   moment().format('YYYY')和moment().format('MM')
+
+
+moment.js是一个专门用于处理时间的包。可以通过下面的方法把moment.js集成到Angular中使用。
+
+一、使用npm/cnpm安装moment.js
+
+npm install --save moment
+二、在使用moment.js的.ts文件中导入
+
+import * as moment from 'moment';
+三、使用方法moment.js
+https://www.jianshu.com/p/74b40f6bc253
+
+
+
+@ViewChild、@ViewChildren
+
+
+angular 中 constructor 函数一般用于依赖注入或执行一些简单的初始化操作
+ES6 constructor 方法是类的构造函数，一个类必须有constructor()方法，如果没有显式定义，一个空的constructor()方法会被默认添加.通过 new 命令创建对象实例时，自动调用该方法
+
+constructor()方法默认返回实例对象（即this）
+类必须使用new调用，否则会报错。这是它跟普通构造函数的一个主要区别，后者不用new也可以执行
+
+class Hello {
+    constructor(private activatedRoute:ActivatedRoute) {
+        // 在类中就可以使用this.activatedRoute了
+    }
+}
+
+angular中@Injectable() 表示这个类可以被其他组件引用,在需要的组件中通过constructor构造器注入
+
+ES6 语法小结：https://www.jianshu.com/p/db22fb6a590b
+模板字符串用反引号（`）标识字符串。除了可以当做普通字符串使用外，还可以用来定义多行字符串，以及在字符串中嵌入变量，功能强大。例如
+
+那么 TypeScript 中如何引用一个 JavaScript 文件呢？例如使用 lodash，async 等著名的 JavaScript 第三方库。答案是通过声明文件（Declaration Files）
+
+
+
+在抛出的Error对象中有一个被广泛支持的属性：name、message。
+name：用来存储错误的类型，在ECMA-262定义了七种错误类型：Error、EvalError、RangeError、ReferenceError、SyntaxError、TypeError、URIError。详情见：try-catch语句
+message：用来存储error message，就是你new Error()时候穿进去的参数
+
+申明：
+throw new Error("parse excel failed");
+
+使用：
+try {
+    parseExcel(con);
+} catch (error) {
+    if (error.message === 'parse excel failed') {
+        //doSomething
+    }
+}
+
+使用闭包有以下几大好处：
+a：希望一个变量长期驻扎在内存中。
+b：避免全局变量的污染。
+
+
+
+HttpModule并不是Angular的核心模块。 它是Angular用来进行Web访问的一种可选方式，并位于一个名叫@angular/http的独立附属模块中，因此需要在app.module.ts中引入关于http的模块。
 
 
 
 
+<button id="btn">确认</button>
+
+function clickHandler(event) {
+    console.log('用户已点击确认按钮!');
+}
+document.getElementById("btn").addEventListener('click', clickHandler);
 
 
+响应式编程是一种异步编程范式，它关注数据流和变化的传播
+响应式编程是一个专注于数据流和变化传递的异步编程范式
+响应式编程，本质上是对数据流或某种变化所作出的反应
+RxJS是js的库， RxJava是java的库。 后者是一种编程语言，而前者是在这种语言下诞生的便于编程实现的库

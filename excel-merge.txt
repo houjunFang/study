@@ -1,0 +1,113 @@
+
+
+
+参考文档：https://my.oschina.net/qinghuo111/blog/4411067/print
+EXCEL官方文档：https://docs.microsoft.com/zh-cn/office/vba/api/excel.worksheet.copy
+
+操作步骤：
+1.创建一个空的excel文件并打开；
+2.右击sheet1->查看代码->按需贴入以下VB脚本；
+3.点击运行菜单进行运行；
+4.运行脚本后会打开待合并EXCEL文件选择对话框，选择需要合并的EXCEL（支持多选）并确认后便开始进行合并工作；
+5.合并成功后会自动打开合并成功的EXCEL 选择保存或另存为保存即可。
+
+
+
+'功能：把多个excel工作簿的第一个sheet工作表合并到一个excel工作簿的多个sheet工作表，新工作表的名称等于原工作簿的名称
+Sub Books2Sheets()
+ '定义对话框变量
+Dim fd As FileDialog
+Set fd = Application.FileDialog(msoFileDialogFilePicker)
+'新建一个工作簿
+Dim newwb As Workbook
+Set newwb = Workbooks.Add
+With fd
+If .Show = -1 Then
+'定义单个文件变量
+Dim vrtSelectedItem As Variant
+'定义循环变量
+Dim i As Integer
+i = 1
+'开始文件检索
+For Each vrtSelectedItem In .SelectedItems
+'打开被合并工作簿
+Dim tempwb As Workbook
+Set tempwb = Workbooks.Open(vrtSelectedItem)
+'复制工作表
+tempwb.Worksheets(1).Copy Before:=newwb.Worksheets(i)
+'把新工作簿的工作表名字改成被复制工作簿文件名，这儿应用于xls文件，即Excel97-2003的文件，如果是Excel2007，需要改成xlsx
+newwb.Worksheets(i).Name = VBA.Replace(tempwb.Name, ".xlsx", "")
+'关闭被合并工作簿
+tempwb.Close SaveChanges:=False
+i = i + 1
+Next vrtSelectedItem
+End If
+End With
+Set fd = Nothing
+End Sub
+
+
+
+
+'方法一、基于选择的xls文件（所有sheet）合并至一个文件
+Sub Books2Sheets()
+ '定义对话框变量
+Dim fd As FileDialog
+Set fd = Application.FileDialog(msoFileDialogFilePicker)
+'新建一个工作簿
+Dim newwb As Workbook
+Set newwb = Workbooks.Add
+With fd
+If .Show = -1 Then
+'定义单个文件变量
+Dim vrtSelectedItem As Variant
+'定义循环变量
+Dim i As Integer
+i = 1
+'开始文件检索
+For Each vrtSelectedItem In .SelectedItems
+'打开被合并工作簿
+Dim tempwb As Workbook
+Set tempwb = Workbooks.Open(vrtSelectedItem)
+
+    Dim G As Long
+    For G = 1 To tempwb.Sheets.Count
+    
+    '复制工作表
+    tempwb.Worksheets(G).Copy Before:=newwb.Worksheets(i)
+    '把新工作簿的工作表名字改成被复制工作簿文件名，这儿应用于xls文件，即Excel97-2003的文件，如果是Excel2007，需要改成xlsx
+    newwb.Worksheets(i).Name = tempwb.Worksheets(G).Name
+  
+    i = i + 1
+    Next
+    '关闭被合并工作簿
+    tempwb.Close SaveChanges:=False
+
+Next vrtSelectedItem
+
+End If
+End With
+Set fd = Nothing
+End Sub
+
+
+'方法二：将多个Sheet页的excel合并成到一个中
+Sub 工作薄间工作表合并()
+Dim FileOpen
+Dim X As Integer
+Application.ScreenUpdating = False
+'这儿应用于xlsx文件，根据需要修改
+FileOpen = Application.GetOpenFilename(FileFilter:="Microsoft Excel文件(.xlsx),.xlsx", MultiSelect:=True, Title:="合并工作薄")
+X = 1
+While X <= UBound(FileOpen)
+Workbooks.Open Filename:=FileOpen(X)
+Sheets().Move After:=ThisWorkbook.Sheets(ThisWorkbook.Sheets.Count)
+X = X + 1
+Wend
+ExitHandler:
+Application.ScreenUpdating = True
+Exit Sub
+errhadler:
+MsgBox Err.Description
+End Sub
+

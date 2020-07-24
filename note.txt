@@ -1052,3 +1052,657 @@ curl --silent --location https://rpm.nodesource.com/setup_9.x | sudo bash -
 UML 
 
 
+=======================================================
+\t 相当于tab
+\r 回车换行（将光标置至行首）
+\n 换行
+
+
+
+String.format();
+
+0	显示数字，如果位数不够则补 0
+#	显示数字，如果位数不够不发生变化
+
+new Decimalformat("####.000").format(111.12)  // 111.120
+
+
+
+java 千分位的添加和去除
+
+将一个数字转换为有千分位的格式
+NumberFormat numberFormat1 = NumberFormat.getNumberInstance();  
+System.out.println(numberFormat1.format(11122.33)); //结果是11,122.33  
+  
+NumberFormat numberFormat2 = NumberFormat.getNumberInstance();  
+numberFormat2.setGroupingUsed(false); //设置了以后不会有千分位，如果不设置，默认是有的  
+System.out.println(numberFormat2.format(11122.33)); //结果是11122.33   
+
+
+将一个可能包含千分位的数字转换为不含千分位的形式：
+String amount1 = "13,000.00";  
+double d1 = new DecimalFormat().parse(amount1).doubleValue(); //这里使用的是parse，不是format  
+System.out.println(String.valueOf(d1)); //结果是13000.00  
+
+
+String currecy = NumberFormat.getCurrencyInstance().format(1245600000);
+System.out.println("转换成Currency格式："+currecy);
+
+//将一个千分位分隔的带货币类型的数字串转化成数值
+try {
+    long dd =  new DecimalFormat().parse(currecy,new ParsePosition(1)).longValue();
+    System.out.println(String.valueOf(dd));
+} catch (Exception e) {
+    e.printStackTrace();
+}
+
+java 数字格式化处理（小数点 百分号等）：https://blog.csdn.net/liu552726/article/details/9332957?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+
+
+===================================================
+java 数组 数组长度一旦声明,不可改变不可追加
+
+整型数组初始化：
+静态初始化：
+int[] array = new int[]{1,2};
+int[] temp = {1,3};           //简化方式
+int temp[] = {1,3};    //这种方式也可以
+
+动态初始化：
+int[] array;  //先声明
+array = new int[10];
+
+int[] temp = new int[10];//合成一步
+
+
+int[] arr;
+arr = new int[10];
+arr[0]=1;
+
+int[] aa = new int[]{1,2};  //
+
+int[] bb = new int[2];
+
+-----------------------------------------------------------
+
+javap是jdk自带的反解析工具
+
+-------------------------------
+format->NumberFormat->DecimalFormat
+
+java1.5之后出现 ... 可变长参数 相当于可传0-N个参数的数组如下：
+public void test(String ...name)
+
+----------------------------------------------
+jconsole使用
+
+java 
+-Djava.rmi.server.hostname=10.160.13.111  #远程服务器ip，即本机ip
+-Dcom.sun.management.jmxremote #允许JMX远程调用
+-Dcom.sun.management.jmxremote.port=3214  #自定义jmx 端口号
+-Dcom.sun.management.jmxremote.ssl=false  # 是否需要ssl 安全连接方式
+-Dcom.sun.management.jmxremote.authenticate=false #是否需要秘钥
+ -jar test.jar 
+ 
+linux 防火墙：https://blog.csdn.net/wade3015/article/details/90725871
+
+
+1、在$JAVA_HOME/bin 下创建一个新文件  jstatd.all.policy，编辑该文件，填入内容：
+grant codebase"file:${java.home}/../lib/tools.jar"{ permission java.security.AllPermission; };//若没有配置 JDK 环境变量，file 后面添加 tool.jar 的绝对路径
+
+2、启动命令，默认监听1099端口并给该文件加上执行权限 chmod +x jstatd.all.policy
+
+jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=127.0.0.1
+
+要使用 VisualGC 必须在远程机上启动jstatd代理程序
+
+/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.252.b09-2.el7_8.x86_64/bin
+
+jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.logCalls=true &
+
+https://www.cnblogs.com/qq931399960/p/10960573.html
+
+
+java \
+ -Djava.rmi.server.hostname=172.16.100.61 \
+ -Dcom.sun.management.jmxremote.port=1566 \
+ -Dcom.sun.management.jmxremote.authenticate=true \
+ -Dcom.sun.management.jmxremote.ssl=false \
+ -jar bosent_baseline_hot-deploy-SPRINGCLOUD-pcmsworkflow-161102-08-0.1-executable.jar &
+ 
+ 
+--------------------------------------
+java 性能监控工具
+jps:jvm process status tool:显示指定系统中所有的hotspot虚机进程
+jstat:jvm statistic monitoring tool) 收集hotspot虚拟机各方面的运行数据
+jinfo:configuration info for java :显示虚拟机配置信息
+jmap:memory map for java :生成虚拟机的内存转储快照heapdump文件
+jstack：stack trace for java :显示虚拟机的线程快照
+jconsole jmx的可视化工具
+visualvm 可视化工具
+
+jmap(查看内存):可以输出所有内存中的对象工具，也可以将VM中的堆文件以二进制形式输出成文本。
+jmap -heap <pid>  //打印出PID进程对应的JVM堆内存heap配置及堆内存使用情况
+
+jmap -finalizerinfo pid  //打印出PID进程对应内存准备回收的对象信息
+
+jmap -dump:live,format=b,file=mydump.txt pid  //将pid进程对应JVM的heap内容到指定文件中
+
+jmap -dump:format=b,file=heap pid
+
+获取堆dump
+1.启动参数配置outofmemory时触发打印堆快照
+-XX:HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/xx/xx/
+
+2.jvm 命令：
+jmap -dump:format=b,file=xxx.hprof <pid>  
+
+查看所有对象的数量以及大小包括类型：jmap -histo 14116 | more
+查看所有对象的数量以及大小包括类型：jmap -histo:live 14116 | more
+
+
+
+64位机上使用需要使用如下方式：
+jmap -J-d64 -heap pid
+
+
+获取thread dump
+kill -3 PID > some.file 2>&1
+
+jstack [option] pid >> jstack.info  //获取thread dump文件
+
+或 jstack -l pid >>d.txt
+线程dump反映的是java虚拟所有线程在某一时刻的状态相信息。当前活动线程的快照
+
+
+
+jstack(查看线程)
+
+jstat(性能分析) Java Virtual Machine statistics monitoring tool
+参考：https://www.cnblogs.com/shilimaixiang/p/13034871.html
+
+jstat [-命令选项] [vmid] [间隔时间/毫秒] [查询次数]
+
+jstat -class pid   //查看内加载情况
+
+jstat -gc  pid  2000 20 //GC信息统计 每2秒统计一次，统计20次
+S0C：第一个幸存区的大小
+S1C：第二个幸存区的大小
+S0U：第一个幸存区的使用大小
+S1U：第二个幸存区的使用大小
+EC：伊甸园区的大小
+EU：伊甸园区的使用大小
+OC：老年代大小
+OU：老年代使用大小
+MC：方法区大小
+MU：方法区使用大小
+CCSC:压缩类空间大小
+CCSU:压缩类空间使用大小
+YGC：年轻代垃圾回收次数
+YGCT：年轻代垃圾回收消耗时间
+FGC：老年代垃圾回收次数
+FGCT：老年代垃圾回收消耗时间
+GCT：垃圾回收消耗总时间
+
+jstat -gccause pid    //输出百分比+最近两次GC事件原因
+jstat -gcnew  pid   //新生代行为统计
+jstat -gcold  pid   //老年代行为统计
+
+jstat -gccapacity pid   //堆使用情况统计
+NGCMN：新生代最小容量
+NGCMX：新生代最大容量
+NGC：当前新生代容量
+S0C：第一个幸存区大小
+S1C：第二个幸存区的大小
+EC：伊甸园区的大小
+OGCMN：老年代最小容量
+OGCMX：老年代最大容量
+OGC：当前老年代大小
+OC:当前老年代大小
+MCMN:最小元数据容量
+MCMX：最大元数据容量
+MC：当前元数据空间大小
+CCSMN：最小压缩类空间大小
+CCSMX：最大压缩类空间大小
+CCSC：当前压缩类空间大小
+YGC：年轻代gc次数
+FGC：老年代GC次数
+
+jstat -gcnewcapacity pid //新生代堆使用情况
+
+
+
+
+
+
+
+
+当堆内存空间溢出时输出堆的内存快照。
+加参数-XX:HeapDumpOnOutOfMemoryError
+
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/home/tomcat/logs/...
+
+java.lang.OutOfMemo-ryError: Java heap space
+也就是说当发生OutOfMemoryError错误时，才能触发-XX:HeapDumpOnOutOfMemoryError 输出到-XX:HeapDumpPath指定位置。
+
+=============================================================================================================
+jstatd
+jstatd是一个rmi的server应用，用于监控jvm的创建和结束，并且提供接口让监控工具可以远程连接到本机的jvm 。jstatd位于 $JAVA_HOME/bin目录下
+jstatd是一个监控 JVM 从创建到销毁过程中资源占用情况并提供远程监控接口的 RMI （ Remote Method Invocation ，远程方法调用）服务器程序，
+它是一个 Daemon 程序，要保证远程监控软件连接到本地的话需要 jstatd 始终保持运行。
+
+jmx
+JMX：Java Management Extensions ，即 Java 管理扩展 , 是一个为应用程序、设备、系统等植入管理功能的框架。 JMX 可以跨越一系列异构操作系统平台、
+系统体系结构和网络传输协议，灵活的开发无缝集成的系统、网络和服务管理应用 。而Visual VM是通过 JMX 来和远程 Java 应用联系的
+
+
+检查hostname -i 检查系统IP
+
+服务器端启动jstatd 服务（java.home/bin目录下）：
+./jstatd -J-Djava.security.policy=jstatd.all.policy \
+-J-Djava.rmi.server.hostname=10.30.32.5 \
+-J-Djava.rmi.server.logCalls=true &
+
+[root@localhost bin]# ./jstatd -J-Djava.security.policy=jstatd.all.policy   //默认就是1099
+./jstatd -J-Djava.security.policy=/root/jstatd.policy -p 2099   //指定端口2099
+
+要使Java VisualVM 成功连接到远程服务器上，服务器端应该在 /etc/hosts 文件中把本机地址设为本机的 IP 地址。
+使用 hostname -i 命令查看，如果显示的是 127.0.0.1 或者与本机实际 IP 不一致的话，需要把 /etc/hosts 文件中相应的地址改为本机实际 IP 。
+[root@localhost ~]# jstatd -J-Djava.security.policy=/root/jdk1.8.0_144/bin/jstatd.all.policy -J-Djava.rmi.server.logCalls=true
+
+
+
+备注：-J-Djava.rmi.server.logCalls 启用日志
+
+jvisualvm 连接 jstatd 远程监控 jvm 或 Visual GC提示"不受此JVM支持“ 解决方案如下：
+服务端启用jstatd时指定安全策略文件如下：
+
+创建安装策略文件jstatd.all.policy：
+grant codebase "file:${java.home}/../lib/tools.jar"{
+ permission java.security.AllPermission;
+};
+
+或绝对路径：
+grant codebase "file:/opt/jdk1.8.0_221/lib/tools.jar"{
+ permission java.security.AllPermission;
+};
+
+启动后可通过如下方式连接测试：
+jps -l rmi://10.30.32.5:1099  连接上指定服务器查看虚机进程
+
+
+
+jconsole visualvm 用户密码设置
+jdk\jre\lib\management\jmxremote.password.template 复制一份为jmxremote.password
+cp -r jmxremote.password.template jmxremote.password
+修改：去掉# 启用配置
+monitorRole  QED
+controlRole  R&D
+
+修改文件权限：chmod 600 jmxremote.password
+
+-------------------
+jconsole 时需一定要加-Dcom.sun.management.jmxremote=true参数
+
+java -Dcom.sun.management.jmxremote.port=6969 -Dcom.sun.management.jmxremote.ssl=false \
+-Dcom.sun.management.jmxremote.authenticate=false \
+-Dcom.sun.management.jmxremote.pwd.file=/opt/jdk1.8.0_221/jre/lib/management/jmxremote.password \
+-Dcom.sun.management.jmxremote.access.file=/opt/jdk1.8.0_221/jre/lib/management/jmxremote.access \
+-Djava.rmi.server.hostname=10.30.32.5 \
+-Dcom.sun.management.jmxremote=true \
+-jar xxx.jar
+
+
+
+
+visualvm 连接远程服务：
+https://www.cnblogs.com/qq931399960/p/10960573.html
+https://www.cnblogs.com/grey-wolf/p/9234780.html
+https://blog.csdn.net/weixin_33910460/article/details/92958822?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
+
+
+
+
+
+启动后查看
+netstat -lpnt|grep jstatd
+
+jps
+
+
+
+
+
+jmx连接
+两种地址
+1、ip:port
+2、jmx service url (service:jmx:rmi:///jndi/rmi://192.168.3.15:9999/jmxrmi)
+service:jmx:rmi:///jndi/rmi://localhost:7091/jmxrmi
+service:jmx:rmi:///jndi/rmi://<hostname>/jmxrmi
+
+java 连接代码
+public static void main(String[] args) {
+		String hostName = "192.168.88.106";
+		int portNum = 10089;
+		
+		try {
+			JMXServiceURL u = new JMXServiceURL("service:jmx:rmi:///jndi/rmi://" 
+					+ hostName + ":" + portNum + "/jmxrmi");
+ 
+			Map<String, Object> auth = new HashMap<String, Object>();
+			auth.put(JMXConnector.CREDENTIALS, new String[] { "controlRole", "R&D" });
+ 
+			JMXConnector c = JMXConnectorFactory.connect(u, auth);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+ 
+	}
+
+
+=====================================================
+GC时会暂停整个JAVA应用，普通GC 只是对年轻代进行垃圾回收，full的GC会对整个堆内存（包含老年代、年轻代）进行垃圾回收。system的GC显示调用GC。
+full gc 只会在两个情况下发生：1）system.gc被显示调用时，会执行full gc。2）老年代的堆内存满时，会执行full gc。
+
+
+
+
+
+
+
+
+-----------------------
+jps -l //查看本机所有java进程pid
+
+线程dump反映的是java虚拟所有线程在某一时刻的状态相信息。当前活动线程的快照
+
+top // 查看占用CUP进程情况
+top -H -p <pid> 或 top -Hp pid  //查看cpu占用高线程
+print "x%\n" <pid>  转化pid成16进制以例dump文件中查找定位
+
+jstack pid |grep -A 20 xxxx
+
+---------------------------------------linux下如何定位代码问题-------------------------------
+top获取进程id
+获取线程消耗cpu最多的线程 top -Hp pid
+printf "%x\n" pid 转化线程ID为16进制
+jstack pid |grep -A 20 16进制id
+
+
+
+
+1、先通过top命令找到消耗cpu很高的进程id假设是123
+
+2、执行top -p 123单独监控该进程
+
+3、在第2步的监控界面输入H，获取当前进程下的所有线程信息
+
+4、找到消耗cpu特别高的线程编号，假设是123
+
+5、执行jstack 123456对当前的进程做dump，输出所有的线程信息
+
+6、将第4步得到的线程编号11354转成16进制是0x7b
+
+7、根据第6步得到的0x7b在第5步的线程信息里面去找对应线程内容
+
+8、解读线程信息，定位具体代码位置
+
+-----------------------------分割线----------------------------------------------------------
+获取线程dump信息 thread dump方法
+方法一：jstack [option] pid
+--参数
+1. -F 强制打印堆栈
+2. -m 打印java 和 native（C++） 堆栈信息  
+3. -l 打印额外的信息，包括锁信息
+
+方法二：
+kill -3 pid
+
+备注：查找JAVA进程：
+jps 或 ps -ef|grep java
+
+
+
+Java语言中的线程是依附于操作系统的线程来运行的，从本质上来说是本地线程在执行java线程代码，从JVM源码角度分析，在Java中创建线程是，
+实际上创建一个os thread，这个os才是真正的线程实体。
+关于jvm虚拟机线程创建感兴趣的可以参考该链接：https://www.jianshu.com/p/3ce1b5e5a55e
+
+thread dump 包含信息(线程的状态和其执行堆栈)：
+线程的名字，ID，线程的数量等。
+线程的运行状态，锁的状态(锁被哪个线程持有，哪个线程再等待锁等)。
+调用堆栈(函数的调用层次关系)。调用堆栈包含完整的类名，执行的方法，源代* 码的行数
+
+守护进程：创建线程的时候可以设置线程是否是守护进程。
+优先级：线程创建的时候设置线程的优先级，一般采用默认值
+线程id（tid）：JVM给线程分配的id号
+本地线程id（nid）：对应的os 线程的线程id，可以将16进制转换为10进制，在os中找到对应的线程
+线程状态：这线程堆栈日志中，一个线程就waiting 状态和 runnale两种状态
+线程内存地址：线程起始地址
+
+
+
+
+free -h -s n //每N秒显示内存使用情况
+
+------------------------------------
+程序计数器（线程私有，每一个线程都有独立计算器；生命周期同线程的创建而创建，随线程结束而死亡）：每个线程在创建后，都会产生自己的程序计算器及栈桢，
+程序计算器主要是用来存放执行指令偏移量及行号指示器，线程的执行及恢复都要依赖程序计数器。
+
+java堆（oom故障发源地，所有线程共享）：存放实例对象，堆由垃圾回收集器自动回收，堆由各子线程共享使用。堆内存空间可以固定大小也可以运行时动态调整
+-Xms256m(最小堆容量) -Xmx1024m（最大堆容量）JVM的Xms和Xmx设置成一样大小，一定程序上避免GC后调整堆大小带来额外压力。
+当线程请求分配内存，但堆内存已满且内存已满且无法再扩展时就抛出OutOfMemoryErro.
+
+
+堆分为两大块：新生代及老年代
+新生代=1个Eden区+2个Survivor区（from区，to区）默认8:1:1
+
+Young GC
+Full Garbage Collection(Full GC)
+
+当堆内存空间溢出时输出堆的内存快照。
+加参数-XX:HeapDumpOnOutOfMemoryError
+
+-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/export/home/tomcat/logs/...
+
+备注：
+堆是所有线程共享
+程序计数器、Java虚拟机栈、本地方法栈都是一个线程对应一个
+
+Metaspace(元空间) 前称JDK7及之前版本只有Hotspot才有Perm区（永久代）
+outOfMemoryError 年老代内存不足。
+outOfMemoryError:PermGen Space 永久代内存不足。
+outOfMemoryError:GC overhead limit exceed 垃圾回收时间占用系统运行时间的98%或以上。
+outOfMemoryError:java heap space 堆内存不足
+
+
+JVM将内存根据分代策略将内存分为三层：新生代，老年代，永久代（非堆永久代）
+新生代from to 复制算法，不产生内存碎片，保证永远有一个survivor space是空的，另一个非空的survivor space无碎片
+每个对象在坚持过一次Minor GC之后，年龄就加1
+
+分代的意义，提高GC效率
+Survivor的存在意义，就是减少被送到老年代的对象，进而减少Full GC的发生
+设置两个Survivor区最大的好处就是解决了碎片化
+
+新生代是 GC 收集垃圾的频繁区域
+
+JVM主要管理两种类型的内存：堆和非堆
+
+栈解决程序的运行问题，即程序如何执行，或者说如何处理数据(线程私有)；
+堆解决的是数据存储的问题，即数据怎么放、放在哪儿（堆所有线程共享）。
+
+
+
+
+64位机上使用需要使用如下方式：
+jmap -J-d64 -heap pid
+
+内存分析工具(Memory Analysis Tool）或与jhat (Java Heap Analysis Tool)
+
+
+-----------------------------------------------------------
+方法区：
+方法区和永久代的关系很像Java中接口和类的关系，永久代是Sun公司HotSpot虚拟机对虚拟机规范中方法区的一种实现方式
+
+JDK1.8之前调节方法区大小：
+-XX:PermSize=N //方法区（永久代）初始大小
+-XX:MaxPermSize=N //方法区（永久代）最大大小，超出这个值将会抛出OutOfMemoryError 
+
+JDK1.8开始方法区（HotSpot的永久代）被彻底删除了，取而代之的是元空间，元空间直接使用的是本机内存。参数设置：
+-XX:MetaspaceSize=N //设置Metaspace的初始（和最小大小）
+-XX:MaxMetaspaceSize=N //设置Metaspace的最大大小
+
+
+栈JVM stack:栈是java 方法执行的内存模型
+堆：java heap :所有的对象实例以及数组都要在堆上分配，此内存区域的唯一目的就是存放对象实例
+堆结构：新生代（Eden区+2个Survivor区）  老年代   永久代（HotSpot有）
+
+
+JVM运行时内存划分为：程序计数器、虚拟机栈、本地方法栈、Java堆、方法区。可以简记为：一计两栈一堆一区
+
+YGC 在新生代中进行，首先要清楚新生代的堆结构划分。新生代分为Eden区和两个Survivor区，其中Eden:from:to = 8:1:1 (比例可以通过参数 –XX:SurvivorRatio 来设定 )，这是最基本的认识。
+
+--------------------------------
+jvm 堆配置：
+
+堆设置
+-Xms:初始堆大小 默认为物理内存的1/64
+-Xmx:最大堆大小 默认为物理内存的1/4
+-Xmn:新生代大小 通过这个值也可以得到老生代的大小：-Xmx减去-Xmn
+
+备注：
+-Xss：栈大小，设置每个线程可使用的内存大小，即栈的大小。在相同物理内存下，减小这个值能生成更多的线程，
+当然操作系统对一个进程内的线程数还是有限制的，不能无限生成。线程栈的大小是个双刃剑，如果设置过小，可能会出现栈溢出，
+特别是在该线程内有递归、大的循环时出现溢出的可能性更大，如果该值设置过大，就有影响到创建栈的数量，如果是多线程的应用，就会出现内存溢出的错误。
+（栈中存放数据过多，大量递归 java.lang.StackOverflowError）
+
+-XX:NewRatio:设置新生代和老年代的比值。如：为3，表示年轻代与老年代比值为1：3
+-XX:SurvivorRatio:新生代中Eden区与两个Survivor区的比值。注意Survivor区有两个。如：为3，表示Eden：Survivor=3：2，一个Survivor区占整个新生代的1/5??
+-XX:MaxTenuringThreshold:设置转入老年代的存活次数。如果是0，则直接跳过新生代进入老年代
+-XX:PermSize、-XX:MaxPermSize:分别设置永久代最小大小与最大大小（Java8以前）
+-XX:MetaspaceSize、-XX:MaxMetaspaceSize:分别设置元空间最小大小与最大大小（Java8以后）
+收集器设置
+-XX:+UseSerialGC:设置串行收集器
+-XX:+UseParallelGC:设置并行收集器
+-XX:+UseParalledlOldGC:设置并行老年代收集器
+-XX:+UseConcMarkSweepGC:设置并发收集器
+垃圾回收统计信息
+-XX:+PrintGC
+-XX:+PrintGCDetails
+-XX:+PrintGCTimeStamps
+-Xloggc:filename
+并行收集器设置
+-XX:ParallelGCThreads=n:设置并行收集器收集时使用的CPU数。并行收集线程数。
+-XX:MaxGCPauseMillis=n:设置并行收集最大暂停时间
+-XX:GCTimeRatio=n:设置垃圾回收时间占程序运行时间的百分比。公式为1/(1+n)
+并发收集器设置
+-XX:+CMSIncrementalMode:设置为增量模式。适用于单CPU情况。
+-XX:ParallelGCThreads=n:设置并发收集器新生代收集方式为并行收集时，使用的CPU数。并行收集线程数。
+————————————————
+java 堆与栈
+
+栈解决的程序运行问题，即程序如何执行，或者说如何处理数据；
+堆解决的是数据存储问题，即就是数据如何放、放哪儿
+从软件设计角度分析，栈代表了处理逻辑，堆代表了数据，这样分开，使得处理逻辑更清晰
+堆和栈的分离，使得堆的内容可以被多个栈共享（即多个线程访问同一个对象）
+面向对象就是堆和栈的完美结合，对象的属性其实就是数据，存放在堆中；而对象的行为（方法），就是运行逻辑，放在栈中。
+每当一个新的线程被创建时（线程结束，栈内存就释放了。不存在垃圾回收问题）。Java 虚拟机都会分配一个虚拟机栈，Java虚拟机栈是以帧为单位来保存线程的运行状态。Java栈只会有两种操作：以帧为单位进行压栈跟出栈
+
+栈及堆的优缺点：
+1.堆线程共享是一个运行时数据区，类的对象实例从中分配空间，不需要程序显示的释放内存空间，由垃圾回收来负责；堆可以动态分配大小，生命周期不用事先告诉编译器；由于动态分配内存，所以存取速度较慢。
+2.栈线程私有的，栈主要存放一些基本的变量（int,short,char,long,byte,float,double,boolean）及对象句柄。栈的优点是存取速度比堆快，仅次于寄存器，缺点是，存在栈中的数据大小与生存期必须是确定的，缺乏灵活性
+
+java把内存划分为 栈内存及堆内存
+
+变量在栈中分配内存，同时存放在堆中的数组或对象的引用变量也在存放在栈中。超出变量作用域后，java会自动释放掉栈中分配的内存空间
+堆内存放new 创建的对象及组数，堆中分配的内存由GC来管理
+
+备注：引用变量就相当于是为数组或对象起的一个名称，以后就可以在程序中使用栈中的引用变量来访问堆中的数组或对象
+
+
+
+
+
+
+栈
+栈桢：局部变量表，操作数栈，动态链接，方法出口
+栈不存在垃圾回收，线程私有，生命周期根据线程，会StackOverflowError
+
+
+
+备注：
+java的数据类型分为两种：基本类型和引用类型。基本类型的变量保存的是原始值，
+引用类型的变量保存的是引用值。引用值代表某个对象的引用，而不是对象本身，对象本身放在这个引用值所表示的地址的位置
+
+运行时数据区（内存模型）
+
+==========================================================================
+通过visualVM程序监控JVM，JDK 1.6中自带的可视化监控工具，这个工具比较实用，功能也比较强大。可以监控线程信息，堆内存信息，
+还可以实时导出堆信息以及强制GC。监控本地JVM直接启动该工具后就可以监控，远程监控需要启动jstatd和jrxml。
+
+启动jstatd方法：新建jstatd.all.policy文件，添加如下内容，tools.jar包的路径根据实际情况修改：
+grant codebase "file:/home/ndmc/tomcat/jdk/jre/lib/tools.jar" {
+   permission java.security.AllPermission;
+};
+
+执行启动命令./jstatd -J-Djava.security.policy=jstatd.all.policy，默认端口为1099，后面可跟-p指定其他端口号
+使用jrxml远程监控JVM的时候需要加上以下参数：
+-Dcom.sun.management.jmxremote
+-Dcom.sun.management.jmxremote.port=8849
+-Dcom.sun.management.jmxremote.ssl=false
+-Dcom.sun.management.jmxremote.authenticate=false
+-Djava.rmi.server.hostname=hostip
+====================================================================
+JVM管理的几个内存区域包括以下几个内存区域：
+
+1、  方法区：用于存储JAVA类信息、常量、静态变量。这个区域也可以发生垃圾回收，比如当一些类不在被引用时JVM可以卸载这个类，不过这种回收动作很少发生。另外所有线程都共享方法区，因此线程对方法区的访问被设计为线程安全的。
+
+2、  虚拟机栈：JAVA虚拟机栈是线程私有的，每当启动一个新线程时，JVM都会为它分配一个JAVA虚拟机栈。没当线程调用方法时，JVM都会为虚拟机栈压入一个栈帧，该栈帧用于存储参数、局部变量、中间运算结果、方法出口等。
+
+3、  本地方法栈：和虚拟机栈类似，只是他是专为JAVA中的Native方法服务。当线程进入本地方法后，它已经脱离的JVM的限制，甚至可以直接使用本地处理器中的寄存器。实际上本地方法的调用机制非常依赖于JVM的具体实现。
+
+4、  堆：由JVM启动时创建，由所有线程共享，用于存放对象的实例。一般情况下它是JVM中管理的内存中最大的一块。绝大部分JVM内存问题都发生在这一块。
+
+5、  程序计数器：同虚拟机栈一样，它也是线程私有，启动线程是创建。程序计数器的中保存的内容总是下一条将被执行的指令的地址。
+
+
+这几个内存区域，除了程序计数器区域外，其他几个区域都有可能发生内存溢出问题。常见的内存溢出有两种：
+1、方法区溢出。出现该问题时，JVM会报如下类似错误：java.lang.OutOfMemoryError : PermGenSpace ，Perm区的最大内存大小可以通过-XX:MaxPermSize=指定。引起这类内存溢出原因一般有两个，一个是常量池太大，一个是需要加载的CLASS类太多。出现问题的时候排查下这两种可能性，问题可以很快找到。这类问题程序稳定后也很少出现。
+2、堆内存溢出。在JVM可使用的最大堆内存可以在启动的时候通过-Xmx参数指定。堆内存溢出是最为常见的内存溢出问题，发生堆内存溢出时，JVM会报告如下错误：java.lang.OutOfMemoryError : java heap space。
+这里列举下在定位堆内存溢出时，常见的方法和思路。堆内存溢出顾名思义就是，堆内存不够用了，如果程序设计的最大对内存已经耗尽，那说明程序设计存在问题，不该申请很多内存的逻辑申请了很多的内存，该释放的对象没有释放。最重要的问题是就要要找出到底是什么对象没有及时释放，导致占用了过多的内存。常见的方法：
+a、  一个强大的定位工具是使用 jprofiler，通过jprofiler可以实时的监控到，当前的堆内存的总体使用情况及当前存活的对象、大小、分配树、对象引用链等等，功能非常全面
+
+
+---------------------------------------------------------
+常见内存溢出问题：
+java.lang.OutOfMemoryError: Java heap space 堆内存溢出
+java.lang.OutOfMemoryError: PermGen space  方法区内存溢出
+java.lang.OutOfMemoryError: GC overhead limit exceeded  垃圾回收时间占用系统运行时间的98%或以上 //GC占用了多余98%（默认值）的CPU时间却只回收了少于2%（默认值）的堆空间
+
+
+在 JDK 1.7 之后(包括1.7)，字符串常量池已经从方法区移到了堆中
+
+Java是使用 双亲委派模型 来进行类的加载的
+双亲委托模型的工作过程是：　　
+
+　　如果一个类加载器（ClassLoader）收到了类加载的请求，它首先不会自己去尝试加载这个类，
+　　而是把这个请求委托给父类加载器去完成，每一个层次的类加载器都是如此，因此所有的加载请求最终都应该传送到顶层的
+　　启动类加载器中，只有当父类加载器反馈自己无法完成这个加载请求（它的搜索范围中没有找到所需要加载的类）时，
+　　子加载器才会尝试自己去加载。
+
+使用双亲委托机制的好处是：
+　　能够有效确保一个类的全局唯一性，当程序中出现多个限定名相同的类时，类加载器在执行加载时，始终只会加载其中的某一个类。
+
+三种JVM
+hotspot(Sun公司),JRockit(BEA公司的JRockit),J9VM(IBM公司)
+
+JDK包含JRE包含JVM
+
+-----------------------------------------------
+栈：存放基本类型变量，对象引用变量；（栈帧：局部变量表，操作数栈，动态链接，方法出口）
+堆：存放有new创建的对象和组数
+小结：堆是来存放对象，栈是用来执行程序的
+
+方法区：跟堆一样被所有线程共享，主要存放类信息，常量，静态变量
+程序计数器：字节码执行指令地址

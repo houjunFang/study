@@ -73,7 +73,15 @@ maven搜索jar包顺序
 </mirrors>  
 那么其他仓库配的地址，都会失效了，以这个为准。
 
+maven仓库设置 settings.xml与pom.xml 优先级
+
+三者的级先是 pom.xml  > /home_dir/.m2/settings.xml(用户自定义setting) > /maven_dir/conf/settings.xml(全局setting) 。
+setting.xml是maven的仓库配置文件，一般存在全局配置及用户自定配置，用户自定义配置优先级高于全局配置。
+配置优先级从高到低：pom.xml> user settings > global settings，如果这些文件同时存在，在应用配置时，会合并它们的内容，如果有重复的配置，优先级高的配置会覆盖优先级低的。
 
 ideal中查看pom.xml的Effective POM 实际生效pom
 右击pom.xml->maven->show effective pom
+
+命令行执行maven指定setting配置文件方式：
+mvn clean install --settings  c:\setting.xml
 

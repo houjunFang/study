@@ -5,7 +5,7 @@ https://blog.csdn.net/weixin_44434573/article/details/86491664?utm_medium=distri
 
 https://github.com/daveqin/stock/blob/master/README.md
 
-
+java 字节码查看IDEA插件工具：jclasslib
 
 ngModel指令需要引入 import {FromsModule} '@angular/froms'
 当在表单中使用[(ngModel)]时，必须要定义name属性。
@@ -905,6 +905,26 @@ rpm -ivh *.rpm --nodeps --force  // cd 至当前目录后安装所有rpm包 不清楚rpm包依赖
  
  
 ------------------------------------------
+linux yum 安装
+yum list java*  //列出所有可安装的JAVA版本
+
+yum install -y java具体版本
+
+#rpm -qa|grep java  //安装后检查安装版本
+#rpm -ql jenkins  //查看yum安装的JENKINS文件
+
+卸载一个软件时 
+yum -y remove httpd
+卸载多个相类似的软件
+yum -y remove httpd*
+卸载多个非类似软件时
+yum -y remove httpd php php-gd mysql
+
+这时候需要用wget命令去网络上下载资源包
+wget?http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo?-O /etc/yum.repos.d/epel-apache-maven.repo
+然后重新安装maven????? ：yum -y install apache-maven
+
+
 windows openssh
 1.ssh-keygen -t dsa|rsa  生成密钥 (会生成id_dsa, id_dsa.pub 私公密钥对)
 2.将公钥复制至远程电脑 ~/.ssh/authorized_keys 中如下：
@@ -1656,7 +1676,7 @@ grant codebase "file:/home/ndmc/tomcat/jdk/jre/lib/tools.jar" {
 ====================================================================
 JVM管理的几个内存区域包括以下几个内存区域：
 
-1、  方法区：用于存储JAVA类信息、常量、静态变量。这个区域也可以发生垃圾回收，比如当一些类不在被引用时JVM可以卸载这个类，不过这种回收动作很少发生。另外所有线程都共享方法区，因此线程对方法区的访问被设计为线程安全的。
+1、  方法区（包含运行时常量池 JDK1.7之前->permspace 永久代 JDK1.8 MetaSpace 元空间）：用于存储JAVA类信息、常量、静态变量。这个区域也可以发生垃圾回收，比如当一些类不在被引用时JVM可以卸载这个类，不过这种回收动作很少发生。另外所有线程都共享方法区，因此线程对方法区的访问被设计为线程安全的。
 
 2、  虚拟机栈：JAVA虚拟机栈是线程私有的，每当启动一个新线程时，JVM都会为它分配一个JAVA虚拟机栈。没当线程调用方法时，JVM都会为虚拟机栈压入一个栈帧，该栈帧用于存储参数、局部变量、中间运算结果、方法出口等。
 
@@ -1706,3 +1726,163 @@ JDK包含JRE包含JVM
 
 方法区：跟堆一样被所有线程共享，主要存放类信息，常量，静态变量
 程序计数器：字节码执行指令地址
+
+符号引用
+在java中，一个java类将会编译成一个class文件。在编译时，java类并不知道引用类的实际内存地址，因此只能使用符号引用来代替。比如org.simple.People类要引用org.simple.Tool类，
+在编译时People类并不知道Tool类的实际内存地址，因此只能使用符号org.simple.Tool(假设)来表示Tool类的地址。而在类装载器装载People类时，此时可以通过虚拟机获取Tool类 
+的实际内存地址，因此便可以既将符号org.simple.Tool替换为Tool类的实际内存地址，及直接引用地址.
+
+volatile修饰变量。在每次被线程访问时，都强迫从共享内存中重读该成员变量的值。而且，当成员变量发生变化时，强迫线程将变化值回写到共享内存。这样在任何时刻，两个不同的线程总是看到某个成员变量的同一个值。
+
+类从被加载到内存中开始，到卸载出内存为止。它的生命周期总共七个阶段：加载---->验证---->准备---->解析---->初始化---->使用---->卸载
+符号引用将在解析阶段被替换为直接引用
+
+Java6和6之前，常量池是存放在方法区（永久代）中的。
+Java7，将常量池是存放到了堆中。
+Java8之后，取消了整个永久代区域，取而代之的是元空间。运行时常量池和静态常量池存放在元空间中，而字符串常量池依然存放在堆中。
+
+
+========================================================================================================
+JVM:java virtual machine  java虚拟机，一种软件实现，整个JAVA的实现跨平台运行的核心部分；可以运行class格式的类文件，JVM屏蔽了平台，使java程序只运行在各自平台的虚机上，从而实现
+一个CLASS文件跨平台运行。
+
+JDK->JRE-JVM  java开发工具包-》java运行环境-》java虚拟机
+
+jvm实例 对应一个独立运行的JAVA程序 每个java程序都运行它自己的jvm实例，当一个java程序启动时，一个jvm实例诞生，当该程序关闭时，jvm实例随之消亡。
+
+CLASS文件（Byte-code字节码文件）：各种不同平台的虚拟机和平台都统一使用一种存储格式-字节码，是和平台无关的基石
+class文件是一组以8位字节为基础单位的二进制流，class文件并不是机器语言而是二进制文件（机器语言指的是硬件能直接运行的二进制指令代码）
+
+
+常量池存放内容：
+1.字面量： 文本字符串，申明为final的常量值
+2.符号引用：
+ 类和接口的全限定名
+ 字段名称和描述符
+ 方法名称和描述符
+
+
+------------------
+2.5. Run-Time Data Areas
+2.5.1. The pc Register
+2.5.2. Java Virtual Machine Stacks
+2.5.3. Heap
+2.5.4. Method Area（包含Run-Time Constant Pool）
+2.5.5. Run-Time Constant Pool
+2.5.6. Native Method Stacks
+-----------------------------------------
+
+
+Class类文件的结构
+１.无符号数
+２.表
+无符号数属于基本的数据类型:
+u1,u2,u4,u8来分别代表1个字节，2个字节，4个字节，8个字节的无符号数。
+表是由多个无符号数或者其它表作为数据项构成的复合数据类型，以_info结尾
+
+
+JVM Class字节码文件格式：
+ClassFile {
+    u4 magic;    //4个字节 CAFFBABE
+    u2 minor_version; //2个字节 次版本号
+    u2 major_version; //2个字节 主版本号45开始jdk1.1  46 jdk1.2
+    u2 constant_pool_count; //2个字节 常量池容量
+    cp_info constant_pool[constant_pool_count-1]; //常量表 从下标1开始，0为不使用常量
+    u2 access_flags; 
+    u2 this_class; 
+    u2 super_class; 
+    u2 interfaces_count; 
+    u2 interfaces[interfaces_count]; 
+    u2 fields_count; 
+    field_info fields[fields_count]; 
+    u2 methods_count; 
+    method_info methods[methods_count]; 
+    u2 attributes_count; 
+    attribute_info attributes[attributes_count]; 
+}
+
+JVM 常量池类型
+类 型															标 志	描 述
+CONSTANT_utf8_info								1	UTF-8编码的字符串
+CONSTANT_Integer_info							3	整形字面量
+CONSTANT_Float_info								4	浮点型字面量
+CONSTANT_Long_info								5	长整型字面量
+CONSTANT_Double_info							6	双精度浮点型字面量
+CONSTANT_Class_info								7	类或接口的符号引用
+CONSTANT_String_info							8	字符串类型字面量
+CONSTANT_Fieldref_info						9	字段的符号引用
+CONSTANT_Methodref_info						10	类中方法的符号引用
+CONSTANT_InterfaceMethodref_info	11	接口中方法的符号引用
+CONSTANT_NameAndType_info					12	字段或方法的符号引用
+CONSTANT_MethodHandle_info				15	表示方法句柄
+CONSTANT_MothodType_info					16	标志方法类型
+CONSTANT_InvokeDynamic_info				18	表示一个动态方法调用点
+
+常量
+cp_info{
+	u1 tag  //JVM通过tag位确定该常量池项表示什么类型的符号引用
+	info[] //若干字节组成的info数组 可以是数值 也可以是索引
+}
+
+CONSTANT_Methodref_info { 
+    u1 tag; 
+    u2 class_index;  //表示引用这个方法的对象在常量池数组中的索引
+    u2 name_and_type_index; //表示方法类型及名称在常量池数组中的索引
+}
+
+CONSTANT_Class_info {
+     u1 tag; 
+     u2 name_index; //类名称在常量池数组中的索引
+}
+
+
+
+
+
+
+
+一个线程--》表示一个JAVA虚拟机栈；
+方法的执行--》可以通过压栈的方式--》方法对应栈帧
+
+-------------------------------
+类加载:
+类加载器：
+系统类加载器（应用类加载器）
+可扩展类加载器
+根类加载器
+
+双亲委派机制，保证类的安全！
+所有类的加载都会委托父类直到最顶层，在顶层开始寻找有没有这个类，如果有这个类就直接加载这个类；没有，就向下查找，直到找到位置。
+
+
+
+JNI:java native interface java本地方法接口
+native
+
+
+ORM一般指对象关系映射。对象关系映射（Object Relational Mapping，简称ORM）
+
+
+类加载过程：装载（查找类文件） 链接（验证，准备，解析：将CLASS文件的符号引用转化为直接引用） 初始化 使用 卸载
+
+
+
+
+-----------------------------------------------------
+
+mysql 查询所有表
+select table_name,table_rows,table_comment from information_schema.tables where table_schema='product_dev' order by table_rows desc;
+
+
+统计所有表的数据量情况
+select * from survey
+select concat(
+'select "',
+TABLE_name,
+'", count(*) from ',
+TABLE_SCHEMA,
+'.',
+TABLE_name,
+' union all'
+) from information_schema.tables
+where TABLE_SCHEMA='product_dev';

@@ -97,7 +97,7 @@ Dim FileOpen
 Dim X As Integer
 Application.ScreenUpdating = False
 '这儿应用于xlsx文件，根据需要修改
-FileOpen = Application.GetOpenFilename(FileFilter:="Microsoft Excel文件(.xlsx),.xlsx", MultiSelect:=True, Title:="合并工作薄")
+FileOpen = Application.GetOpenFilename(FileFilter:="Microsoft Excel文件(.xls),.xls", MultiSelect:=True, Title:="合并工作薄")
 X = 1
 While X <= UBound(FileOpen)
 Workbooks.Open Filename:=FileOpen(X)
@@ -111,3 +111,18 @@ errhadler:
 MsgBox Err.Description
 End Sub
 
+
+'EXCEL中所有sheet页按字段重新排序
+Sub 工作表标签排序()
+n = Sheets.Count
+For i = 1 To n
+Cells(i, Columns.Count).NumberFormatLocal = "@"
+Cells(i, Columns.Count) = Sheets(i).Name
+Next
+Cells(1, Columns.Count).Resize(n).Sort Cells(1, Columns.Count)
+R = Cells(1, Columns.Count).Resize(n)
+Cells(1, Columns.Count).Resize(n) = ""
+For i = 1 To n
+Sheets(R(i, 1)).Move Sheets(1)
+Next
+End Sub

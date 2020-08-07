@@ -1,0 +1,41 @@
+如果一个接口Cup有个方法use()，有个类SmallCup实现接口Cup，则在类SmallCup中正确的是？  ( )
+A、void use() { …}
+B、protected void use() { …}
+C、public void use() { …}
+D、以上语句都可以用在类SmallCup中
+
+
+
+题二：
+class Father{     
+    private int i = 5;     
+    public Father() {     
+        System.out.println("Father's i is " + this.i);     
+        test();     
+    }     
+    public void test(){     
+        System.out.println(this.i);     
+    }     
+}     
+
+class Son extends Father{     
+    private int i = 55;     
+
+    public Son() {     
+        System.out.println("Son's i is " + this.i);     
+    }     
+
+    @Override    
+    public void test() {     
+        System.out.println(this.i);     
+    }     
+
+}     
+public class Test {     
+    public static void main(String[] args) {     
+        new Son();     
+    }     
+}
+执行结果：
+
+

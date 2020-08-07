@@ -71,7 +71,7 @@ set kill-jar="ps -ef | grep bosent_baseline_hot-deploy-SPRINGCLOUD-pcms%%A-16110
 set start-jar="cd %ssh_remote_dir%/pcms-%%A;nohup java -jar -Xms512m -Xmx1024m bosent_baseline_hot-deploy-SPRINGCLOUD-pcms%%A-161102-08-0.1-executable.jar>nohup.out 2>&1 & tail -f nohup.out|sed '/Started BosentStartforSpringCloud/Q'"!start-jar!
 )
 
-rem 将其中的""换成;
+rem 将其中的""换成;   %A:B=C%  // dos中 A:B=C的方式来替换字符串，具体含义就是在字符串变量A中查找所有的子串B并且替换成子串C
 set bak-jar=%bak-jar:""=;%
 set kill-jar=%kill-jar:""=;%
 set start-jar=%start-jar:""=;%

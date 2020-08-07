@@ -305,6 +305,8 @@ SpringRunner是SpringJUnit4ClassRunner的一个别名。
 -----------------------------------------------------------------------
 spring-boot-starter-parent 与 spring-boot-dependencies
 参考：https://www.cnblogs.com/sjshare/p/10669001.html
+https://blog.csdn.net/q42368773/article/details/106345903
+
 1.继承spring-boot-starter-parent
 <parent>
    <groupId>org.springframework.boot</groupId>
@@ -317,6 +319,7 @@ spring-boot-starter-parent 与 spring-boot-dependencies
      <spring-data-releasetrain.version>Fowler-SR2</spring-data-releasetrain.version>
 </properties>
 可以通过spring-boot-dependencies pom，查看支持的属性列表。
+备注：因为默认配置文件接受Spring风格的占位符(${})，Maven过滤器换成了@...@占位符。（可以通过Maven属性resource.delimiter替换）
 
 2.spring-boot-dependencies 通过scope=import 来进行版本管理
 <dependencyManagement> //父pom中的依赖版本管理
@@ -378,6 +381,13 @@ dependencyManagement
     </dependencies>
 </dependencyManagement>
 引入springBoot的相关依赖，后面子工程中直接引用依赖时不用再指定版号即可
+
+----------------------------------------------------------------------------
+Dependencies 同 dependencyManagement 区别：
+1. dependencies即使在子项目中不写该依赖项，那么子项目仍然会从父项目中继承该依赖项（全部继承）
+2. dependencyManagement里只是声明依赖，并不实现引入，因此子项目需要显示的声明需要用的依赖。
+如果不在子项目中声明依赖，是不会从父项目中继承下来的；只有在子项目中写了该依赖项，并且没有指定具体版本，才会从父项目中继承该项，
+并且version和scope都读取自父pom;另外如果子项目中指定了版本号，那么会使用子项目中指定的jar版本
 
 ============================================================================
 @SpringBootTest(classes = App.class)//指定sprintBoot启动类	获取启动类、加载配置，确定装载Spring Boot。
@@ -605,3 +615,221 @@ springboot程序测试依赖，如果是自动创建项目默认添加
 pom.xml中
 查找顺序：relativePath元素中的地址–本地仓库–远程仓库
 <relativePath/>设定一个空值将始终从仓库中获取，不从本地路径获取
+
+-----------------------------------------------------
+在IDEA中下载maven helper插件，方便排查jar冲突
+
+springboot2.0+ JDK版本：jdk8
+
+=================================================
+springboot jpa 参考文档：https://www.cnblogs.com/col-smile/p/13382604.html
+
+内存数据库依赖包hsqldb
+<dependency>
+    <groupId>org.hsqldb</groupId>
+    <artifactId>hsqldb</artifactId>
+    <scope>runtime</scope>
+</dependency>
+
+
+---------------------------
+SpringBoot--使用JDBC连接mysql
+1.pom增加如下依赖:（springboot2.0+ 默认数据源为hikariCP 相关依赖包含在spring-boot-starter-jdbc依赖中）
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+ 
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+</dependency>
+
+2.代码中使用 @Autowired private final JdbcTemplate jdbcTemplate;
+说明：springboot自动配置了jdbcTemplate数据操作模板
+// jdbcTemplate 是springboot的核心文件  用来简化数据库操作,内部定义了很多避免错误的机制
+// springboot默认提供了数据源com.zaxxer.hikari.HikariDataSource
+// springboot自动注入数据源,使用它不用管理数据源,也不用管理关闭问题
+
+在程序中执行
+1.注入JdbcTemplate
+2.编写SQL语句
+3.使用JdbcTemplate执行SQL语句
+4.根据具体的方法的构造重载判断选择可以使用？ 占位符，
+
+@Repository
+public class UserDto {
+    @Autowired
+    private final JdbcTemplate jdbcTemplate;
+ 
+ 
+    public UserDto(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+ 
+ 
+    public int AddUser(User user){
+        String sql = "insert into t_user(username, password) values(?, ?)";
+        return jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
+    }
+}
+
+或通过如下方式使用：
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		Class.forName("com.mysql.cj.jdbc.Driver");
+		String url = "jdbc:mysql://127.0.0.1:3306/pets?characterEncoding=utf8&useSSL=false&serverTimezone=GMT";
+		Connection con = DriverManager.getConnection(url, "root", "root");
+		Statement statement = con.createStatement();
+		ResultSet resultSet = statement.executeQuery("select * from t_users");
+		while (resultSet.next()) {
+			System.out.println("查询结果： "+resultSet.getString("name"));
+		}
+ 
+	}
+	
+3.application.properties文件数据源配置如下：
+spring.datasource.url=jdbc:mysql://localhost:3306/test_db?serverTimezone=GMT%2B8&useSSL=false
+spring.datasource.username=root
+spring.datasource.password=123456
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+4.jdbcTemplate API：https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/jdbc/core/JdbcTemplate.html
+spring容器就已经帮我们实例化了JdbcTemplate，我们在代码里可以直接注入进去即可
+spring提供jdbctemplate的自动化配置 使用时直接注入autowired即可，也可如下手动创建：
+
+DriverManagerDataSource dataSource=new DriverManagerDataSource();
+dataSource.setDriverClassName("org.postgresql.Driver");
+dataSource.setUrl("jdbc:postgresql://127.0.0.1:5432/postgres");
+dataSource.setUsername("postgres");
+dataSource.setPassword("332578");
+JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+
+然后 如下使用：
+  @Resource
+  private JdbcTemplate jdbcTemplate;
+
+================================================
+spring data jpa 操作数据库
+1.pom中引入依赖如下：
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.16</version>
+</dependency>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+swagger2集成：
+<!-- 生成api文档 -->
+  <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger2</artifactId>
+      <version>2.2.2</version>
+  </dependency>
+  <dependency>
+      <groupId>io.springfox</groupId>
+      <artifactId>springfox-swagger-ui</artifactId>
+      <version>2.2.2</version>
+  </dependency>
+  
+  
+---------------------------------------------------
+JDBC（Java DataBase Connectivity,java数据库连接）是一种用于执行SQL语句的Java API，可以为多种关系数据库提供统一访问，它由一组用Java语言编写的类和接口组成。
+jdbcTemplate : Spring框架为我们提供了JDBCTemplate，一组访问访问数据库的类库，Spring对JDBC的封装,通俗点说就是Spring对jdbc的封装的模板
+JPA :java persistence api 可以通过注解或者XML描述【对象-关系表】之间的映射关系，并将实体对象持久化到数据库中
+
+JPA仅仅是一种规范，也就是说JPA仅仅定义了一些接口，而接口是需要实现才能工作的。所以底层需要某种实现，而Hibernate就是实现了JPA接口的ORM框架
+Spring Data JPA 可以理解为 JPA 规范的再次封装抽象，底层还是使用了 Hibernate 的 JPA 技术实现
+Spring Data JPA 是 Spring 基于 ORM 框架、JPA 规范的基础上封装的一套 JPA 应用框架，底层使用了 Hibernate 的 JPA 技术实现，可使开发者用极简的代码即可实现对数据的访问和操作。它提供了包括增删改查等在内的常用功能，且易于扩展
+
+ORM：对象关系映射(Object Relational Mapping，简称ORM，或O/RM，或O/R mapping），是一种程序技术，用于实现面向对象编程语言里不同类型系统的数据之间的转换
+ORM框架：这种框架一般需要有两种能力：
+1.具有访问数据库及操作（CRUD操作）数据库的能力。
+2.可以进行数据和对象之间的映射转换，在操作数据前，将对象转为数据，拼接sql；在查询完数据库后，将查询结果自动映射成对象。
+ORM框架比较常用的又hibernate，mybatis。hibernate是完全的ORM框架；而mybatis是一种半ORM框架，需要定义sql语句。
+
+在springboot2.0之后，采用的默认数据库连接池就是Hikari。不需要引入依赖，已经在SpringBoot中包含了
+
+常用数据源：DBCP、C3P0、Druid、HikariCP
+JDBC api详解：https://www.cnblogs.com/heapStark/p/8241272.html
+
+
+
+@Repository
+
+-------------------------------
+mybatis-generator
+
+springboot集成mybatis
+1.pom中增加依赖：
+<dependency>
+	<groupId>org.mybatis.spring.boot</groupId>
+	<artifactId>mybatis-spring-boot-starter</artifactId>
+	<version>2.1.3</version>
+</dependency>
+
+<dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+	<scope>runtime</scope>
+</dependency>
+
+2.application.propeties数据源配置
+spring.datasource.url=jdbc:mysql://rm-bp166l1d00e85fbhe90150.mysql.rds.aliyuncs.com:3306/cip_dev
+spring.datasource.password=cip_dev@123
+spring.datasource.username=cip_dev
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+mybatis.mapper-locations=classpath:mappers/*.xml    //mapper*.xml配置文件路径
+mybatis.type-aliases-package=com.hjapp.entity       //实体entity包路径，此处配置，mapper.xml中的type类型不用配置带包的路径，直接类名即可
+
+3.启动类上增加
+@MapperScan("com.hjapp.mapper")  //需要扫描的mapper接口
+
+或者增加
+@Mapper
+@Repository  //增加这个为了编译器 @Autowired不报错（不加报错不影响运行）
+
+4.mapper.xml文件示例：
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hjapp.mapper.DataMapper">   //mapper接口完整路径 包名+类名
+    <resultMap id="BaseResultMap" type="Zjxx">     //此处type 配置文件中有配置mybatis.type-aliases-package的话可以省略包名，否则包名+类名
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="zjdm" property="zjdm" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryZjxx" resultMap="BaseResultMap">
+        SELECT
+        id,zjdm
+        FROM zjxx where id='1022'
+    </select>
+
+</mapper>
+
+
+5.总结：
+@Mapper 一定要有，否则 Mybatis 找不到 mapper。
+@Repository 可有可无，可以消去依赖注入的报错信息。
+@MapperScan 可以替代 @Mapper。
+

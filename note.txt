@@ -1,3 +1,76 @@
+java 枚举类
+java 单例
+
+子类重写父类方法时，方法的访问权限不可小于原访问权限。
+
+----------------------------
+java 构造方法总结：
+构造方法: 方法名同类型([参数列表]){}
+1.方法名与类名相同，方法名前没有返回值类型申明（void 也不可以），方法中不能有return返回一个值；
+2.构造方法同普通方法可以重载（但构造方法是不被继承的），以参数的个数，类型，或排列顺序区分；
+3.构造函数不能被继承，也不能直接被调用；构造方法可以通过this()调用其他构造函数，通过super()调用父类构造函数，但这两个都方法都必须是调用方法的第一句；
+4.创建子类对象时，首先执行父类构造方法，然后再执行子类构造方法；多级继承情况下，从继承最上层开始依次执行各类的构造方法；
+如果子类构造方法中没有super语句显示调用父类的构造方法，创建子类对象时会自动调用父类默认的构造方法，若父类没有默认构造方法，则编译出错。
+5.每个类中至少有一个构造函数，如果没有系统会创建一个默认的无参构造函数，若已定义构造方法后则不会再自动创建默认的无参构造函数了；
+4.构造方法不能由编程人员调用，而要系统调用
+5.构造方法不能被static、final、synchronized、abstract和native修饰
+6 构造方法被调用的几种方式：当前类的其他构造方法通过this语句调用它；当前类的子类的构造方法通过super语句调用它；在程序中通过new语句调用它。
+7构造方法可以处于public、protected、private和默认四种访问级别之一。
+ 当构造方法为private级别时，意味着只能在当前类访问它，不能被继承，不能被其他程序用new创建实例对象。
+ abstract修饰的类，不允许被实例化，这点和private修饰构造方法相同，但abstract修饰的类可以被继承，拥有子类，可以创建子类的实例；
+ final类禁止被继承，这点和private修饰构造方法相同，但是final类可以用new创建实例对象。
+ 
+且必须作为构造方法的第一条语句，成员方法中不可调用构造方法。
+父类的构造方法不能被子类继承，但是，在子类的构造方法中可以通过super语句调用父类的构造方法。使用super语句应该注意：在子类的构造方法中使用super语句，它必须作为第一条语句。
+在创建子类的对象时，java虚拟机首先执行父类的构造方法，然后再执行子类的构造方法，在多级继承的情况下，将从继承树的最上层得父类开始，依次执行各个类的构造方法，这可以保证子类对象从所有直接或间接父类中继承的实例变量都被正确的初始化。
+如果子类的构造方法中没有用super语句显示调用父类的构造方法，那么通过这个构造方法创建子类对象时，java虚拟机会自动先调用父类的默认构造方法，而此时若父类没有默认构造方法时，就是编译出错
+
+
+
+
+
+java 修饰符
+访问修饰符
+default(friendly) 默认访问模式，默认修饰符（即不加任何访问修饰符），只允许在同一包内访问；使用对象：类，接口，变量，方法
+private 私有访问修饰符。被其修饰的内部类，属性，方法只可在本类中访问，其子类不可访问，更不允许跨包访问。使用对象：变量，方法。注意：外部类不可修饰 （访问修饰符的使用主要用来隐藏类的实现细节和保护类的数据）
+protected 保护型访问修饰符，被其修饰的内部类，属性，方法仅能被其本身类或其子类访问，即使子类不在同一包中。 使用对象：变量，方法，注意：不能修饰外部内，接口及接口成员方法及成员变量
+public 公共访问修饰符，可以被任何对象访问，被其修饰的类，方法，属性不仅可以跨类访问而且允许跨包访问。使用对象：类，接口，变量，方法 （接口里的变量都隐式声明为 public static final,而接口里的方法默认情况下访问权限为 public）
+
+非访问修饰符
+static
+final
+
+访问修饰符的继承
+1.父类声明private方法 不能被继承；
+2.父类申明public方法，子类方法必须也只能是public；
+3.父类声明protected方法，子类方法只能声明为protected或public,不能为private
+
+
+
+接口，比抽象类还要抽象的类:
+
+接口中的方法会被隐式的指定为  public abstract （只能是 public abstract，其他修饰符都会报错）。
+接口中的变量会被隐式的指定为  public static final   变量（并且只能是 public，用 private 修饰会报编译错误。）
+java接口里的成员变量只能是public 的，static 的，final的；并且必须赋初值，否则通不过编译。
+接口中的方法是不能在接口中实现的，只能由实现接口的类来实现接口中的方法。
+注：
+接口是隐式抽象的，当声明一个接口的时候，不必使用 abstract 关键字。
+接口中每一个方法也是隐式抽象的，声明时同样不需要 abstract 关键字。
+接口中的方法都是公有的( public ) ！！！ 不是 default
+
+public: 使接口的实现类可以使用这个常量
+static：接口不涉及和任何具体实例相关的细节,因此接口没有构造方法,不能被实例化,没有实例变量，只有静态（static）变量。
+            static修饰就表示它属于类的，随的类的加载而存在的，当JVM把字节码加载进JVM的时候，static修饰的成员已经在内存中存在了。
+            如果是非static的话，就表示属于对象的，只有建立对象时才有它，而接口是不能建立对象的，所以接口的常量必须定义为static。
+final：
+            接口中不可以定义变量即定义的变量前都要加上final修饰，使之成为常量(没有final修饰的是变量，加上final修饰就会变成常量)。所以接口的属性默认是public static final 常量，且必须赋初值。
+            （  final修饰就是保证接口定义的常量不能被实现类去修改，如果没有final的话，由子类随意去修改的话，接口建立这个常量就没有意义了。）
+ 
+接口中方法的修饰符：public abstract（默认不写）
+abstract：
+接口仅仅描述系统能做什么，但是不指名如何去做，所以接口中的方法都是抽象（abstract）方法。
+
+
 Xmind
 -------------------
 股票量化：https://blog.csdn.net/wuu1299/article/details/78965555?utm_medium=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-10.nonecase&depth_1-utm_source=distribute.pc_relevant_right.none-task-blog-BlogCommendFromMachineLearnPai2-10.nonecase
@@ -175,6 +248,8 @@ spring.profiles.active=test
 application.properties
 application-test.properties
 application-prd.properties
+备配置文件格式:application-{profile}.properties 或 application-{profile}.yml
+
 
 JAVA启动时指定启用配置文件方式：
 java -jar app.jar --spring.profiles.active=dev --server.port=8060  //指定端口
@@ -881,6 +956,19 @@ tcp 0 0 0.0.0.0:21 0.0.0.0:* LISTEN
 nginx
 
 whereis nginx
+
+nginx -t  //查看nginx 默认配置文件目录
+
+/usr/sbin/nginx  //安装目录
+
+systemctl status nginx.service
+
+/bin/systemctl start nginx.service
+/bin/systemctl stop nginx.service
+/bin/systemctl restart nginx.service
+
+nginx -c xxx/nginx.conf  //不加-c 则使用默认配置文件启动
+
 
 # nginx指定配置文件启动
 /usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
@@ -1867,8 +1955,97 @@ ORM一般指对象关系映射。对象关系映射（Object Relational Mapping，简称ORM）
 
 
 
+Linux scp 命令用于 Linux 之间复制文件和目录。
 
+从远程复制到本地
+scp root@www.runoob.com:/home/root/others/music /home/space/music/1.mp3 
+
+从本地复制到远程
+scp local_file remote_username@remote_ip:remote_folder 
+或者 
+scp local_file remote_username@remote_ip:remote_file 
+或者 
+scp local_file remote_ip:remote_folder 
+或者 
+scp local_file remote_ip:remote_file 
 -----------------------------------------------------
+java -jar myapp.jar --spring.profiles.active=dev
+
+
+
+
+-------------------------------------------------------------
+jmm 相关参考：
+http://www.blogjava.net/DLevin/archive/2011/09/05/358033.html
+https://blog.csdn.net/weixin_42762133/article/details/103241439
+
+在sun提供的hotSpot虚拟机中，包括了启动类装载器、扩展类装载器、系统类装载器、用户定义类装载器
+
+当遇到new（使用new关键字实例化对象）、getstatic（读取一个类的非final修饰静态字段）、putstatic（设置一个类的静态字段）、invokestatic（调用一个类的静态方法）方法时，
+对相应的类执行初始化操作
+解析阶段是JVM将常量池内的符号引用替换为直接引用的过程（此时与验证阶段存在交叉关系）
+
+一个java类将会编译成一个class文件。在编译时，java类并不知道所引用的类的实际地址，因此只能使用符号引用来代替。比如org.simple.People类引用了org.simple.Language类，在编译时People类并不知道Language类的实际内存地址，因此只能使用符号org.simple.Language（假设是这个，当然实际中是由类似于CONSTANT_Class_info的常量来表示的）来表示Language类的地址
+
+
+访问权限修饰符：https://blog.csdn.net/qq_37499840/article/details/89218587
+
+final—终态类，表示该类不能被继承
+
+成员变量修饰符
+    public（公共访问控制符）: 指定该变量为公共的，他可以被任何对象的方法访问。
+
+    private（私有访问控制符）: 指定该变量只允许自己的类的方法访问，其他任何类（包括子类）中的方法均不能访问。
+
+    protected（保护访问控制符）: 指定该变量可以别被自己的类和子类访问。在子类中可以覆盖此变量。
+
+    friendly: 在同一个包中的类可以访问，其他包中的类不能访问。
+
+    final: 最终修饰符，指定此变量的值不能变。
+
+    static（静态修饰符）：指定变量被所有对象共享，即所有实例都可以使用该变量。变量属于这个类。
+
+    transient（过度修饰符）：指定该变量是系统保留，暂无特别作用的临时性变量。
+
+    volatile（易失修饰符）：指定该变量可以同时被几个线程控制和修改。
+
+方法修饰符
+    public（公共控制符）
+
+    private（私有控制符）: 指定此方法只能有自己类等方法访问，其他的类不能访问（包括子类）
+
+    protected（保护访问控制符）：指定该方法可以被它的类和子类进行访问。
+
+    final:指定该方法不能被重载。
+
+    static：指定不需要实例化就可以激活的一个方法。
+
+    synchronize: 同步修饰符，在多个线程中，该修饰符用于在运行前，对他所属的方法加锁，以防止其他线程的访问，运行结束后解锁。
+
+    native：本地修饰符。指定此方法的方法体是用其他语言在程序外部编写的。
+
+
+
+public class A{
+  static{
+  	System.out.println("static init!")
+  }
+}
+
+Class.forName("A",true,this.getClass().getClassLoader()) 等同 Class.forName("A") 等同 new A() 加载类并初始化
+总结：
+ 不初始化则不会执行static块
+ Class.forName("A",false,this.getClass().getClassLoader())   //加载类A 但不初始化，不会执行static
+
+
+
+
+
+
+
+
+
+=========================================================
 
 mysql 查询所有表
 select table_name,table_rows,table_comment from information_schema.tables where table_schema='product_dev' order by table_rows desc;

@@ -460,3 +460,38 @@ git checkout tag_name
 
 git checkout -b branch_name tag_name
 这样会从tag创建一个分支，然后就和普通的git操作一样了。
+
+================================================================
+pull request:  请求拉取（fork了别人的分支本地修改提交仓库后，通过pull request 请求被fork的仓库管理员pull自己的相关修改）
+
+另一种方法是为 PR 创建一个远程分支，追踪提交者的仓库。
+# 创建远程仓库，指向 PR 提交者的仓库
+$ git remote add nullin git://github.com/nullin/testng.git
+
+# 从该远程仓库拉取代码
+$ git fetch nullin
+
+# 将该仓库的某个分支合并到当前分支
+$ git merge kneath/error-page
+
+# 推送到自己的仓库
+$ git push origin master
+
+
+cherry-pick
+有时，PR 里面包含好几个 commit，但是你只想合并其中的一个或几个。
+
+这时可以使用cherry-pick命令，挑出你感兴趣的 commit。
+
+# 建立远程分支，追踪提交者的仓库
+$ git remote add nullin git://github.com/nullin/testng.git
+
+# 从该远程仓库拉取代码
+$ git fetch nullin
+
+# 只将感兴趣的 commit 加入当前代码
+$ git cherry-pick commit1
+$ git cherry-pick commit2
+
+# 推送到自己的仓库
+$ git push origin master

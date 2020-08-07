@@ -1,0 +1,52 @@
+如果一个接口Cup有个方法use()，有个类SmallCup实现接口Cup，则在类SmallCup中正确的是？  ( )
+A、void use() { …}
+B、protected void use() { …}
+C、public void use() { …}
+D、以上语句都可以用在类SmallCup中
+
+正确答案: C  
+
+子类重写父类方法时，方法的访问权限不能小于原访问权限，在接口中，方法的默认权限就是public，所以子类重写后只能是public
+
+
+=================================================================================================================
+class Father{     
+    private int i = 5;     
+    public Father() {     
+        System.out.println("Father's i is " + this.i);     
+        test();     
+    }     
+    public void test(){     
+        System.out.println(this.i);     
+    }     
+}     
+
+class Son extends Father{     
+    private int i = 55;     
+
+    public Son() {     
+        System.out.println("Son's i is " + this.i);     
+    }     
+
+    @Override    
+    public void test() {     
+        System.out.println(this.i);     
+    }     
+
+}     
+public class Test {     
+    public static void main(String[] args) {     
+        new Son();     
+    }     
+}
+
+
+
+
+结果是：
+Father's i is 5
+0
+Son's i is 55
+结合第一点，构造方法调用之前，首先是new指令创建了一个对象，并将各个成员初始化为其默认值。下面看构造方法的调用过程。
+子类构造方法会调用父类构造方法，父类构造方法首先打印Father's i is 5。然后调用test（）方法，注意，我们创建的是Son类的对象，所以test（）方法调用的是Son类定义的test（）方法，也就是说发生了多态。我们再去看Son类中test方法的实现，就是简单的输出this.i，为什么是0呢，别忘了我们还没有执行子类的构造方法啊，所以此时子类的i还是new指令初始化得到的0。好，test（）方法执行完了，总算回到子类构造方法继续执行，先把i赋值为55，下面的输出语句Son's i is 55也就不难理解了。
+在构造方法中调用方法要特别注意这种多态现象。

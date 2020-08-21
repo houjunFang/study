@@ -883,5 +883,20 @@ export class MockService(){
 
 
 
+npm new projectName
+npm install primeng@6.1.7 --save
+npm install font-awesome --save
+npm install @angular/animations --save
+
+angular.json
+"styles": [
+    "styles.css",
+    "./node_modules/primeng/resources/themes/bootstrap/theme.css",
+    "./node_modules/primeng/resources/primeng.min.css",
+    "./node_modules/font-awesome/css/font-awesome.css"
+],
 
 
+              "../node_modules/primeng/resources/themes/bootstrap/theme.css",
+              "../node_modules/primeng/resources/primeng.min.css",
+              "../node_modules/font-awesome/css/font-awesome.css"

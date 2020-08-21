@@ -1,4 +1,8 @@
 
+本地安装jar方式（将jar安装自本地仓库）：
+mvn install:install-file -DgroupId=com.uisftech -DartifactId=bosent_baseline_framework_ext-tobpm -Dversion=0.1 -Dpackaging=jar -Dfile=bosent_baseline_framework_ext-tobpm-0.1.jar --settings E:\maven_setting_cfg\settings_hoperun.xml
+--------------------------------------------------------------
+
 maven命令行窗口指定特定settings.xml
 mvn install --settings c:\user\settings.xml 
 mvn clean package --settings F:\Maven\settings.xml -Dmaven.test.skip=true

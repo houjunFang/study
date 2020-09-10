@@ -882,7 +882,12 @@ export class MockService(){
 
 
 
+node -v //nodejs版本检查，高版本中已包括npm 
 
+安装angular-cli
+npm install -g @angular/cli
+============================================================================================
+angular primeng集成 步骤：
 npm new projectName
 npm install primeng@6.1.7 --save
 npm install font-awesome --save
@@ -894,9 +899,7 @@ angular.json
     "./node_modules/primeng/resources/themes/bootstrap/theme.css",
     "./node_modules/primeng/resources/primeng.min.css",
     "./node_modules/font-awesome/css/font-awesome.css"
-],
+]
 
-
-              "../node_modules/primeng/resources/themes/bootstrap/theme.css",
-              "../node_modules/primeng/resources/primeng.min.css",
-              "../node_modules/font-awesome/css/font-awesome.css"
+=============================================================================================
+primeng p-datatable :https://blog.csdn.net/weixin_30449239/article/details/97299226

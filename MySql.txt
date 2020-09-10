@@ -1,0 +1,11 @@
+
+
+mysql存储引擎：
+查看存储引擎：show engines；
+
+1.InnoDB(mysql5默认) 支持事务行级锁，支持外键约束
+	数据和索引放在一块，都位于B+数的叶子节点上
+	
+	
+2.MyISAM
+3.Memory

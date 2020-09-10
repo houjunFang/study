@@ -1,0 +1,21 @@
+设置npm 全局安装目录
+npm config set prefix "E:\web-wks\gloabal-node-modules"
+
+npm install @angular/cli -g	
+
+npm new appname --skip-install
+
+参考文档：https://blog.csdn.net/weixin_30881367/article/details/95281123
+@NgModule({
+providers:[] //数组，当前模块需要的一些公共服务列表，然后我们就可以在这个模块的各个组件中通过依赖注入使用了。
+declarations:[]//数组类型，用来声明属于这个模块的指令，模块，组件等，然后我们就可以在这个模块中使用它们了。
+imports:[]     //数组类型，当前模块需要依赖的一些其他模块，然后就可以使用别的模块提供的一些指令组件等
+exports:[]     //数组类型，当前模块需要导出的一些组件，指令，模块等；其他模块导入了当前模块，则其他模块就可以使用这里的导出的组件，指令模块
+entryComponents:[] //这些组件将会在这个模块定义的时候进行编译
+bootstrap:[]   //数组类型，指定当前模块启动时应当启动的组件
+
+})
+
+
+通过即时JIT编译器动态引导
+使用预编译器（ AoT - Ahead-Of-Time ）进行静态引导
